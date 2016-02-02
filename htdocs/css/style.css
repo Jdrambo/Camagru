@@ -20,8 +20,9 @@ h1{
 }
 h2{
     display:inline-block;
-	margin:0;
+	margin:24px auto;
 	padding:0;
+    text-align:center;
 }   
 header{
 	vertical-align: middle;
@@ -60,25 +61,29 @@ header a{
 	color:#3498db;
 }
 .standard-form{
-    width:80%;
-    margin:12px 10%;
+    width:100%;
+    margin:12px 0;
 }
 .field{
     min-width: 320px;
-    width:40%;
-    margin:12px 30%;
+    width:30%;
+    margin:12px 35%;
     font-size:18px;
     padding:6px;
     border:none;
     border-bottom:1px solid #fff;
     background-color:transparent;
     color:#fff;
+    background-color:rgba(255, 255, 255, 0.2);
+}
+.field::-webkit-input-placeholder{
+    color:#fff;
 }
 .btn-form{
     color:#fff;
     min-width: 240px;
-    width:40%;
-    margin:12px 30%;
+    width:30%;
+    margin:12px 35%;
     padding:6px;
     font-size:18px;
     cursor:pointer;
@@ -89,4 +94,8 @@ header a{
 .btn-form:hover{
     color:#8fc400;
     background-color:#fff;
+}
+.title-form{
+    display: block;
+    text-align:center;
 }
