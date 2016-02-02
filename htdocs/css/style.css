@@ -5,9 +5,17 @@ body{
 	color:#fff;
 	font-family:'sans-serif', Arial;
 	font-weight:100;
-	background-image: url("img/design3.jpeg");
+	background-image: url("../img/design3.jpeg");
 	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-position:center top;
 }
 h1{
 	font-family: 'Nothing You Could Do', cursive;
+	font-size: 48px;
+}
+.container{
+	width:70%;
+	margin:24px 15%;
 }
