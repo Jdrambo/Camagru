@@ -14,8 +14,37 @@ body{
 h1{
 	font-family: 'Nothing You Could Do', cursive;
 	font-size: 48px;
+	display:inline-block;
+	margin:0;
+	padding:0;
+}
+header{
+	vertical-align: middle;
+	line-height:60px;
+	height:60px;
 }
 .container{
 	width:70%;
 	margin:24px 15%;
+}
+.menu-right{
+	float:right;
+	display:inline-block;
+	line-height:60px;
+	height:60px;
+	margin:0;
+}
+.btn-menu{
+	padding:0 24px;
+	color:#fff;
+	text-decoration: none;
+	font-family:'sans-serif', Arial;
+	font-weight:100;
+	display:inline-block;
+	line-height:48px;
+	height:48px;
+	margin:0;
+}
+.btn-menu:hover{
+	color:#3498db;
 }

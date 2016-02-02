@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class = "container">
-	<h1>Camagru</h1>
+	<?php include('header.php');?>
 	<p>Bienvenu sur Camagru le site de retouche photo ultime</p>
 </div>
 </body>
