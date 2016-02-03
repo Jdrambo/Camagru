@@ -99,3 +99,10 @@ header a{
     display: block;
     text-align:center;
 }
+.error{
+	color:#c0392b;
+	font-size:24px;
+}
+.ok{
+	color:#27ae60;
+}

@@ -13,11 +13,11 @@ if (!isset($_SESSION['id']))
         $query = $db->prepare('SELECT * FROM config');
         $query->execute();
         $data = $query->fetch(PDO::FETCH_ASSOC);
-        $pass = mysqli_real_escape_string($_POST['password']);
-        $pass_verif = mysqli_real_escape_string($_POST['pass_verif']);
-        $login = mysqli_real_escape_string($_POST['login']);
-        $mail = mysqli_real_escape_string($_POST['mail']);
-        $mail_verif = mysqli_real_escape_string($_POST['mail_verif']);
+        $pass = $_POST['pass'];
+        $pass_verif = $_POST['pass_verif'];
+        $login = $_POST['login'];
+        $mail = $_POST['mail'];
+        $mail_verif = $_POST['mail_verif'];
         $pref = $data['pass_prefixe'];
         $suff = $data['pass_suffixe'];
         $pattern = $data['pattern'];
@@ -44,20 +44,21 @@ if (!isset($_SESSION['id']))
                         $query->bindValue(":pass", $pass);
                         $query->bindValue(":clef", $clef);
                         $query->execute();
+                        $message = array("Bienvenue sur Camagru ! Pour valider votre inscription un mail vous a été envoyé a l'adresse suivante :<br>".$mail."", "ok");
                     }
                     else {
-                        $message = "Ce login ou cette adresse e-mail sont déjà enregistré";
+                        $message = array("Ce login ou cette adresse e-mail est déjà enregistré", "error");
                     }
                 }
                 else {
-                    $message = "Le login n'est pas valide";
+                    $message = array("Le login n'est pas valide", "error");
                 }
             }
             else
-                $message = "L'adresses mail n'est pas valide";
+                $message = array("L'adresses mail n'est pas valide", "error");
         }
         else
-            $message = "Le mot de passe n'est pas valide";
+            $message = array("Le mot de passe n'est pas valide", "error");
     }
     ?>
     <!DOCTYPE html>
@@ -71,10 +72,15 @@ if (!isset($_SESSION['id']))
         <?php include('header.php');?>
         <form class = "standard-form" action = "inscription.php" method = "post">
             <h2 class = "title-form">Inscription</h2>
+            <?php
+            	if (isset($message)){
+            		echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
+            	}
+            ?>
             <input class = "field" type = "text" name = "login" placeholder = "Identifiant">
             <input class = "field" type = "text" name = "mail" placeholder = "Adresse e-mail">
             <input class = "field" type = "text" name = "mail_verif" placeholder = "Vérification de l'adresse e-mail">
-            <input class = "field" type = "password" name = "password" placeholder = "Mot de passe">
+            <input class = "field" type = "password" name = "pass" placeholder = "Mot de passe">
             <input class = "field" type = "password" name = "pass_verif" placeholder = "Vérification du mot de passe">
             <button class = "btn-form" name = "submit" value = "inscription">Je m'inscris</button>
         </form>
