@@ -37,7 +37,13 @@ if (!isset($_SESSION['id']))
                     if (!(isset($data['id']))){
                         $pass = $pref.$pass.$suff;
                         $pass = hash("whirlpool", $pass);
-                        $query = $db->prepare('INSERT INTO account () VALUES ()');
+                        $clef = hash("whirlpool", (microtime()*42));
+                        $query = $db->prepare('INSERT INTO account (login, mail, pass, actif, clef, type, role, id_icone) VALUES (:login, :mail, :pass, 0, :clef, "standard", "user", 1)');
+                        $query->bindValue(":login", $login);
+                        $query->bindValue(":mail", $mail);
+                        $query->bindValue(":pass", $pass);
+                        $query->bindValue(":clef", $clef);
+                        $query->execute();
                     }
                     else {
                         $message = "Ce login ou cette adresse e-mail sont déjà enregistré";
