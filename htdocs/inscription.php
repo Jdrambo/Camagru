@@ -1,4 +1,4 @@
-<?php
+ <?php
 session_start();
 /*
 S'il n'existe pas de variable de session id (donc pas d'utilisateur connecté)
@@ -25,7 +25,7 @@ if (!isset($_SESSION['id']))
         // On vérifie que les deux mots de passes soient identiques
         if ($pass === $pass_verif && preg_match($pass_pattern, $pass)) {
             // On vérifie que les deux mail soient identiques
-            if ($mail === $mail_verif){
+            if ($mail === $mail_verif && filter_var($mail, FILTER_VALIDATE_EMAIL)){
                 // On vérifié que le login est valide
                 $tab = ['admin', 'adm', 'administrateur', 'administrator'];
                 if (preg_match($pattern, $login) && !(in_array(strtolower($pass), $tab))){
@@ -35,7 +35,9 @@ if (!isset($_SESSION['id']))
                     $query->execute();
                     $data = $query->fetch(PDO::FETCH_ASSOC);
                     if (!(isset($data['id']))){
-                        // LA SUITE DU CODE ICI DEMAIN !!!
+                        $pass = $pref.$pass.$suff;
+                        $pass = hash("whirlpool", $pass);
+                        $query = $db->prepare('INSERT INTO account () VALUES ()');
                     }
                     else {
                         $message = "Ce login ou cette adresse e-mail sont déjà enregistré";
@@ -46,10 +48,10 @@ if (!isset($_SESSION['id']))
                 }
             }
             else
-                $message = "Les adresses mail ne sont pas valides";
+                $message = "L'adresses mail n'est pas valide";
         }
         else
-            $message = "Les mots de passes ne sont pas valides";
+            $message = "Le mot de passe n'est pas valide";
     }
     ?>
     <!DOCTYPE html>
