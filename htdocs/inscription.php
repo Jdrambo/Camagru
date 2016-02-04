@@ -38,7 +38,7 @@ if (!isset($_SESSION['id']))
                         $pass = $pref.$pass.$suff;
                         $pass = hash("whirlpool", $pass);
                         $clef = hash("whirlpool", (microtime()*42));
-                        $query = $db->prepare('INSERT INTO account (login, mail, pass, actif, clef, type, role, id_icone) VALUES (:login, :mail, :pass, 0, :clef, "standard", "user", 1)');
+                        $query = $db->prepare('INSERT INTO account (login, mail, pass, actif, clef, type, role, id_icone, date_inscription) VALUES (:login, :mail, :pass, 0, :clef, "standard", "user", 1, NOW())');
                         $query->bindValue(":login", $login);
                         $query->bindValue(":mail", $mail);
                         $query->bindValue(":pass", $pass);
