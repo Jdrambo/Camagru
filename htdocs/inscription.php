@@ -49,6 +49,8 @@ if (!isset($_SESSION['id']))
                         $query->bindValue(":clef", $clef);
                         $query->execute();
                         $message = array("Bienvenue sur Camagru ! Pour valider votre inscription un mail vous a été envoyé a l'adresse suivante : ".$mail."", "ok");
+                        $email = new Email($mail, $login, $clef);
+                        $email.sendEmail();
                     }
                     else {
                         $message = array("Ce login ou cette adresse e-mail est déjà enregistré", "error");
