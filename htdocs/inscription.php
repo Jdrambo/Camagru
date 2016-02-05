@@ -1,5 +1,9 @@
- <?php
+<?php
 session_start();
+function loadClass($name){
+	require($name.".php");
+}
+spl_autoload_register("loadClass");
 /*
 S'il n'existe pas de variable de session id (donc pas d'utilisateur connecté)
 On affiche la page d'inscription. Sinon on renvoie l'utilisateur sur la page d'accueil.

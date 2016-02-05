@@ -1,3 +1,10 @@
+<?php
+session_start();
+function loadClass($name){
+	require($name.".php");
+}
+spl_autoload_register("loadClass");
+?>
 <!DOCTYPE html>
 <html>
 <head>
