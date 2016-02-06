@@ -38,6 +38,10 @@ if (!isset($_SESSION['id']))
                     $query->bindValue(":mail", $mail);
                     $query->execute();
                     $data = $query->fetch(PDO::FETCH_ASSOC);
+                    /*
+                    Si il n'y a pas déjà un utilisateur ayant le même login ou la même adresse e-mail
+                    On enregistre un nouveau compte utilisateur avec le rôle user en base de données
+                    */
                     if (!(isset($data['id']))){
                         $pass = $pref.$pass.$suff;
                         $pass = hash("whirlpool", $pass);
@@ -48,17 +52,27 @@ if (!isset($_SESSION['id']))
                         $query->bindValue(":pass", $pass);
                         $query->bindValue(":clef", $clef);
                         $query->execute();
+                        
+                        
+                        // Ici nous envoyons un e-mail à l'utilisateur afin qu'il puisse valider son compte
+                        $text = "<html><head><meta charset = \"utf-8\"></head><body><h1>Bonjour et bienvenue sur Camagru</h1>
+                        <p>Vous avez créé un compte avec l'adresse ".$mail." et le login ".$login.".</p>
+                        <p>Pour finaliser votre inscription,< cliquez sur le lien ci dessous, ou copiez / collez le dans la barre 
+                        d'adresse de votre navigateur.</p><p><a href = \"inscription.php?clef=".$clef."\">".$clef."</a></p></body></html>";
+                        $tab = array("login" => $login, "email" => $mail, "clef" => $clef, "message" => $text);
+                        $email = new Email($tab);
+                        //$email.sendEmail();
+                        // Il reste à bosser sur la classe Email, car les valeur ne sont pas bien stockée. On voit ça demain ;)
+                        $email->describeObj();
+                        
+                        // Le message que l'on affiche pour dire qu'on a envoyé un e-mail à l'utilisateur. (affiché en vert).
                         $message = array("Bienvenue sur Camagru ! Pour valider votre inscription un mail vous a été envoyé a l'adresse suivante : ".$mail."", "ok");
-                        $email = new Email($mail, $login, $clef);
-                        $email.sendEmail();
                     }
-                    else {
+                    else
                         $message = array("Ce login ou cette adresse e-mail est déjà enregistré", "error");
-                    }
                 }
-                else {
+                else
                     $message = array("Le login n'est pas valide", "error");
-                }
             }
             else
                 $message = array("L'adresses mail n'est pas valide", "error");

@@ -107,3 +107,9 @@ header a{
 	color:#27ae60;
     font-size:24px;
 }
+.alert{
+    background-color:#fff;
+    color:#c0392b;
+    font-size:24px;
+    margin:24px;
+}

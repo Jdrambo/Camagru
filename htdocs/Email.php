@@ -1,21 +1,23 @@
 <?php
 class Email{
+    
     private $_email;
     private $_login;
     private $_clef;
+    private $_message;
     
-    public function __construct($email, $login, $clef){
-        $this->hydrate();
-    }
-    
-    public function hydrate($email, $login, $clef){
-        $this->setEmail($email);
+    public function __construct(array $data){
+        /*$this->setEmail($email);
         $this->setLogin($login);
         $this->setClef($clef);
+        $this->setmessage($message);*/
+        foreach($data as $key => $value){
+            $func = "set".ucfirst($key);
+            $this->$func = $value;
+        }
     }
     
     public function sendEmail(){
-        $message = "Bonjour et bienvenue sur Camagru";
         //ICI ON PREPARE LE MAIL A ENVOYER
         //mail();
     }
@@ -35,6 +37,11 @@ class Email{
             $this->_clef = $value;
     }
     
+    public function setMessage($value){
+        if (isset($value))
+            $this->_message = $value;
+    }
+    
     public function getEmail(){
         return($this->_email);
     }
@@ -47,8 +54,13 @@ class Email{
         return($this->_clef);
     }
     
+    public function getMessage(){
+        return($this->_message);
+    }
+    
     public function describeObj(){
-        console.log('Email : '.$this->getEmail().' / Login : '.$this->getLogin().' / Clef : '.$this->getClef());
+        echo '<p class = "alert" >Email : '.$this->getEmail().' / Login : '.$this->getLogin().' / Clef : '.$this->getClef().'</p>';
+        echo '<p class = "alert" >Message : '.$this->getMessage().'</p>';
     }
 }
 ?>
