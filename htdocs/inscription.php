@@ -56,15 +56,15 @@ if (!isset($_SESSION['id']))
                         // Ici nous envoyons un e-mail à l'utilisateur afin qu'il puisse valider son compte
                         $text = "<html><head><meta charset = \"utf-8\"></head><body><h1>Bonjour et bienvenue sur Camagru</h1>
                         <p>Vous avez créé un compte avec l'adresse ".$mail." et le login ".$login.".</p>
-                        <p>Pour finaliser votre inscription, cliquez sur le lien ci dessous.</p><p><a href = \"inscription.php?clef=".$clef."\">Valider l'inscription</a></p>
-                        <p>Ou copiez / collez le dans la barre 
-                        d'adresse de votre navigateur.</body></html>";
+                        <p>Pour finaliser votre inscription, cliquez sur le lien ci dessous.</p><p><a href = \"inscription.php?submit=validation&login=".$login."&clef=".$clef."\">Valider l'inscription</a></p>
+                        <p>Ou copiez / collez le dans la barre d'adresse de votre navigateur.</p>
+                        <p>http://www.camagru.fr/inscription.php?submit=validation&login=".$login."&clef=".$clef."</p></body></html>";
                         
                         $subject = "Camagru - Inscription";
                         $headers = "From : register@camagru.fr"."\r\n"."Reply-To: noreply@camagru.fr";
                         $tab = array("email" => $mail, "message" => $text, "subject" => $subject, "headers" => $headers);
                         $email = new Email($tab);
-                        $email.sendEmail();
+                        $email->sendEmail();
 
                         // Le message que l'on affiche pour dire qu'on a envoyé un e-mail à l'utilisateur. (affiché en vert).
                         $message = array("Bienvenue sur Camagru ! Pour valider votre inscription un mail vous a été envoyé a l'adresse suivante : ".$mail."", "ok");
@@ -81,6 +81,33 @@ if (!isset($_SESSION['id']))
         else
             $message = array("Le mot de passe n'est pas valide", "error");
     }
+    // En dessous sera le code de validation de l'inscription
+    if (isset($_GET['submit']) && $_GET['submit'] === "validation"){
+        if (isset($_GET['login']) && isset($_GET['clef'])){
+            $query = $db->prepare('SELECT * FROM `account` WHERE (`login` = :login && `clef` = :clef)');
+            $query->bindValue(':login', $_GET['login']);
+            $query->bindValue(':clef', $_GET['clef']);
+            $query->execute();
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+            if (isset($data['id'])){
+                if (isset($data['actif']) && $data['actif'] === '0'){
+                    $query = $db->prepare('UPDATE `account` SET `actif` = 1 WHERE (`login` = :login && `clef` = :clef)');
+                    $query->bindValue(':login', $_GET['login']);
+                    $query->bindValue(':clef', $_GET['clef']);
+                    $query->execute();
+                    $message = array("Votre compte a été activé avec succès", "ok");
+                }
+                else if (isset($data['actif']) && $data['actif'] === '2')
+                    $message = array("Votre compte a été suspendu, pour plus d'informations veuillez contacter l'administrateur du site", "error");
+                else
+                    $message = array("Votre compte est déjà actif", "ok");
+            }
+            else
+                $message = array("Un erreur c'est produite, veuillez contacter l'administrateur du site.", "error");
+        }
+        else
+            $message = array("Un erreur c'est produite, veuillez contacter l'administrateur du site.", "error");
+    }
     ?>
     <!DOCTYPE html>
     <html>
@@ -90,27 +117,34 @@ if (!isset($_SESSION['id']))
     </head>
     <body>
     <div class = "container">
-        <?php include('header.php');?>
-        <form class = "standard-form" action = "inscription.php" method = "post">
-            <h2 class = "title-form">Inscription</h2>
-            <?php
-            	if (isset($message)){
-            		echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
-            	}
-            ?>
-            <input class = "field" type = "text" name = "login" placeholder = "Identifiant">
-            <input class = "field" type = "text" name = "mail" placeholder = "Adresse e-mail">
-            <input class = "field" type = "text" name = "mail_verif" placeholder = "Vérification de l'adresse e-mail">
-            <input class = "field" type = "password" name = "pass" placeholder = "Mot de passe">
-            <input class = "field" type = "password" name = "pass_verif" placeholder = "Vérification du mot de passe">
-            <button class = "btn-form" name = "submit" value = "inscription">Je m'inscris</button>
-        </form>
+        <?php include('header.php');
+        if (isset($_GET['submit'])){
+            if (isset($message))
+                echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
+        }
+        else{
+        ?>
+            <form class = "standard-form" action = "inscription.php" method = "post">
+                <h2 class = "title-form">Inscription</h2>
+                <?php
+                    if (isset($message))
+                        echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
+                ?>
+                <input class = "field" type = "text" name = "login" placeholder = "Identifiant">
+                <input class = "field" type = "text" name = "mail" placeholder = "Adresse e-mail">
+                <input class = "field" type = "text" name = "mail_verif" placeholder = "Vérification de l'adresse e-mail">
+                <input class = "field" type = "password" name = "pass" placeholder = "Mot de passe">
+                <input class = "field" type = "password" name = "pass_verif" placeholder = "Vérification du mot de passe">
+                <button class = "btn-form" name = "submit" value = "inscription">Je m'inscris</button>
+            </form>
+        <?php
+        }
+        ?>
     </div>
     </body>
     </html>
     <?php
 }
-else {
+else 
     header('Location: index.php');
-}
 ?>

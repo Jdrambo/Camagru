@@ -14,7 +14,7 @@ class Email{
     }
     
     public function sendEmail(){
-        mail($this->getMail(), $this->getSubject(), $this->getMessage(), $this->getHeaders())
+        mail($this->getEmail(), $this->getSubject(), $this->getMessage(), $this->getHeaders());
     }
     
     public function setEmail($value){
