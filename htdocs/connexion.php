@@ -1,9 +1,19 @@
 <?php
 session_start();
+include("db.php");
 function loadClass($name){
-	require($name.".php");
+	require("classes/".$name.".php");
 }
 spl_autoload_register("loadClass");
+
+if (isset($_POST['submit']) && $_POST['submit'] === "connect"){
+    $connect = new Connect($_POST['login'], $_POST['password'], $db);
+    if ($connect->checkUser() === true){
+        /*$sess = new SessionUser($_POST['login'], $_POST['password']);
+        $sess->createSession();*/
+        echo '<p class = "alert">CONNEXION OK</p>';
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>

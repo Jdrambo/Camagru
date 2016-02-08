@@ -1,7 +1,7 @@
 <?php
 session_start();
 function loadClass($name){
-	require($name.".php");
+	require("classes/".$name.".php");
 }
 spl_autoload_register("loadClass");
 /*
