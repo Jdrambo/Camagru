@@ -17,10 +17,10 @@ class DeleteAccount{
 
 	public function eraseAccount(){
 		$db = $this->getDb();
-		$pass = hash("whirlpool", $this->getPref().$this->getpass().$this->getSuff());
-		$query = $db->prepare('SELECT id FROM account WHERE id = :id && pass = :pass');
+		$pass = hash("whirlpool", $this->getPref().$this->getPass().$this->getSuff());
+		$query = $db->prepare('SELECT * FROM `account` WHERE (`id` = :id && `pass` = :pass)');
 		$query->bindValue(':id', $this->getId());
-		$auery->bindValue(':pass', $this->getPass());
+		$query->bindValue(':pass', $pass);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_ASSOC);
 		if (isset($data['id'])){
@@ -33,6 +33,10 @@ class DeleteAccount{
 			    }
 			    session_unset($_SESSION);
 			}
+		}
+		else {
+			$message = array("Vous n'avez pas saisi le bon mot de passe", "error");
+			return ($message);
 		}
 	}
 
@@ -56,6 +60,7 @@ class DeleteAccount{
 		$query = $db->prepare('SELECT pass_prefixe FROM config');
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_ASSOC);
+		$this->_pref = $data['pass_prefixe'];
 	}
 
 	public function setSuff(){
@@ -63,6 +68,7 @@ class DeleteAccount{
 		$query = $db->prepare('SELECT pass_suffixe FROM config');
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_ASSOC);
+		$this->_suff = $data['pass_suffixe'];
 	}
 
 	public function getDb(){
@@ -70,19 +76,19 @@ class DeleteAccount{
 	}
 
 	public function getPass(){
-		return ($this->_pass);
+		return($this->_pass);
 	}
 
 	public function getId(){
-		return ($this->_id);
+		return($this->_id);
 	}
 
 	public function getPref(){
-		return ($this->_pref);
+		return($this->_pref);
 	}
 
 	public function getSuff(){
-		return ($this->_suff);
+		return($this->_suff);
 	}
 }
 ?>

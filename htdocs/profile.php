@@ -7,9 +7,9 @@ spl_autoload_register("loadClass");
 if (isset($_SESSION['id'])){
     include("db.php");
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_account"){
-            $deleteAc = new DeleteAccount($_SESSION['id'], $_POST['pass'], $db);
-            $deleteAc->eraseAccount();
-        }
+        $deleteAc = new DeleteAccount($_SESSION['id'], $_POST['pass'], $db);
+        $message = $deleteAc->eraseAccount();
+    }
 }
 if (isset($_SESSION['id'])){
     ?>
@@ -22,7 +22,10 @@ if (isset($_SESSION['id'])){
     <body>
     <div class = "container">
         <?php include('header.php');
-        echo '<h2>Profile de '.$_SESSION['login'].'</h2><img class = "profile-picture" alt = "'.$_SESSION['name'].'" src = "'.$_SESSION['url'].'"><p>'.$_SESSION['mail'].'</p><p>Type de compte : '.$_SESSION['type'].'</p><p>Role : '.$_SESSION['role'].'</p>';?>
+        echo '<h2>Profile de '.$_SESSION['login'].'</h2><img class = "profile-picture" alt = "'.$_SESSION['name'].'" src = "'.$_SESSION['url'].'"><p>'.$_SESSION['mail'].'</p><p>Type de compte : '.$_SESSION['type'].'</p><p>Role : '.$_SESSION['role'].'</p>';
+        if (isset($message))
+            echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
+        ?>
         <form class = "delete-form" action = "profile.php" method = "post">
         <p>Suppression du compte</p>
         <input class = "field" type = "password" name = "pass" placeholder = "Votre mot de passe...">
@@ -35,3 +38,4 @@ if (isset($_SESSION['id'])){
 }
 else
     header("Location: index.php");
+?>

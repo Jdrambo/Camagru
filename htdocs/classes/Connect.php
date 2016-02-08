@@ -7,6 +7,7 @@ class Connect{
     private $_pattern;
     private $_passPattern;
     private $_db;
+    private $_message = array("", "");
     
     public function __construct($login, $pass, $db){
         $this->setDb($db);
@@ -26,10 +27,14 @@ class Connect{
         $query->bindValue(":login", $this->getLogin());
         $query->execute();
         $data = $query->fetch(PDO::FETCH_ASSOC);
-        if (isset($data['id']))
+        if (isset($data['id'])){
+            $this->setMessage("Identification validée", "ok");
             return (true);
-        else
+        }
+        else {
+            $this->setMessage("Identifiants non valides", "error");
             return (false);
+        }
     }
     
     public function setDb($value){
@@ -80,6 +85,11 @@ class Connect{
         $data = $query->fetch(PDO::FETCH_ASSOC);
         $this->_passPattern = $data['pass_pattern'];
     }
+
+    public function setMessage($text, $tag){
+        if (isset($text) && isset($tag))
+            $this->_message = array($text, $tag);
+    }
     
     public function getDb(){
         return ($this->_db);
@@ -107,6 +117,10 @@ class Connect{
     
     public function getPassPattern(){
         return ($this->_passPattern);
+    }
+
+    public function getMessage(){
+        return ($this->_message);
     }
 }
 ?>
