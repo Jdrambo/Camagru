@@ -79,6 +79,13 @@ header a{
     width:100%;
     margin:12px 0;
 }
+.delete-form{
+    width:80%;
+    margin:24px 10%;
+    text-align: center;
+    background-color:#c0392b;
+    padding:24px;
+}
 .field{
     min-width: 320px;
     width:30%;
@@ -110,6 +117,17 @@ header a{
     color:#8fc400;
     background-color:#fff;
 }
+.btn-delete{
+    background-color:#fff;
+    color:#c0392b;
+    border:1px solid #f39c12;
+}
+.btn-delete:hover{
+    background-color:#f39c12;
+    border:#000;
+    color:#000;
+    border:1px solid #000;
+}
 .title-form{
     display: block;
     text-align:center;
@@ -128,6 +146,11 @@ header a{
     color:#c0392b;
     font-size:24px;
     margin:24px;
+}
+.profile-picture{
+    width:128px;
+    margin:0px 24px;
+    display:block;
 }
 @media screen and (max-width: 720px){
     .container{
