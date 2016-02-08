@@ -89,7 +89,7 @@ if (!isset($_SESSION['id']))
             $query->bindValue(':clef', $_GET['clef']);
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-            if (isset($data['id'])){c1
+            if (isset($data['id'])){
                 if (isset($data['actif']) && $data['actif'] === '0'){
                     $query = $db->prepare('UPDATE `account` SET `actif` = 1 WHERE (`login` = :login && `clef` = :clef)');
                     $query->bindValue(':login', $_GET['login']);
