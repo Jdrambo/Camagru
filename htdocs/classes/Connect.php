@@ -5,23 +5,23 @@ class Connect{
     private $_pref;
     private $_suff;
     private $_pattern;
-    private $_passPatter;
+    private $_passPattern;
     private $_db;
     
     public function __construct($login, $pass, $db){
         $this->setDb($db);
-        $this->setLogin($login);
-        $this->setPass($pass);
         $this->setPref();
         $this->setSuff();
         $this->setPattern();
         $this->setPassPattern();
+        $this->setLogin($login);
+        $this->setPass($pass);
     }
     
     public function checkUser(){
         $db = $this->getDb();
-        $pass = $this->getPref().$this->getPass().$this->getSuff();
-        $query = $db->prepare('SELECT id FROM account WHERE (pass = :pass && login = :login)');
+        $pass = hash("whirlpool", $this->getPref().$this->getPass().$this->getSuff());
+        $query = $db->prepare('SELECT id FROM account WHERE (pass = :pass && login = :login && actif = 1)');
         $query->bindValue(":pass", $pass);
         $query->bindValue(":login", $this->getLogin());
         $query->execute();
@@ -32,9 +32,9 @@ class Connect{
             return (false);
     }
     
-    public function setDb($db, $dbLogin, $dbPass){
-        if (isset($db))
-            $this->_db = $db;
+    public function setDb($value){
+        if (isset($value))
+            $this->_db = $value;
     }
     
     public function setLogin($value){
