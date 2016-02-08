@@ -5,15 +5,15 @@ function loadClass($name){
 }
 spl_autoload_register("loadClass");
 
-if (!isset($_SESSION['id'])){
-    include("db.php");
-    if (isset($_POST['submit']) && $_POST['submit'] === "connect"){
-        $connect = new Connect($_POST['login'], $_POST['password'], $db);
-        if ($connect->checkUser() === true){
-            $sess = new SessionUser($db, $_POST['login']);
-            $sess->createSession();
-        }
+include("db.php");
+if (isset($_POST['submit']) && $_POST['submit'] === "connect"){
+    $connect = new Connect($_POST['login'], $_POST['password'], $db);
+    if ($connect->checkUser() === true){
+        $sess = new SessionUser($db, $_POST['login']);
+        $sess->createSession();
     }
+}
+if (!isset($_SESSION['id'])){
     ?>
     <!DOCTYPE html>
     <html>
