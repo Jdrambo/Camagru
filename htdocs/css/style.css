@@ -60,6 +60,12 @@ header a{
 .btn-menu:hover{
 	color:#3498db;
 }
+.deco {
+    color:#c0392b;
+}
+.deco:hover{
+    color:#f39c12;
+}
 .standard-form{
     width:100%;
     margin:12px 0;
@@ -74,7 +80,7 @@ header a{
     border-bottom:1px solid #fff;
     background-color:transparent;
     color:#fff;
-    background-color:rgba(255, 255, 255, 0.2);
+    background-color:rgba(0, 0, 0, 0.6);
 }
 .field::-webkit-input-placeholder{
     color:#fff;
@@ -99,11 +105,19 @@ header a{
     display: block;
     text-align:center;
 }
+
 .error{
 	background-color:#fff;
 	color:#c0392b;
-	font-size:24px;
+    font-size:24px;
 }
 .ok{
 	color:#27ae60;
+    font-size:24px;
+}
+.alert{
+    background-color:#fff;
+    color:#c0392b;
+    font-size:24px;
+    margin:24px;
 }
