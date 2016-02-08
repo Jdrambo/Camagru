@@ -10,7 +10,7 @@ class SessionUser{
     }
     
     public function createSession(){
-        $query = $this->getDb()->prepare('SELECT * FROM account WHERE login = :login');
+        $query = $this->getDb()->prepare('SELECT * FROM account INNER JOIN icons ON account.id_icone = icons.id WHERE account.login = :login');
         $query->bindValue(':login', $this->getLogin());
         $query->execute();
         $data = $query->fetch(PDO::FETCH_ASSOC);

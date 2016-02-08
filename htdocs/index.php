@@ -19,9 +19,6 @@ spl_autoload_register("loadClass");
 		if(isset($_SESSION))
 			foreach ($_SESSION as $key => $value)
 				echo '<p class = "field">$_SESSION[\'' . $key . '\'] => ' . $value . '</p>';
-		if(isset($_SERVER))
-			foreach ($_SERVER as $key => $value)
-				echo '<p class = "field">$_SERVER[\'' . $key . '\'] => ' . $value . '</p>';
 	?>
 </div>
 </body>
