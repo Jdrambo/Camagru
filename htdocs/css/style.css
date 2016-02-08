@@ -88,8 +88,8 @@ header a{
 .btn-form{
     color:#fff;
     min-width: 240px;
-    width:30%;
-    margin:12px 35%;
+    width:20%;
+    margin:12px 40%;
     padding:6px;
     font-size:18px;
     cursor:pointer;
@@ -107,7 +107,6 @@ header a{
 }
 
 .error{
-	background-color:#fff;
 	color:#c0392b;
     font-size:24px;
 }
@@ -120,4 +119,42 @@ header a{
     color:#c0392b;
     font-size:24px;
     margin:24px;
+}
+@media screen and (max-width: 720px){
+    .container{
+    width:90%;
+    margin:24px 5%;
+    }
+    header{
+    vertical-align: middle;
+    line-height:60px;
+    height:60px;
+    text-decoration:none;
+    padding:0 12px;
+    margin:0 0 96px 0;
+    color:#fff;
+    }
+    .field{
+    min-width: 320px;
+    width:100%;
+    margin:12px 0;
+    font-size:18px;
+    padding:6px;
+    border:none;
+    border-bottom:1px solid #fff;
+    background-color:transparent;
+    color:#fff;
+    background-color:rgba(0, 0, 0, 0.6);
+    }
+    .btn-form{
+    color:#fff;
+    width:80%;
+    margin:12px 10%;
+    padding:6px;
+    font-size:18px;
+    cursor:pointer;
+    border:1px solid #8fc400;
+    border-bottom:1px solid #fff;
+    background-color:#8fc400;
+    }
 }
