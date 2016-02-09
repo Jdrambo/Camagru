@@ -11,7 +11,7 @@ if (isset($_SESSION['id'])){
         $message = $deleteAc->eraseAccount();
     }
     if (isset($_POST['submit'] && $_POST['submit'] === "modif_pass")){
-        $newPass = new ModifPass($_SESSION['id'], $_POST['old_pass'], $_POST['new_pass'], $_POST['new_pass_verif']);
+        $newPass = new ModifPass($db, $_SESSION['id'], $_POST['old_pass'], $_POST['new_pass'], $_POST['new_pass_verif']);
         $message = $newPass->getMessage();
     }
 }
