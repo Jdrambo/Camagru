@@ -79,6 +79,13 @@ header a{
     width:100%;
     margin:12px 0;
 }
+.regular-form{
+    width:80%;
+    margin:24px 10%;
+    text-align:center;
+    background-color:rgba(0, 0, 0, 0.8);
+    padding:24px;
+}
 .delete-form{
     width:80%;
     margin:24px 10%;
