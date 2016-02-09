@@ -27,8 +27,8 @@ class ModifPass{
             if (preg_match($this->getPassPattern(), $this->getNewPass())){
                 $oldPass = hash("whirlpool", $this->getPref().$this->getOldPass().$this->getSuff());
                 $db = $this->getDb();
-                $query = $db->prepare('SELECT * FROM account WHER (id = :id && pass COLLATE utf8_bin = :pass)');
-                $query->bindValue(':id', $id);
+                $query = $db->prepare('SELECT * FROM account WHERE (id = :id && pass COLLATE utf8_bin = :pass)');
+                $query->bindValue(':id', $this->getId());
                 $query->bindValue(':pass', $oldPass);
                 $query->execute();
                 $data = $query->fetch(PDO::FETCH_ASSOC);
@@ -118,7 +118,11 @@ class ModifPass{
     }
     
     public function getNewPass(){
-        return ($this->_oldPassVerif);
+        return ($this->_newPass);
+    }
+    
+    public function getNewPassVerif(){
+        return ($this->_newPassVerif);
     }
     
     public function getPref(){

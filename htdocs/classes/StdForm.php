@@ -27,7 +27,7 @@ class StdForm{
             if ($value[0] === "input")
                 echo '<input type = "'.$value[1].'" name = "'.$value[2].'" class = "'.$value[3].'" placeholder = "'.$value[4].'">';
             else
-                echo '<button type = "'.$value[1].'" name = "'.$value[2].'" value = "'.$value[2].'" class = "'.$value[3].'">'.$value[4].'</button>';
+                echo '<button type = "'.$value[1].'" name = "'.$value[1].'" value = "'.$value[2].'" class = "'.$value[3].'">'.$value[4].'</button>';
         }
         echo '</form>';
     }

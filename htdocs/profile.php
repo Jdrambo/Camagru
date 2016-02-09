@@ -10,7 +10,7 @@ if (isset($_SESSION['id'])){
         $deleteAc = new DeleteAccount($_SESSION['id'], $_POST['pass'], $db);
         $message = $deleteAc->eraseAccount();
     }
-    if (isset($_POST['submit'] && $_POST['submit'] === "modif_pass")){
+    if (isset($_POST['submit']) && $_POST['submit'] === "modif_pass"){
         $newPass = new ModifPass($db, $_SESSION['id'], $_POST['old_pass'], $_POST['new_pass'], $_POST['new_pass_verif']);
         $message = $newPass->getMessage();
     }
@@ -32,7 +32,7 @@ if (isset($_SESSION['id'])){
     
         //Appel de la classe StdForm pour créer un formulaire standard
             $modif_pass = new StdForm("post", "profile.php", "standard-form regular-form", "modif_pass", "Modification du mot de passe");
-            $modif_pass->addInputs(array(array("input", "password", "old_pass", "field", "Ancien mot de passe"), array("input", "password", "new_pass", "field", "Nouveau mot de passe"), array("input", "password", "new_pass_verif", "field", "Vérificaiton du mot de passe"), array("button" ,"submit", "modif_pass", "btn-form", "Modifier le mot de passe")));
+            $modif_pass->addInputs(array(array("input", "password", "old_pass", "field", "Ancien mot de passe"), array("input", "password", "new_pass", "field", "Nouveau mot de passe"), array("input", "password", "new_pass_verif", "field", "Vérificaiton du mot de passe"), array("button" , "submit", "modif_pass", "btn-form", "Modifier le mot de passe")));
         ?>
         <form class = "delete-form" action = "profile.php" method = "post">
         <h3>Suppression du compte</h3>
