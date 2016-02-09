@@ -33,7 +33,7 @@ if (!isset($_SESSION['id']))
                 // On vérifié que le login est valide
                 $tab = ['admin', 'adm', 'administrateur', 'administrator'];
                 if (preg_match($pattern, $login) && !(in_array(strtolower($pass), $tab))){
-                    $query = $db->prepare('SELECT * FROM account WHERE (login = :login || mail = :mail)');
+                    $query = $db->prepare('SELECT * FROM account WHERE (login COLLATE utf8_bin = :login || mail COLLATE utf8_bin = :mail)');
                     $query->bindValue(":login", $login);
                     $query->bindValue(":mail", $mail);
                     $query->execute();
@@ -81,15 +81,25 @@ if (!isset($_SESSION['id']))
         else
             $message = array("Le mot de passe n'est pas valide", "error");
     }
-    // En dessous sera le code de validation de l'inscription
+    /*
+    En dessous sera le code de validation de l'inscription
+    Après renvoie de l'e-mail par l'utilisateur
+    */
     if (isset($_GET['submit']) && $_GET['submit'] === "validation"){
+        // On vérifie que login et clef sont présent
         if (isset($_GET['login']) && isset($_GET['clef'])){
-            $query = $db->prepare('SELECT * FROM `account` WHERE (`login` = :login && `clef` = :clef)');
+            $query = $db->prepare('SELECT * FROM `account` WHERE (`login` COLLATE utf8_bin = :login && `clef` COLLATE utf8_bin = :clef)');
             $query->bindValue(':login', $_GET['login']);
             $query->bindValue(':clef', $_GET['clef']);
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
+            // On vérifie qu'il y a bien un utilisateur avec ce login et la clef correspondante en BDD
             if (isset($data['id'])){
+                /*
+                Si actif = 0 on active le compte et on passe actif a 1
+                Si actif vaut 2 c'est qu'il est suspendu
+                Sinon c'est quele compte est déjà actif
+                */
                 if (isset($data['actif']) && $data['actif'] === '0'){
                     $query = $db->prepare('UPDATE `account` SET `actif` = 1 WHERE (`login` = :login && `clef` = :clef)');
                     $query->bindValue(':login', $_GET['login']);
@@ -118,11 +128,13 @@ if (!isset($_SESSION['id']))
     <body>
     <div class = "container">
         <?php include('header.php');
+        // Si la page est chargé suite a un mail de validation on affiche pas le formulaire d'inscription
         if (isset($_GET['submit'])){
             if (isset($message))
                 echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
         }
         else{
+        // Sinon on affiche le formulaire d'inscription
         ?>
             <form class = "standard-form" action = "inscription.php" method = "post">
                 <h2 class = "title-form">Inscription</h2>

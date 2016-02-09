@@ -22,7 +22,7 @@ if (isset($_SESSION['id'])){
     <body>
     <div class = "container">
         <?php include('header.php');
-        echo '<h2>Profile de '.$_SESSION['login'].'</h2><img class = "profile-picture" alt = "'.$_SESSION['name'].'" src = "'.$_SESSION['url'].'"><p>'.$_SESSION['mail'].'</p><p>Type de compte : '.$_SESSION['type'].'</p><p>Role : '.$_SESSION['role'].'</p>';
+        echo '<h2>Profile de '.$_SESSION['login'].'</h2><img class = "profile-picture" alt = "'.$_SESSION['name'].'" src = "'.$_SESSION['url'].'"><p>'.$_SESSION['mail'].'</p><p>Type de compte : '.$_SESSION['type'].'</p><p>Role : '.$_SESSION['role'].'</p><p>Inscription : Le '.$_SESSION['ins_day'].'/'.$_SESSION['ins_month'].'/'.$_SESSION['ins_year'].' à '.$_SESSION['ins_hour'].':'.$_SESSION['ins_min'].':'.$_SESSION['ins_sec'].'</p>';
         if (isset($message))
             echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
         ?>

@@ -22,7 +22,7 @@ class Connect{
     public function checkUser(){
         $db = $this->getDb();
         $pass = hash("whirlpool", $this->getPref().$this->getPass().$this->getSuff());
-        $query = $db->prepare('SELECT id FROM account WHERE (pass = :pass && login = :login && actif = 1)');
+        $query = $db->prepare('SELECT id FROM account WHERE (pass COLLATE utf8_bin = :pass && login COLLATE utf8_bin = :login && actif = 1)');
         $query->bindValue(":pass", $pass);
         $query->bindValue(":login", $this->getLogin());
         $query->execute();
