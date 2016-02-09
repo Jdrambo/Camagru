@@ -167,6 +167,11 @@ header a{
 .icon-selector{
     display:inline-block;
     margin:12px;
+    cursor:pointer;
+    border:2px solid transparent;
+}
+.icon-selector:hover{
+    border:2px solid #2980b9;
 }
 @media screen and (max-width: 720px){
     .container{
