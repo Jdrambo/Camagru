@@ -11,7 +11,10 @@ class IconsLib{
         $query = $db->prepare('SELECT * FROM icons');
         $query->execute();
         while($data = $query->fetch(PDO::FETCH_ASSOC)){
-            echo '<div class = "icon-selector" id = "icon-'.$data['id'].'"><img alt = "'.$data['name'].'" title = "'.$data['name'].'" class = "display-picture" src = "'.$data['url'].'"></div>';
+            if ($data['id'] === $_SESSION['id_icon'])
+                echo '<div class = "icon-selector icon-selected" id = "icon-'.$data['id'].'"><img alt = "'.$data['name'].'" title = "'.$data['name'].'" class = "display-picture" src = "'.$data['url'].'"></div>';
+            else
+                echo '<div class = "icon-selector" id = "icon-'.$data['id'].'"><img alt = "'.$data['name'].'" title = "'.$data['name'].'" class = "display-picture" src = "'.$data['url'].'"></div>';
         }
     }
     

@@ -11,7 +11,7 @@ class SessionUser{
     
     public function createSession(){
         $query = $this->getDb()->prepare('SELECT account.id, account.login, account.mail, account.type, account.role, account.date_inscription, YEAR(account.date_inscription) AS ins_year, MONTH(account.date_inscription) AS ins_month, DAY(account.date_inscription) AS ins_day, HOUR(account.date_inscription) AS ins_hour, MINUTE(account.date_inscription) AS ins_min, SECOND(account.date_inscription) AS ins_sec, icons.id as id_icon, icons.name, icons.url
-        FROM account INNER JOIN icons ON account.id_icone = icons.id
+        FROM account INNER JOIN icons ON account.id_icon = icons.id
         WHERE account.login = :login');
         $query->bindValue(':login', $this->getLogin());
         $query->execute();

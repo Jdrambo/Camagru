@@ -43,6 +43,7 @@ if (isset($_SESSION['id'])){
         <button class = "btn-form btn-delete" name = "submit" value = "delete_account">Supprimer mon compte</button>
         </form>
     </div>
+    <script src = "js/select_icon.js"></script>
     </body>
     </html>
 <?php

@@ -173,6 +173,9 @@ header a{
 .icon-selector:hover{
     border:2px solid #2980b9;
 }
+.icon-selected{
+    border:2px solid #c0392b;
+}
 @media screen and (max-width: 720px){
     .container{
     width:90%;
