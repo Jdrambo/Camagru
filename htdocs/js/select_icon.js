@@ -6,7 +6,6 @@ for(var i = 0; i < len; i++){
 
 function requestIcon(callback, elem){
 	var elem_split = elem.split("-");
-	console.log(elem_split[1]);
 	var id_icon = encodeURIComponent(elem_split[1]);
 	var xhr = new XMLHttpRequest();
 
@@ -23,7 +22,6 @@ function requestIcon(callback, elem){
 
 function selectIcon(data){
 	var result = JSON.parse(data);
-	console.log(result);
 	if (result[0] === "true"){
 		var elems = document.getElementsByClassName("icon-selector");
 		var len = elems.length;

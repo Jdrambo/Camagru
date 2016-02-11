@@ -7,10 +7,9 @@ spl_autoload_register("loadClass");
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset = "utf-8">
-<link rel = "stylesheet" href = "css/style.css">
-</head>
+<?php
+include("head.php");
+?>
 <body>
 <div class = "container">
 	<?php include('header.php');?>
