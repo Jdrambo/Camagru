@@ -10,7 +10,7 @@ if (isset($_SESSION['id'])){
 		$data = $query->fetch(PDO::FETCH_ASSOC);
 		if (isset($data['id'])){
 			$query = $db->prepare('UPDATE account SET id_icon = :id_icon WHERE id = :id_user');
-			$query->bindValue(":id_icon", $_POST['id']);
+			$query->bindValue(":id_icon", $data['id']);
 			$query->bindValue(":id_user", $_SESSION['id']);
 			$query->execute();
 			$_SESSION['id_icon'] = $data['id'];
