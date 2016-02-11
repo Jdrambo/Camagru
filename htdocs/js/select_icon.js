@@ -23,11 +23,8 @@ function requestIcon(callback, elem){
 function selectIcon(data){
 	var result = JSON.parse(data);
 	if (result[0] === "true"){
-		var elems = document.getElementsByClassName("icon-selector");
-		var len = elems.length;
-		for(var i = 0; i < len; i++){
-			elems[i].className = "icon-selector";
-		}
+		var elem = document.getElementsByClassName("icon-selected");
+        elem.className = "icon-selector";
 		document.getElementById('icon-'+result[1]).className = "icon-selector icon-selected";
 		document.getElementById('main-profile-picture').src = result[2];
 		document.getElementById('menu-profile-picture').src = result[2];
