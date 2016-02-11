@@ -176,6 +176,35 @@ header a{
 .icon-selected{
     border:2px solid #c0392b;
 }
+.border_pics{
+    width:40%;
+    margin:12px 30%;
+    padding:6px;
+    display:inline-block;
+    background-color:rgba(0, 0, 0, 0.8);
+}
+.main_pics{
+    width:100%;
+    margin:12px 0;
+    display:inline-block;
+}
+.title_pics{
+    color:#1abc9c;
+    font-size:32px;
+    font-family: 'Nothing You Could Do', cursive;
+}
+.comment_pics{
+    color:#ccc;
+}
+@media screen and (min-width: 720px) and (max-width: 1280px){
+    .border_pics{
+    width:80%;
+    margin:12px 10%;
+    padding:6px;
+    display:inline-block;
+    background-color:rgba(0, 0, 0, 0.8);
+    }
+}
 @media screen and (max-width: 720px){
     .container{
     width:90%;
@@ -212,5 +241,12 @@ header a{
     border:1px solid #8fc400;
     border-bottom:1px solid #fff;
     background-color:#8fc400;
+    }
+    .border_pics{
+    width:90%;
+    margin:12px 5%;
+    padding:6px;
+    display:inline-block;
+    background-color:rgba(0, 0, 0, 0.8);
     }
 }

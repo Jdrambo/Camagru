@@ -46,11 +46,19 @@ if (!isset($_SESSION['id']))
                         $pass = $pref.$pass.$suff;
                         $pass = hash("whirlpool", $pass);
                         $clef = hash("whirlpool", (microtime()*42));
-                        $query = $db->prepare('INSERT INTO account (login, mail, pass, actif, clef, type, role, id_icone, date_inscription) VALUES (:login, :mail, :pass, 0, :clef, "standard", "user", 1, NOW())');
+                        $dir = hash("md5", (microtime().$login));
+                        $dir = "img/".$dir;
+                        while (is_dir($dir)){
+                            $dir = hash("md5", (microtime().$login));
+                            $dir = "img/".$dir;
+                        }
+                        mkdir($dir);
+                        $query = $db->prepare('INSERT INTO account (login, mail, pass, actif, clef, type, role, id_icon, date_inscription, pictures_dir) VALUES (:login, :mail, :pass, 0, :clef, "standard", "user", 1, NOW(), :dir)');
                         $query->bindValue(":login", $login);
                         $query->bindValue(":mail", $mail);
                         $query->bindValue(":pass", $pass);
                         $query->bindValue(":clef", $clef);
+                        $query->bindValue(":dir", $dir);
                         $query->execute();
 
                         // Ici nous envoyons un e-mail à l'utilisateur afin qu'il puisse valider son compte
