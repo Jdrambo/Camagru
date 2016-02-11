@@ -13,15 +13,21 @@ if (isset($_SESSION['id'])){
 			$query->bindValue(":id_icon", $_POST['id']);
 			$query->bindValue(":id_user", $_SESSION['id']);
 			$query->execute();
-			$_SESSION['id_icon'] = $_POST['id'];
+			$_SESSION['id_icon'] = $data['id'];
 			$_SESSION['url'] = $data['url'];
 			$_SESSION['name'] = $data['name'];
-
-			echo "true";
+			$tab = array("true", $_SESSION['id_icon'], $_SESSION['url'], $_SESSION['name']);
+			echo json_encode($tab);
 		}
-		echo "false";
+		else {
+			$tab = array("false");
+			echo json_encode($tab);
+		}
 	}
-	echo "false";
+	else {
+		$tab = array("false");
+		echo json_encode($tab);
+	}
 }
 else
 	header("Location: index.php");
