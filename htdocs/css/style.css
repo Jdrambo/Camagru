@@ -196,6 +196,11 @@ header a{
 .comment_pics{
     color:#ccc;
 }
+#videoElement {
+    width: 500px;
+    height: 375px;
+    background-color: #666;
+}
 @media screen and (min-width: 720px) and (max-width: 1280px){
     .border_pics{
     width:80%;
