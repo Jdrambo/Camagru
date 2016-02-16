@@ -20,8 +20,17 @@ if (isset($_SESSION['id']))
 
 	echo '<video id="video" class = "cam-video"></video>
             <img id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png">
-            <canvas id="canvas" class = "cam-pics"></canvas>';
+            <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
+            <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">
+            <p class = "container-check"><input class = "form-check" name = "published" value = "true" id = "pics_published" type = "checkbox"> Publier</p>
+            <canvas id="canvas" class = "cam-pics"></canvas>
+            <div class = "edit-menu">
+            <img id="save" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
+            <img id="edit" class = "edit-btn" alt = "éditer l\'image" src = "img/edit.png">
+            <p id = "text">Ok</p>
+            </div>';
 	?>
+	<script src = "js/edit.js"></script>
 	  <script>
        (function() {
 		  var streaming = false,
@@ -66,8 +75,7 @@ if (isset($_SESSION['id']))
 		    canvas.width = width;
 		    canvas.height = height;
 		    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
-		    var data = canvas.toDataURL('image/png');
-		    photo.setAttribute('src', data);
+		    var dataURL = canvas.toDataURL('image/png');
 		  }
 
 		  startbutton.addEventListener('click', function(ev){

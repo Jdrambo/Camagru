@@ -225,6 +225,35 @@ header a{
 .cam-btn:hover{
     opacity:0.8;
 }
+.edit-menu{
+    width:40%;
+    margin:12px 30%;
+}
+.edit-btn{
+    text-align:center;
+    vertical-align:middle;
+    width:64px;
+    margin:12px 12px;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    display:inline-block;
+}
+.edit-btn:hover{
+    opacity:0.8;
+}
+.container-check{
+    text-align:center;
+    padding:12px 24px;
+    width:320px;
+    margin:12px auto;
+    background-color:rgba(0,0,0,0.8);
+    display:block;
+}
+.form-check{
+    width:16px;
+    height:16px;
+}
 @media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
     width:70%;
