@@ -33,6 +33,14 @@ function finishSave(data){
 		alert("SAVE OK");
 	}
 	else {
-		alert(result);
+		alert("Une erreur est survenu");
 	}
+}
+
+function showElement(id){
+	document.getElementById(id).style.display = "inline-block";
+}
+
+function hideElement(id){
+	document.getElementById(id).style.display = "none";
 }

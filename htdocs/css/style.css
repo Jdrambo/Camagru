@@ -228,6 +228,7 @@ header a{
 .edit-menu{
     width:40%;
     margin:12px 30%;
+    display:none;
 }
 .edit-btn{
     text-align:center;
