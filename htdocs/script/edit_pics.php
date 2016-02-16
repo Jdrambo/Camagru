@@ -11,10 +11,7 @@ if(isset($_SESSION['id'])){
 			$comment = trim($_POST['comment']);
 		else
 			$comment = "";
-		if (isset($_POST['published']) && $_POST['published'] === "true")
-			$published = 1;
-		else
-			$published = 0;
+		$published = $_POST['published'];
 		// Ma requete pour recuperer le dossier de l'utilisateur
 		$query = $db->prepare('SELECT pictures_dir FROM account WHERE id = :id');
 		$query->bindValue(":id", $_SESSION['id']);

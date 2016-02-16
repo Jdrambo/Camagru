@@ -22,7 +22,7 @@ if (isset($_SESSION['id']))
             <img id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png">
             <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
             <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">
-            <p class = "container-check"><input class = "form-check" name = "published" value = "true" id = "pics_published" type = "checkbox"> Publier</p>
+            <p class = "container-check"><input class = "form-check" name = "published" id = "pics_published" type = "checkbox"> Publier</p>
             <canvas id="canvas" class = "cam-pics"></canvas>
             <div class = "edit-menu">
             <img id="save" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">

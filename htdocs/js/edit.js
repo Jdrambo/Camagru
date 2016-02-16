@@ -9,7 +9,11 @@ function savePics(callback){
 	var canvas = document.getElementById('canvas').toDataURL('image/png');
 	var title = document.getElementById('pics_title').value;
 	var comment = document.getElementById('pics_comment').value;
-	var published = document.getElementById('pics_published').value;
+	var published = document.getElementById('pics_published');
+	if (published.checked === true)
+		published = "1";
+	else
+		published = "0";
 	document.getElementById('text').innerHTML = title;
 
 	xhr.onreadystatechange = function() {
