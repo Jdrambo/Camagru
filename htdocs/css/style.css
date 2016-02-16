@@ -48,7 +48,7 @@ header a{
 	margin:0;
 }
 .btn-menu{
-	padding:0 24px;
+	padding:0 12px;
 	color:#fff;
 	text-decoration: none;
 	font-family:'sans-serif', Arial;
@@ -177,8 +177,8 @@ header a{
     border:2px solid #c0392b;
 }
 .border_pics{
-    width:40%;
-    margin:12px 30%;
+    width:30%;
+    margin:12px 35%;
     padding:6px;
     display:inline-block;
     background-color:rgba(0, 0, 0, 0.8);
@@ -199,12 +199,36 @@ header a{
 #videoElement {
     width: 500px;
     height: 375px;
-    background-color: #666;
+    background-color: #ccc;
 }
-@media screen and (min-width: 720px) and (max-width: 1280px){
+.cam-video{
+    width:40%;
+    margin:12px 30%;
+    display:block;
+    background-color:#000;
+}
+.cam-pics{
+    width:40%;
+    margin:12px 30%;
+    display:block;
+}
+.cam-btn{
+    text-align:center;
+    vertical-align:middle;
+    width:78px;
+    margin:12px auto;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    display:block;
+}
+.cam-btn:hover{
+    opacity:0.8;
+}
+@media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
-    width:80%;
-    margin:12px 10%;
+    width:70%;
+    margin:12px 15%;
     padding:6px;
     display:inline-block;
     background-color:rgba(0, 0, 0, 0.8);
