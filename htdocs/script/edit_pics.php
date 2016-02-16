@@ -34,10 +34,10 @@ if(isset($_SESSION['id'])){
 			$query->bindValue(":comment", $comment);
 			$query->bindValue(":published", $published);
 			$query->execute();
-			echo json_encode("true");
+			echo "true";
 		}
 		else
-			echo json_encode("false");
+			echo "false";
 	}
 }
 else

@@ -20,17 +20,21 @@ if (isset($_SESSION['id']))
 
 	echo '<video id="video" class = "cam-video"></video>
             <img title = "Prendre une photo" id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png">
-            <canvas id="canvas" class = "cam-pics"></canvas>
+            <canvas id = "canvas" class = "cam-pics"></canvas>
             <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
             <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">
-            <p class = "container-check"><input class = "form-check" name = "published" id = "pics_published" type = "checkbox"> Publier</p>
+            <p id = "container-published" class = "container-check"><input class = "form-check" name = "published" id = "pics_published" type = "checkbox"> Publier</p>
             <div id = "edit-menu" class = "edit-menu">
-            <img id="save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
-            <img id="edit" title = "Editer la photo" class = "edit-btn" alt = "éditer l\'image" src = "img/edit.png">
+            	<img id = "save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
+            	<img id = "edit" title = "Editer la photo" class = "edit-btn" alt = "éditer l\'image" src = "img/edit.png">
             </div>';
 	?>
 	<script src = "js/edit.js"></script>
 	  <script>
+	  		hideElement("pics_title");
+		    hideElement("pics_comment");
+		    hideElement("container-published");
+		    hideElement("edit-menu");
        (function() {
 		  var streaming = false,
 		      video        = document.querySelector('#video'),
@@ -75,7 +79,10 @@ if (isset($_SESSION['id']))
 		    canvas.height = height;
 		    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 		    var dataURL = canvas.toDataURL('image/png');
-		    showElement("edit-menu");
+		    showElement("pics_title", "inline-block");
+		    showElement("pics_comment", "inline-block");
+		    showElement("container-published", "block");
+		    showElement("edit-menu", "inline-block");
 		  }
 
 		  startbutton.addEventListener('click', function(ev){

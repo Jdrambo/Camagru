@@ -14,7 +14,6 @@ function savePics(callback){
 		published = "1";
 	else
 		published = "0";
-	document.getElementById('text').innerHTML = title;
 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
@@ -28,17 +27,16 @@ function savePics(callback){
 }
 
 function finishSave(data){
-	var result = JSON.parse(data);
-	if (data[0] === "true"){
+	if (data === "true"){
 		alert("SAVE OK");
 	}
 	else {
-		alert("Une erreur est survenu");
+		alert("Une erreur est survenue");
 	}
 }
 
-function showElement(id){
-	document.getElementById(id).style.display = "inline-block";
+function showElement(id, disp){
+	document.getElementById(id).style.display = disp;
 }
 
 function hideElement(id){
