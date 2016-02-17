@@ -20,12 +20,13 @@ if(isset($_SESSION['id'])){
 		$dir = $data['pictures_dir']."/";
 
 		$pics = $_POST['pics'];
-		$file = "../".$dir.hash("md5", uniqid()).".png";
+		$file = $dir.hash("md5", uniqid()).".png";
+		$file2 = "../".$file;
 		$pics = str_replace('data:image/png;base64,', '', $pics);
 		$uri = str_replace(' ', '+', $pics);
 		$data = base64_decode($uri);
 		
-		$res = file_put_contents($file, $data);
+		$res = file_put_contents($file2, $data);
 		if($res){
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
 			$query->bindValue(":url", $file);
