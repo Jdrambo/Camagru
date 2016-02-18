@@ -7,6 +7,7 @@ spl_autoload_register("loadClass");
 if (isset($_SESSION['id'])){
     include("db.php");
     $icons = new IconsLib($db);
+    $pics = new PicsLib($db);
     //
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_account"){
         $deleteAc = new DeleteAccount($_SESSION['id'], $_POST['pass'], $db);
@@ -33,6 +34,8 @@ include("head.php");
             echo '<p class = "'.$message[1].'">'.$message[0].'</p>';
         //Création de la liste de sélection d'icones
         $icons->iconSelector();
+        //Création de la bibliothèques d'images
+        $pics->displayLib();
         //Appel de la classe StdForm pour créer un formulaire standard
         $modif_pass = new StdForm("post", "profile.php", "standard-form regular-form", "modif_pass", "Modification du mot de passe");
         $modif_pass->addInputs(array(array("input", "password", "old_pass", "field", "Ancien mot de passe"), array("input", "password", "new_pass", "field", "Nouveau mot de passe"), array("input", "password", "new_pass_verif", "field", "Vérificaiton du mot de passe"), array("button" , "submit", "modif_pass", "btn-form", "Modifier le mot de passe")));

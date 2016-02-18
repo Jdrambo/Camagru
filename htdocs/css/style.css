@@ -255,6 +255,33 @@ header a{
     width:16px;
     height:16px;
 }
+.pics-lib{
+    margin: 24px 0;
+}
+.img-pics-lib{
+    width:100%;
+    display:inline-block;
+    vertical-align: top;
+}
+.pics-border{
+    display:inline-block;
+    width:178px;
+    height:178px;
+    margin:6px;
+    background-color:rgba(255, 255, 255, 0.6);
+    padding:6px;
+}
+.img-delete{
+    width:32px;
+    margin-top:140px;
+    margin-left:140px;
+    display:inline-block;
+    position:absolute;
+    cursor:pointer;
+}
+.img-delete:hover{
+    opacity:0.8;
+}
 @media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
     width:70%;
