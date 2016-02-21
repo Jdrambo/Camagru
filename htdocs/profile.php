@@ -49,6 +49,7 @@ include("head.php");
     </div>
     <!-- Script de selection des icones -->
     <script src = "js/select_icon.js"></script>
+    <script src = "js/delete_pics.js"></script>
     </body>
     </html>
 <?php

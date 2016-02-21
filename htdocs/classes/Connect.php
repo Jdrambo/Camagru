@@ -2,8 +2,6 @@
 class Connect{
     private $_login;
     private $_pass;
-    private $_pref;
-    private $_suff;
     private $_pattern;
     private $_passPattern;
     private $_db;
@@ -11,8 +9,6 @@ class Connect{
     
     public function __construct($login, $pass, $db){
         $this->setDb($db);
-        $this->setPref();
-        $this->setSuff();
         $this->setPattern();
         $this->setPassPattern();
         $this->setLogin($login);
@@ -21,13 +17,11 @@ class Connect{
     
     public function checkUser(){
         $db = $this->getDb();
-        $pass = hash("whirlpool", $this->getPref().$this->getPass().$this->getSuff());
-        $query = $db->prepare('SELECT id FROM account WHERE (pass COLLATE utf8_bin = :pass && login COLLATE utf8_bin = :login && actif = 1)');
-        $query->bindValue(":pass", $pass);
+        $query = $db->prepare('SELECT id, pass FROM account WHERE (login COLLATE utf8_bin = :login && actif = 1)');
         $query->bindValue(":login", $this->getLogin());
         $query->execute();
         $data = $query->fetch(PDO::FETCH_ASSOC);
-        if (isset($data['id'])){
+        if (isset($data['id']) && password_verify($this->getPass(), $data['pass'])){
             $this->setMessage("Identification validée", "ok");
             return (true);
         }
@@ -52,22 +46,6 @@ class Connect{
         if (isset($value) && preg_match($this->getPassPattern(), $value)){
             $this->_pass = $value;
         }
-    }
-    
-    public function setPref(){
-        $db = $this->getDb();
-        $query = $db->prepare('SELECT pass_prefixe FROM config');
-        $query->execute();
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        $this->_pref = $data['pass_prefixe'];
-    }
-    
-    public function setSuff(){
-        $db = $this->getDb();
-        $query = $db->prepare('SELECT pass_suffixe FROM config');
-        $query->execute();
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        $this->_suff = $data['pass_suffixe'];
     }
     
     public function setPattern(){
@@ -101,14 +79,6 @@ class Connect{
     
     public function getPass(){
         return ($this->_pass);
-    }
-    
-    public function getPref(){
-        return ($this->_pref);
-    }
-    
-    public function getSuff(){
-        return ($this->_suff);
     }
     
     public function getPattern(){

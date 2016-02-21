@@ -25,15 +25,13 @@ class ModifPass{
     public function changePass(){
         if ($this->getNewPass() === $this->getNewPassVerif()){
             if (preg_match($this->getPassPattern(), $this->getNewPass())){
-                $oldPass = hash("whirlpool", $this->getPref().$this->getOldPass().$this->getSuff());
                 $db = $this->getDb();
-                $query = $db->prepare('SELECT * FROM account WHERE (id = :id && pass COLLATE utf8_bin = :pass)');
+                $query = $db->prepare('SELECT * FROM account WHERE id = :id');
                 $query->bindValue(':id', $this->getId());
-                $query->bindValue(':pass', $oldPass);
                 $query->execute();
                 $data = $query->fetch(PDO::FETCH_ASSOC);
-                if (isset($data['id']) && $data['id'] === $this->getId()){
-                    $newPass = hash("whirlpool", $this->getPref().$this->getNewPass().$this->getSuff());
+                if (isset($data['id']) && isset($data['pass']) && $data['id'] === $this->getId() && password_verify($this->getOldPass(), $data['pass'])){
+                    $newPass = password_hash($this->getNewPass(), PASSWORD_DEFAULT);
                     $db = $this->getDb();
                     $query = $db->prepare('UPDATE account SET pass = :newPass WHERE id = :id');
                     $query->bindValue(':newPass', $newPass);

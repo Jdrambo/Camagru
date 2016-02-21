@@ -144,10 +144,14 @@ header a{
 .error{
 	color:#c0392b;
     font-size:24px;
+    background-color: rgba(255,255,255, 0.8);
+    padding:6px;
 }
 .ok{
 	color:#27ae60;
     font-size:24px;
+    background-color: rgba(255,255,255, 0.8);
+    padding:6px;
 }
 .alert{
     background-color:#fff;
@@ -257,27 +261,32 @@ header a{
 }
 .pics-lib{
     margin: 24px 0;
+    max-height:600px;
+    overflow-y: auto;
+    display:inline-block;
+}
+.pics-lib-title{
+    color:#000;
 }
 .img-pics-lib{
     width:100%;
     display:inline-block;
-    vertical-align: top;
 }
 .pics-border{
     display:inline-block;
     width:178px;
-    height:178px;
     margin:6px;
-    background-color:rgba(255, 255, 255, 0.6);
+    background-color:rgba(255, 255, 255, 0.8);
     padding:6px;
+    vertical-align: top;
 }
 .img-delete{
     width:32px;
-    margin-top:140px;
-    margin-left:140px;
     display:inline-block;
-    position:absolute;
     cursor:pointer;
+    float:right;
+    margin-top:6px;
+    vertical-align: bottom;
 }
 .img-delete:hover{
     opacity:0.8;
