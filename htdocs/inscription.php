@@ -22,8 +22,6 @@ if (!isset($_SESSION['id']))
         $login = $_POST['login'];
         $mail = $_POST['mail'];
         $mail_verif = $_POST['mail_verif'];
-        $pref = $data['pass_prefixe'];
-        $suff = $data['pass_suffixe'];
         $pattern = $data['pattern'];
         $pass_pattern = $data['pass_pattern'];
         // On vérifie que les deux mots de passes soient identiques
@@ -43,8 +41,7 @@ if (!isset($_SESSION['id']))
                     On enregistre un nouveau compte utilisateur avec le rôle user en base de données
                     */
                     if (!(isset($data['id']))){
-                        $pass = $pref.$pass.$suff;
-                        $pass = hash("whirlpool", $pass);
+                        $pass = password_hash($pass, PASSWORD_DEFAULT);
                         $clef = hash("whirlpool", (microtime()*42));
                         $dir = hash("md5", (microtime().$login));
                         $dir = "img/".$dir;

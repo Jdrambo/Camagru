@@ -4,27 +4,32 @@ class DeleteAccount{
 	private $_db;
 	private $_pass;
 	private $_id;
-	private $_pref;
-	private $_suff;
 
 	public function __construct($id, $pass, $db){
 		$this->setDb($db);
 		$this->setPass($pass);
 		$this->setId($id);
-		$this->setPref();
-		$this->setSuff();
 	}
 
 	public function eraseAccount(){
 		$db = $this->getDb();
-		$pass = hash("whirlpool", $this->getPref().$this->getPass().$this->getSuff());
-		$query = $db->prepare('SELECT * FROM `account` WHERE (`id` = :id && `pass` = :pass)');
+		$query = $db->prepare('SELECT * FROM `account` WHERE `id` = :id');
 		$query->bindValue(':id', $this->getId());
-		$query->bindValue(':pass', $pass);
 		$query->execute();
 		$data = $query->fetch(PDO::FETCH_ASSOC);
-		if (isset($data['id'])){
-			$query = $db->prepare('DELETE FROM account WHERE id = :id');
+		if (isset($data['id']) && password_verify($this->getPass(), $data['pass'])){
+            $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+            $query->bindValue(':id', $this->getId());
+            $query->execute();
+            while($data = $query->fetch(PDO::FETCH_ASSOC)){
+                if (isset($data['pictures_dir']))
+                    $dir = $data['pictures_dir'];
+                if (isset($data['url']) && file_exists($data['url']))
+                    unlink($data['url']);
+            }
+            if (isset($dir) && file_exists($dir))
+                rmdir($dir);
+			$query = $db->prepare('DELETE `account`, `pictures` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
 			$query->bindValue(':id', $this->getId());
 			$query->execute();
 			if (isset($_SESSION)){
@@ -55,22 +60,6 @@ class DeleteAccount{
 			$this->_id = $value;
 	}
 
-	public function setPref(){
-		$db = $this->getDb();
-		$query = $db->prepare('SELECT pass_prefixe FROM config');
-		$query->execute();
-		$data = $query->fetch(PDO::FETCH_ASSOC);
-		$this->_pref = $data['pass_prefixe'];
-	}
-
-	public function setSuff(){
-		$db = $this->getDb();
-		$query = $db->prepare('SELECT pass_suffixe FROM config');
-		$query->execute();
-		$data = $query->fetch(PDO::FETCH_ASSOC);
-		$this->_suff = $data['pass_suffixe'];
-	}
-
 	public function getDb(){
 		return($this->_db);
 	}
@@ -81,14 +70,6 @@ class DeleteAccount{
 
 	public function getId(){
 		return($this->_id);
-	}
-
-	public function getPref(){
-		return($this->_pref);
-	}
-
-	public function getSuff(){
-		return($this->_suff);
 	}
 }
 ?>
