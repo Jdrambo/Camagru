@@ -72,6 +72,37 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);
         }
     }
+    
+    // Script de modification du statu publique/privée d'une image
+    if (isset($_POST['submit']) && isset($_POST['id_pics']) && $_POST['submit'] === "privacy_pics"){
+        $query = $db->prepare('SELECT * FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
+        $query->bindValue(":id_pics", $_POST['id_pics']);
+        $query->bindValue(":user_id", $_SESSION['id']);
+        $query->execute();
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+        if (isset($data['id'])){
+            $id = $data['id'];
+            if ($data['published'] === "0"){
+                $query = $db->prepare('UPDATE pictures SET published = 1 WHERE id = :pics_id && user_id = :user_id');
+                $message = 'L\'image a été rendue publique';
+                $privacy = 'Publique';
+            }
+            else {
+                $query = $db->prepare('UPDATE pictures SET published = 0 WHERE id = :pics_id && user_id = :user_id');
+                $message = 'L\'image a été rendue privée';
+                $privacy = 'Privée';
+            }
+            $query->bindValue(':pics_id', $data['id']);
+            $query->bindValue(':user_id', $_SESSION['id']);
+            $query->execute();
+            $tab = array('true', $message, $id, $privacy);
+            echo json_encode($tab);
+        }
+        else{
+            $tab = array('false', 'Erreur lors de la modification du statut de l\'image');
+            echo json_encode($tab);
+        }
+    }
 }
 else
 	header("Location: index.php");

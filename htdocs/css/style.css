@@ -280,7 +280,7 @@ header a{
     padding:6px;
     vertical-align: top;
 }
-.img-delete{
+.img-delete, .img-privacy{
     width:32px;
     display:inline-block;
     cursor:pointer;
@@ -288,7 +288,7 @@ header a{
     margin-top:6px;
     vertical-align: bottom;
 }
-.img-delete:hover{
+.img-delete:hover, .img-privacy:hover{
     opacity:0.8;
 }
 .state_message{

@@ -28,6 +28,8 @@ include("head.php");
     <body>
     <div class = "container">
         <?php include('header.php');
+        //Le message pour les alert
+        echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
         //Affichage de la photo de profile et des informations du compte
         echo '<h2>Profil de '.$_SESSION['login'].'</h2><img id = "main-profile-picture" class = "profile-picture" alt = "'.$_SESSION['name'].'" src = "'.$_SESSION['url'].'"><p>'.$_SESSION['mail'].'</p><p>Type de compte : '.$_SESSION['type'].'</p><p>Role : '.$_SESSION['role'].'</p><p>Inscription : Le '.$_SESSION['ins_day'].'/'.$_SESSION['ins_month'].'/'.$_SESSION['ins_year'].' à '.$_SESSION['ins_hour'].':'.$_SESSION['ins_min'].':'.$_SESSION['ins_sec'].'</p>';
         if (isset($message))
