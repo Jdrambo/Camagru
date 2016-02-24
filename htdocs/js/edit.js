@@ -27,12 +27,32 @@ function savePics(callback){
 }
 
 function finishSave(data){
+    var elem = document.getElementById('state_message');
 	if (data === "true"){
-		alert("SAVE OK");
+        elem.innerHTML = "La photo a bien été enregistrée";
+		elem.style.visibility = "visible";
+        elem.style.opacity = "1";
+        setTimeout((function(){
+            elem.style.opacity = "0";
+            elem.style.visibility = "hidden";
+        }),2000);
+       
 	}
 	else {
-		alert("Une erreur est survenue");
+		elem.innerHTML = "Une erreur est survenue pendant l'enregistrement de l'image";
+        elem.style.backgroundColor = "#822";
+		elem.style.visibility = "visible";
+        elem.style.opacity = "1";
+        setTimeout((function(){
+            elem.style.opacity = "0";
+            elem.style.visibility = "hidden";
+        }),2000);
 	}
+}
+
+function hideMessage(elem){
+    elem.style.height = "0";
+    elem.style.visibility = "hidden";
 }
 
 function showElement(id, disp){

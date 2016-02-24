@@ -16,6 +16,7 @@ include("head.php");
 if (isset($_SESSION['id']))
 {
 	include("db.php");
+    echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
 	echo '<p>Edition de photos</p>';
 
 	echo '<video id="video" class = "cam-video"></video>
