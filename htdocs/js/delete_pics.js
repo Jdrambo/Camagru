@@ -39,9 +39,10 @@ function resultDelete(data){
         for(var i = 0; i < len; i++){
             parent_pics[i].removeChild(border);
         }
+        displayMessage("L'image a bien été supprimée", "#228");
     }
     else
-        alert ("ERROR");
+        displayMessage("Erreur lors de la suppression de l'image", "#822");
 }
 
 function changePrivacy(callback, elemId){
@@ -63,7 +64,7 @@ function changePrivacy(callback, elemId){
 function resultPrivacy(data){
     console.log(data);
     var result = JSON.parse(data);
-    var mess = document.getElementById('state_message');
+    
     if (result[0] === "true"){
         var picsPrivacy = document.getElementById('privacy-'+result[2]);
         picsPrivacy.innerHTML = result[3];
@@ -71,23 +72,20 @@ function resultPrivacy(data){
             document.getElementById('img-privacy-'+result[2]).src = "img/lock.png";
         else
             document.getElementById('img-privacy-'+result[2]).src = "img/unlock.png";
-        mess.style.backgroundColor = "#228";
-        mess.innerHTML = result[1];
-		mess.style.visibility = "visible";
-        mess.style.opacity = "1";
-        setTimeout((function(){
-            mess.style.opacity = "0";
-            mess.style.visibility = "hidden";
-        }),2000);
+        displayMessage(result[1], "#228");
     }
-    else{
-        mess.style.backgroundColor = "#822";
-        mess.innerHTML = result[1];
-		mess.style.visibility = "visible";
-        mess.style.opacity = "1";
-        setTimeout((function(){
-            mess.style.opacity = "0";
-            mess.style.visibility = "hidden";
-        }),2000);
-    }
+    else
+        displayMessage(result[1], "#822");
+}
+
+function displayMessage(text, color){
+    var mess = document.getElementById('state_message');
+    mess.style.backgroundColor = color;
+    mess.innerHTML = text;
+    mess.style.visibility = "visible";
+    mess.style.opacity = "1";
+    setTimeout((function(){
+        mess.style.opacity = "0";
+        mess.style.visibility = "hidden";
+    }),2000);
 }

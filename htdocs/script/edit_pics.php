@@ -84,12 +84,12 @@ if(isset($_SESSION['id'])){
             $id = $data['id'];
             if ($data['published'] === "0"){
                 $query = $db->prepare('UPDATE pictures SET published = 1 WHERE id = :pics_id && user_id = :user_id');
-                $message = 'L\'image a été rendue publique';
+                $message = 'L\'image est désormais publique';
                 $privacy = 'Publique';
             }
             else {
                 $query = $db->prepare('UPDATE pictures SET published = 0 WHERE id = :pics_id && user_id = :user_id');
-                $message = 'L\'image a été rendue privée';
+                $message = 'L\'image est désormais privée';
                 $privacy = 'Privée';
             }
             $query->bindValue(':pics_id', $data['id']);

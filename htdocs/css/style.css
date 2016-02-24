@@ -280,7 +280,7 @@ header a{
     padding:6px;
     vertical-align: top;
 }
-.img-delete, .img-privacy{
+.img-privacy, .img-delete{
     width:32px;
     display:inline-block;
     cursor:pointer;
@@ -288,7 +288,7 @@ header a{
     margin-top:6px;
     vertical-align: bottom;
 }
-.img-delete:hover, .img-privacy:hover{
+.img-privacy:hover, .img-delete:hover{
     opacity:0.8;
 }
 .state_message{
@@ -305,6 +305,15 @@ header a{
     color:#fff;
     text-align:center;
     transition:top 0.5s ease-in, visibility 0.5s ease-in, opacity 0.5s ease-in;
+}
+.com-login{
+    color:#8f8fff;
+    font-size:18px;
+    margin:6px;
+}
+.com-text{
+    color:#fff;
+    font-size:14px;
 }
 @media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
