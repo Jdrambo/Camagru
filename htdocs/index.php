@@ -35,7 +35,7 @@ if (isset($_SESSION['id']))
             $data['hour_add'] = "0".$data['hour_add'];
         if ($data['min_add'] <= 9)
             $data['min_add'] = "0".$data['min_add'];
-		echo '<div class = "border_pics"><p class = "title_pics">'.$data['title'].'</p><p>Par : '.$data['login'].'</p><img class = "main_pics" src = "'.$data['url'].'"><p class = "comment_pics">'.$data['comment'].'</p><p>Le '.$data['day_add'].'/'.$data['month_add'].'/'.$data['year_add'].' à '.$data['hour_add'].'h'.$data['min_add'].'</p><div class = "comments-block"';
+		echo '<div class = "border_pics"><p class = "title_pics">'.$data['title'].'</p><p>Par : '.$data['login'].'</p><img class = "main_pics" src = "'.$data['url'].'"><p class = "comment_pics">'.$data['comment'].'</p><p>Le '.$data['day_add'].'/'.$data['month_add'].'/'.$data['year_add'].' à '.$data['hour_add'].'h'.$data['min_add'].'</p><div class = "comments-block">';
         while ($com = $queryx->fetch(PDO::FETCH_ASSOC)){
             echo '<p><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span></p>';
         }
