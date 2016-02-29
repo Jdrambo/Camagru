@@ -58,7 +58,8 @@ if(isset($_SESSION['id'])){
                 $query->bindValue(":id_pics", $data['id']);
                 $query->bindValue(":user_id", $_SESSION['id']);
                 $query->execute();
-                unlink("../".$data['url']);
+                if (is_file($data['url']))
+                    unlink($data['url']);
                 $tab = array('true', 'Image supprimée', $data['id']);
                 echo json_encode($tab);
             }
@@ -68,7 +69,7 @@ if(isset($_SESSION['id'])){
             }
         }
         catch(Exception $e){
-            $tab = array('false', 'Erreur : '.$e->getMessage(), '');
+            $tab = array('false', 'Erreur : '.$e->getMessage());
             echo json_encode($tab);
         }
     }
@@ -100,6 +101,53 @@ if(isset($_SESSION['id'])){
         }
         else{
             $tab = array('false', 'Erreur lors de la modification du statut de l\'image');
+            echo json_encode($tab);
+        }
+    }
+    
+    //Script de gestion des like sur un post
+    if (isset($_POST['submit']) && isset($_POST['pics_id']) && $_POST['submit'] === "like_pics"){
+        try{
+            $q = null;
+            $q = $db->prepare('SELECT * FROM `liketab` WHERE (`pics_id` = :pics_id && `user_id` = :user_id)');
+            $q->bindValue(':pics_id', $_POST['pics_id']);
+            $q->bindValue(':user_id', $_SESSION['id']);
+            $q->execute();
+
+            $resq = $q->fetch(PDO::FETCH_ASSOC);
+            if (isset($resq['id']) && $resq['id'] != null){
+                try{
+                    $q = null;
+                    $q = $db->prepare('DELETE FROM `liketab` WHERE (pics_id = :pics_id && user_id = :user_id)');
+                    $q->bindValue(':pics_id', $_POST['pics_id']);
+                    $q->bindValue(':user_id', $_SESSION['id']);
+                    $q->execute();
+                    $tab = array('true', 'unlike', $_POST['pics_id']);
+                    echo json_encode($tab);
+                }
+                catch(Exception $err){
+                    $tab = array('false', "Erreur : ".$err->getMessage());
+                    echo json_encode($tab);
+                }
+            }
+            else {
+                try {
+                    $q = null;
+                    $q = $db->prepare('INSERT INTO `liketab` (pics_id, user_id) VALUES (:pics_id, :user_id)');
+                    $q->bindValue(':pics_id', $_POST['pics_id']);
+                    $q->bindValue(':user_id', $_SESSION['id']);
+                    $q->execute();
+                    $tab = array('true', 'addlike', $_POST['pics_id']);
+                    echo json_encode($tab);
+                }
+                catch(Exception $err){
+                    $tab = array('false', "Erreur : ".$err->getMessage());
+                    echo json_encode($tab);
+                }
+            }
+        }
+        catch(Exception $e){
+            $tab = array('false', 'Erreur : '.$e->getMessage());
             echo json_encode($tab);
         }
     }

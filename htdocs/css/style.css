@@ -189,7 +189,7 @@ header a{
 }
 .main_pics{
     width:100%;
-    margin:12px 0;
+    margin:0;
     display:inline-block;
 }
 .title_pics{
@@ -306,6 +306,33 @@ header a{
     text-align:center;
     transition:top 0.5s ease-in, visibility 0.5s ease-in, opacity 0.5s ease-in;
 }
+.login-post{
+    color:#fff;
+    font-size:20px;
+    margin:6px;
+}
+.date-post{
+    color:#ccc;
+    font-size:14px;
+    margin:6px;
+}
+.command-post{
+    background-color:rgba(255, 255, 255, 0.6);
+    padding: 12px 6px;
+}
+.comment-post, .like-post{
+    margin:6px;
+    cursor:pointer;
+}
+.comment-post:hover, .like-post:hover{
+    color:#2828cc;
+    text-decoration: underline;
+}
+.icon-comment{
+    width:32px;
+    display:inline-block;
+    vertical-align:middle;
+}
 .com-login{
     color:#8f8fff;
     font-size:18px;
@@ -314,6 +341,14 @@ header a{
 .com-text{
     color:#fff;
     font-size:14px;
+}
+.img-like{
+    width:20px;
+    background-color:#fff;
+    border-radius:14px;
+    padding:4px;
+    margin:0 6px;
+    vertical-align:middle;
 }
 @media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
