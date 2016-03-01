@@ -12,14 +12,13 @@
     }
     
     function likePost(callback, elem){
-        var elem_split = elem.split('-');
+        var elem_split = elem.split('_');
         var pics_id = encodeURIComponent(elem_split[2]);
         xhr = new XMLHttpRequest()
 
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
                 callback(xhr.responseText);
-            }
 	    };
     
     xhr.open("POST", "script/edit_pics.php", true);
@@ -31,10 +30,10 @@
         var result = JSON.parse(data);
         console.log(result);
         if (result[0] === "true"){
-            var post = document.getElementById('like-post-'+result[2]);
+            var post = document.getElementById('like_post_'+result[2]);
             var likeCount = document.getElementById('like-count-'+result[2]);
             var count = Number(likeCount.innerHTML);
-            if (result[1] === "addlike"){
+            if (result[1] === "0"){
                 post.innerHTML = "Je n'aime plus";
                 count++;
             }
@@ -46,7 +45,7 @@
         }
     }
     
-    function commentPost(callback, id){
+    /*function commentPost(callback, id){
         
     }
     
@@ -58,4 +57,4 @@
         else {
             
         }
-    }
+    }*/
