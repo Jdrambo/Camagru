@@ -1,18 +1,18 @@
-   var AllBtnLike = document.getElementsByClassName('like-post');
-   var AllBtnComment = document.getElementsByClassName('comment-post');
-    var AllBtnLikeLen = AllBtnLike.length;
-    var AllBtnCommentLen = AllBtnComment.length;
+var BtnLike = document.getElementsByClassName('like-post');
+var BtnComment = document.getElementsByClassName('comment-post');
+var BtnLikeLen = BtnLike.length;
+var BtnCommentLen = BtnComment.length;
     
-    for(var i = 0; i < AllBtnLikeLen; i++){
-        AllBtnLike[i].addEventListener("click", function(){likePost(resultLike, this.id)}, false);
-    }
+for(var i = 0; i < BtnLikeLen; i++){
+    BtnLike[i].addEventListener("click", function(){ likePost(resultLike, this.id)}, false);
+}
     
-    for (var i = 0; i < AllBtnCommentLen; i++){
-        AllBtnComment[i].addEventListener("click", function (){commentPost(resultComment, this.id)}, false);
-    }
+for (var i = 0; i < BtnCommentLen; i++){
+    BtnComment[i].addEventListener("click", function(){ commentPost(resultComment, this.id)}, false);
+}
     
     function likePost(callback, elem){
-        var elem_split = elem.split('_');
+        var elem_split = elem.split('-');
         var pics_id = encodeURIComponent(elem_split[2]);
         xhr = new XMLHttpRequest()
 
@@ -21,7 +21,7 @@
                 callback(xhr.responseText);
 	    };
     
-    xhr.open("POST", "script/edit_pics.php", true);
+    xhr.open("POST", "script/like.php", true);
 	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xhr.send("submit=like_pics&pics_id="+pics_id);
     }
@@ -30,7 +30,7 @@
         var result = JSON.parse(data);
         console.log(result);
         if (result[0] === "true"){
-            var post = document.getElementById('like_post_'+result[2]);
+            var post = document.getElementById('like-post-'+result[2]);
             var likeCount = document.getElementById('like-count-'+result[2]);
             var count = Number(likeCount.innerHTML);
             if (result[1] === "0"){
