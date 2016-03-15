@@ -103,6 +103,31 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);
         }
     }
+    
+    // Script qui enregistre un commentaire en base de données
+    if (isset($_POST['submit']) && isset($_POST['content']) && isset($_POST['pics_id']) && $_POST['submit'] === "comment_post"){
+        $content = trim($_POST['content']);
+        if ($content !== "" && !empty($content)){
+            $query = $db->prepare('INSERT INTO comments (pics_id, user_id, content, date_add) VALUES (:pics_id, :user_id, :content, NOW())');
+            $query->bindValue(':pics_id', $_POST['pics_id']);
+            $query->bindValue(':user_id', $_SESSION['id']);
+            $query->bindValue(':content', $_POST['content']);
+            $query->execute();
+
+            $query = $db->prepare('SELECT * FROM comments WHERE pics_id = :pics_id && user_id = :user_id ORDER BY date_add DESC LIMIT 1');
+            $query->bindValue(':pics_id', $_POST['pics_id']);
+            $query->bindValue(':user_id', $_SESSION['id']);
+            $query->execute();
+            $data = $query->fetch(PDO::FETCH_ASSOC);
+
+            $tab = array('true', $_POST['pics_id'], $_POST['content'], $_SESSION['url'], $_SESSION['login'], $data['id']);
+            echo json_encode($tab);
+        }
+        else{
+            $tab = array('false', 'empty');
+            echo json_encode($tab);   
+        }
+    }
 }
 else
 	header("Location: index.php");

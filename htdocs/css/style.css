@@ -376,6 +376,28 @@ header a{
     display:inline-block;
     width:75%;
 }
+.line-comment{
+    background-color:rgba(30, 30, 30, 0.2);
+    padding:6px;
+}
+.line-comment2{
+    background-color:rgba(60, 60, 60, 0.4);
+    padding:6px;
+}
+.line-comment:hover >.delete-com, .line-comment2:hover >.delete-com{
+    display:inline-block;
+}
+.delete-com{
+    width:16px;
+    float:right;
+    cursor:pointer;
+    vertical-align: middle;
+    display:none;
+    margin:6px;
+}
+.delete-com:hover{
+    opacity:0.6;
+}
 @media screen and (min-width: 720px) and (max-width: 1400px){
     .border_pics{
     width:70%;

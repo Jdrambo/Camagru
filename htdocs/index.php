@@ -28,7 +28,7 @@ if (isset($_SESSION['id']))
     ORDER BY pictures.date_ajout DESC LIMIT 10');
 	$query->execute();
 	while ($datax = $query->fetch(PDO::FETCH_ASSOC)){
-        $queryx = $db->prepare('SELECT `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC LIMIT 10');
+        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC LIMIT 10');
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         
@@ -57,9 +57,18 @@ if (isset($_SESSION['id']))
         else
             $like_status = "J'aime";
 		echo '<div class = "border_pics"><p><span class = "title_pics">'.$datax['title'].'</span><br>
-        <span class = "login-post">'.$datax['login'].'</span><br><span class = "date-post">'.$datax['day_add'].'/'.$datax['month_add'].'/'.$datax['year_add'].', '.$datax['hour_add'].'h'.$datax['min_add'].'</span></p><p class = "comment_pics">'.$datax['comment'].'</p><img class = "main_pics" src = "'.$datax['url'].'"><p class = "command-post"><span class = "like-count" id = "like-count-'.$datax['picture_id'].'">'.$likeCount.'</span><img class = "img-like" src = "img/like2.png"><span class = "like-post" id = "like-post-'.$datax['picture_id'].'">'.$like_status.'</span><span class = "comment-post" id = "comment-post-'.$id_pic.'">Commenter</span></p><div id = "general-input-border-'.$id_pic.'" class = "general-input-border"><div class = "my-comment-img-border"><img class = "my-comment-img" alt = "my_comment_profil_picture" id = "my-comment-img-'.$id_pic.'" src = "'.$_SESSION['url'].'"></div><div class = "comment-input-border"><input id = "comment-input-'.$id_pic.'" class = "comment-input" type = "text" name = "comment-input" placeholder = "Votre commentaire..."></div></div><div class = "comments-block">';
+        <span class = "login-post">'.$datax['login'].'</span><br><span class = "date-post">'.$datax['day_add'].'/'.$datax['month_add'].'/'.$datax['year_add'].', '.$datax['hour_add'].'h'.$datax['min_add'].'</span></p><p class = "comment_pics">'.$datax['comment'].'</p><img class = "main_pics" src = "'.$datax['url'].'"><p class = "command-post"><span class = "like-count" id = "like-count-'.$datax['picture_id'].'">'.$likeCount.'</span><img class = "img-like" src = "img/like2.png"><span class = "like-post" id = "like-post-'.$datax['picture_id'].'">'.$like_status.'</span><span class = "comment-post" id = "comment-post-'.$id_pic.'">Commenter</span></p><div id = "general-input-border-'.$id_pic.'" class = "general-input-border"><div class = "my-comment-img-border"><img class = "my-comment-img" alt = "my_comment_profil_picture" id = "my-comment-img-'.$id_pic.'" src = "'.$_SESSION['url'].'"></div><div class = "comment-input-border"><input id = "comment-input-'.$id_pic.'" class = "comment-input" type = "text" name = "comment-input" placeholder = "Votre commentaire..."></div></div><div class = "comments-block" id = "comments-block-'.$id_pic.'">';
+        $i = 0;
         while ($com = $queryx->fetch(PDO::FETCH_ASSOC)){
-            echo '<p><img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span></p>';
+            if ($i % 2 > 0)
+                echo '<p class = "line-comment" id = "comment-id-'.$com['comId'].'">';
+            else
+                echo '<p class = "line-comment2" id = "comment-id-'.$com['comId'].'">';
+            echo '<img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span>';
+            if ($com['comUserId'] === $_SESSION['id'])
+                echo '<img id = "delete-com-'.$com['comId'].'" alt = "delete comment" class = "delete-com" src = "img/delete_small.png">';
+            echo '</p>';
+            $i++;
         }
         echo '</div></div>';
         echo '<script src = "js/main_page.js"></script>';

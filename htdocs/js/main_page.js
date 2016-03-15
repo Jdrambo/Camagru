@@ -19,11 +19,12 @@ for (var i = 0; i < BtnCommentLen; i++){
 // On ajoute l'eventListener qui écoutera la pression d'une touche dans l'input de commentaire
 for (var i = 0; i < validComLen; i++){
     validCom[i].addEventListener("keyup", function(e){
-        if (lastEvent && lasEvent.keyCode === e.keyCode)
+        if (lastEvent && lastEvent.keyCode === e.keyCode)
             return ;
+        else
+            lastEvent = null;
         if (e.keyCode === 13){
             lastEvent = e;
-            alert(this.value);
             addCom(resultAddCom, this.id);
         }
     }, false);
@@ -76,10 +77,50 @@ for (var i = 0; i < validComLen; i++){
 
 // Cette fonction ajoute en bdd un commentaire
     function addCom(callback, elem_id){
-            alert("KeyCode =  / id = " + elem_id);
+        var content = document.getElementById(elem_id).value;
+        document.getElementById(elem_id).value = "";
+        content = content.trim();
+        if (content != ""){
+            var elem_split = elem_id.split('-');
+            var pics_id = encodeURIComponent(elem_split[2]);
+            xhr = new XMLHttpRequest()
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
+                    callback(xhr.responseText);
+            };
+
+            xhr.open("POST", "script/edit_pics.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("submit=comment_post&pics_id="+pics_id+"&content="+content);
+        }
     }
 
 // Cette function est la callback de addCom
     function resultAddCom(data){
+        if (data)
+            var result = JSON.parse(data);
         
+        if (result && result[0] === "true"){
+            var com_block = document.getElementById("comments-block-" + result[1]);
+            var node = document.createElement("p");
+            node.className = "line-comment";
+            node.id = "comment-id-"+result[5];
+            var image = document.createElement("img");
+            image.src = result[3];
+            image.className = "icon-comment";
+            var login = document.createElement("span");
+            login.className = "com-login";
+            login.innerHTML = result[4];
+            var content = document.createElement("span");
+            content.className = "com-text";
+            content.innerHTML = result[2];
+            
+            node.appendChild(image);
+            node.appendChild(login);
+            node.appendChild(content);
+            var firstNode = com_block.firstChild;
+            com_block.insertBefore(node, firstNode);
+        }
+        console.log(result);
     }
