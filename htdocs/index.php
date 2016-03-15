@@ -38,6 +38,7 @@ if (isset($_SESSION['id']))
         $count = $queryy->fetch(PDO::FETCH_ASSOC);
         $likeCount = count($count['id']);
         
+        $id_pic = $datax['picture_id'];
         $q = $db->prepare('SELECT * FROM `tablike` WHERE (`pics_id` = :pics_id && `user_id` = :user_id && `status` = 1)');
         $q->bindValue(':pics_id', $datax['picture_id']);
         $q->bindValue(':user_id', $_SESSION['id']);
@@ -56,7 +57,7 @@ if (isset($_SESSION['id']))
         else
             $like_status = "J'aime";
 		echo '<div class = "border_pics"><p><span class = "title_pics">'.$datax['title'].'</span><br>
-        <span class = "login-post">'.$datax['login'].'</span><br><span class = "date-post">'.$datax['day_add'].'/'.$datax['month_add'].'/'.$datax['year_add'].', '.$datax['hour_add'].'h'.$datax['min_add'].'</span></p><p class = "comment_pics">'.$datax['comment'].'</p><img class = "main_pics" src = "'.$datax['url'].'"><p class = "command-post"><span class = "like-count" id = "like-count-'.$datax['picture_id'].'">'.$likeCount.'</span><img class = "img-like" src = "img/like2.png"><span class = "like-post" id = "like-post-'.$datax['picture_id'].'">'.$like_status.'</span><span class = "comment-post" id = "comment-post-'.$datax['picture_id'].'">Commenter</span></p><div class = "comments-block">';
+        <span class = "login-post">'.$datax['login'].'</span><br><span class = "date-post">'.$datax['day_add'].'/'.$datax['month_add'].'/'.$datax['year_add'].', '.$datax['hour_add'].'h'.$datax['min_add'].'</span></p><p class = "comment_pics">'.$datax['comment'].'</p><img class = "main_pics" src = "'.$datax['url'].'"><p class = "command-post"><span class = "like-count" id = "like-count-'.$datax['picture_id'].'">'.$likeCount.'</span><img class = "img-like" src = "img/like2.png"><span class = "like-post" id = "like-post-'.$datax['picture_id'].'">'.$like_status.'</span><span class = "comment-post" id = "comment-post-'.$id_pic.'">Commenter</span></p><div id = "general-input-border-'.$id_pic.'" class = "general-input-border"><div class = "my-comment-img-border"><img class = "my-comment-img" alt = "my_comment_profil_picture" id = "my-comment-img-'.$id_pic.'" src = "'.$_SESSION['url'].'"></div><div class = "comment-input-border"><input id = "comment-input-'.$id_pic.'" class = "comment-input" type = "text" name = "comment-input" placeholder = "Votre commentaire..."></div></div><div class = "comments-block">';
         while ($com = $queryx->fetch(PDO::FETCH_ASSOC)){
             echo '<p><img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span></p>';
         }
