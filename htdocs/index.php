@@ -66,7 +66,7 @@ if (isset($_SESSION['id']))
                 echo '<p class = "line-comment2" id = "comment-id-'.$com['comId'].'">';
             echo '<img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span>';
             if ($com['comUserId'] === $_SESSION['id'])
-                echo '<img id = "delete-com-'.$com['comId'].'" alt = "delete comment" class = "delete-com" src = "img/delete_small.png">';
+                echo '<img id = "delete-com-'.$com['comId'].'" title = "Spprimer le commentaire" alt = "delete comment" class = "delete-com" src = "img/delete_small.png">';
             echo '</p>';
             $i++;
         }

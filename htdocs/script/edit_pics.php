@@ -128,6 +128,22 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);   
         }
     }
+    
+    // Script de suppression d'un commentaire
+    if (isset($_POST['submit']) && $_POST['submit'] === "delete_com" && isset($_POST['com_id'])){
+        try{
+            $query = $db->prepare('DELETE FROM comments WHERE id = :id && user_id = :user_id');
+            $query->bindValue(':id', $_POST['com_id']);
+            $query->bindValue(':user_id', $_SESSION['id']);
+            $query->execute();
+            $tab = array('true', $_POST['com_id']);
+            echo json_encode($tab);
+        }
+        catch(Exception $e) {
+            $tab = array('false', $_POST['com_id'], $e->getMessage());
+            echo json_encore($tab);
+        }
+    }
 }
 else
 	header("Location: index.php");

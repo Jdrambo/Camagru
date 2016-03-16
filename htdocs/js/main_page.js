@@ -1,9 +1,15 @@
+// On récupère tous les boutons j'aime
 var BtnLike = document.getElementsByClassName('like-post');
+// On récupère tous les boutons commenter
 var BtnComment = document.getElementsByClassName('comment-post');
+// On récupère tous les champs de saisi de commentaire
 var validCom = document.getElementsByClassName('comment-input');
+// On récupère tous les boutons supprimer un commentaire
+var btnDeleteCom = document.getElementsByClassName('delete-com');
 var BtnLikeLen = BtnLike.length;
 var BtnCommentLen = BtnComment.length;
 var validComLen = validCom.length;
+var btnDeleteComLen = btnDeleteCom.length;
 var lastEvent;
 
 // On ajoute l'evenListner pour le like (j'aime)...
@@ -28,6 +34,11 @@ for (var i = 0; i < validComLen; i++){
             addCom(resultAddCom, this.id);
         }
     }, false);
+}
+
+// On ajoute l'eventlistener qui supprimera le commentaire sélectionné
+for(var i = 0; i < btnDeleteComLen; i++){
+    btnDeleteCom[i].addEventListener("click", function(){ deleteCom(resultDeleteCom, this.id)}, false);
 }
 
 // Cette fonction vérifie si un like est présent ou nom en bdd, l'ajoute ou le retire selon le cas
@@ -104,7 +115,10 @@ for (var i = 0; i < validComLen; i++){
         if (result && result[0] === "true"){
             var com_block = document.getElementById("comments-block-" + result[1]);
             var node = document.createElement("p");
-            node.className = "line-comment";
+            if (com_block.firstChild.className === "line-comment2")
+                node.className = "line-comment";
+            else
+                node.className = "line-comment2";
             node.id = "comment-id-"+result[5];
             var image = document.createElement("img");
             image.src = result[3];
@@ -115,12 +129,59 @@ for (var i = 0; i < validComLen; i++){
             var content = document.createElement("span");
             content.className = "com-text";
             content.innerHTML = result[2];
+            var delete_img = document.createElement("img");
+            delete_img.src = "img/delete_small.png";
+            delete_img.className = "delete-com";
+            delete_img.id = "delete-com-"+result[5];
+            delete_img.title = "Spprimer le commentaire";
+            delete_img.alt = "delete comment";
+            delete_img.addEventListener("click", function(){ deleteCom(resultDeleteCom, this.id)}, false);
             
             node.appendChild(image);
             node.appendChild(login);
             node.appendChild(content);
+            node.appendChild(delete_img);
             var firstNode = com_block.firstChild;
             com_block.insertBefore(node, firstNode);
         }
-        console.log(result);
+        else
+            console.log("ERROR");
+    }
+
+// Cette fonction demandera une suppression du commentaire voulu en BDD
+    function deleteCom(callback, elem){
+        var elem_split = elem.split('-');
+        var com_id = encodeURIComponent(elem_split[2]);
+        xhr = new XMLHttpRequest()
+
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
+            callback(xhr.responseText);
+        };
+        
+        xhr.open("POST", "script/edit_pics.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send("submit=delete_com&com_id="+com_id);
+    }
+
+// Cette fonction récupère la réponse suite à la demande de suppression d'un commentaire
+    function resultDeleteCom(data){
+        if (data)
+            var result = JSON.parse(data);
+        if (result && result[0] === "true"){
+            var elem = document.getElementById('comment-id-'+result[1]);
+            var parentElem = elem.parentElement;
+            while (elem.firstChild){
+                var oldElem = elem.removeChild(elem.firstChild);
+                oldElem = null;
+            }
+            oldElem = parentElem.removeChild(elem);
+            oldElem = null;
+            
+        }
+        else if (result && result[0] === "false"){
+            console.log(result);
+        }
+        else
+            console.log("ERROR");
     }
