@@ -1,25 +1,25 @@
 // On récupère tous les boutons j'aime
-var BtnLike = document.getElementsByClassName('like-post');
+var btnLike = document.getElementsByClassName('like-post');
 // On récupère tous les boutons commenter
-var BtnComment = document.getElementsByClassName('comment-post');
+var btnComment = document.getElementsByClassName('comment-post');
 // On récupère tous les champs de saisi de commentaire
 var validCom = document.getElementsByClassName('comment-input');
 // On récupère tous les boutons supprimer un commentaire
 var btnDeleteCom = document.getElementsByClassName('delete-com');
-var BtnLikeLen = BtnLike.length;
-var BtnCommentLen = BtnComment.length;
+var btnLikeLen = btnLike.length;
+var btnCommentLen = btnComment.length;
 var validComLen = validCom.length;
 var btnDeleteComLen = btnDeleteCom.length;
 var lastEvent;
 
 // On ajoute l'evenListner pour le like (j'aime)...
-for(var i = 0; i < BtnLikeLen; i++){
-    BtnLike[i].addEventListener("click", function(){ likePost(resultLike, this.id)}, false);
+for (var i = 0; i < btnLikeLen; i++){
+    btnLike[i].addEventListener("click", function(){ likePost(resultLike, this.id)}, false);
 }
 
 // On ajoute l'eventListener qui détect quand on appuie sur commenter
-for (var i = 0; i < BtnCommentLen; i++){
-    BtnComment[i].addEventListener("click", function(){ commentPost(this.id)}, false);
+for (var i = 0; i < btnCommentLen; i++){
+    btnComment[i].addEventListener("click", function(){ commentPost(this.id)}, false);
 }
 
 // On ajoute l'eventListener qui écoutera la pression d'une touche dans l'input de commentaire
@@ -41,40 +41,43 @@ for(var i = 0; i < btnDeleteComLen; i++){
     btnDeleteCom[i].addEventListener("click", function(){ deleteCom(resultDeleteCom, this.id)}, false);
 }
 
-// Cette fonction vérifie si un like est présent ou nom en bdd, l'ajoute ou le retire selon le cas
+// Cette fonction vérifie si un like est présent ou non en bdd, l'ajoute ou le retire selon le cas
     function likePost(callback, elem){
         var elem_split = elem.split('-');
         var pics_id = encodeURIComponent(elem_split[2]);
         xhr = new XMLHttpRequest()
 
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
-                callback(xhr.responseText);
-	    };
-    
-    xhr.open("POST", "script/like.php", true);
-	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	xhr.send("submit=like_pics&pics_id="+pics_id);
+        if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
+            callback(xhr.responseText);
+        };
+        
+        xhr.open("POST", "script/edit_pics.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.send("submit=lkPost&pics_id="+pics_id);
     }
 
 // Cette fonction est la fonction callback de likePost, qui incrémente le compteur de like de 1, ou le décrémente
     function resultLike(data){
         var result = JSON.parse(data);
         console.log(result);
-        if (result[0] === "true"){
-            var post = document.getElementById('like-post-'+result[2]);
+        if (result && result[0] === "true"){/*
+            var btnLike = document.getElementById('like-post-'+result[2]);
             var likeCount = document.getElementById('like-count-'+result[2]);
             var count = Number(likeCount.innerHTML);
-            if (result[1] === "0"){
-                post.innerHTML = "Je n'aime plus";
+            if (result && result[1] === "addLike"){
+                btnLike.innerHTML = "Je n'aime plus";
                 count++;
             }
             else {
-                post.innerHTML = "J'aime";
+                btnLike.innerHTML = "J'aime";
                 count--;  
             }
-            likeCount.innerHTML = count;
+            likeCount.innerHTML = count;*/
+            console.log("OK")
         }
+        else
+            console.log("ERROR");
     }
 
 // Cette fonction a pour but d'afficher la zone de commentaire sous le post sélectionné
@@ -115,7 +118,7 @@ for(var i = 0; i < btnDeleteComLen; i++){
         if (result && result[0] === "true"){
             var com_block = document.getElementById("comments-block-" + result[1]);
             var node = document.createElement("p");
-            if (com_block.firstChild.className === "line-comment2")
+            if (com_block.firstChild && com_block.firstChild.className === "line-comment2")
                 node.className = "line-comment";
             else
                 node.className = "line-comment2";
@@ -142,7 +145,10 @@ for(var i = 0; i < btnDeleteComLen; i++){
             node.appendChild(content);
             node.appendChild(delete_img);
             var firstNode = com_block.firstChild;
-            com_block.insertBefore(node, firstNode);
+            if (firstNode)
+                com_block.insertBefore(node, firstNode);
+            else
+                com_block.appendChild(node);
         }
         else
             console.log("ERROR");

@@ -141,7 +141,44 @@ if(isset($_SESSION['id'])){
         }
         catch(Exception $e) {
             $tab = array('false', $_POST['com_id'], $e->getMessage());
-            echo json_encore($tab);
+            echo json_encode($tab);
+        }
+    }
+    
+    //script de j'aime / j'aime pas d'un post
+    if (isset($_POST['submit']) && $_POST['submit'] === "lkPost" && isset($_POST['pics_id'])){
+        try{
+            $query = $db->prepare('SELECT * FROM tablk WHERE (pics_id = :pics_id && user_id = :user_id) LIMIT 1');
+            $query->bindValue(':pics_id', $_POST['pics_id']);
+            $query->bindValue(':user_id', $_SESSION['id']);
+            $query->execute();
+            $tab = array();
+            
+            if ($query->rowCount() > 0){
+                $lkpost = $query->fetch(PDO::FETCH_ASSOC);
+                $query = $db->prepare('DELETE FROM tablk WHERE (pics_id = :pics_id && user_id = :user_id)');
+                $query->bindValue(':pics_id', $_POST['pics_id']);
+                $query->bindValue(':user_id', $_SESSION['id']);
+                $query->execute();
+                array_push($tab, 'true');
+                array_push($tab, 'removedLike');
+                array_push($tab, $_POST['pics_id']);
+            }
+            else {
+                $lkpost = $query->fetch(PDO::FETCH_ASSOC);
+                $query = $db->prepare('INSERT INTO tablk (pics_id, user_id) VALUES (:pics_id, :user_id)');
+                $query->bindValue(':pics_id', $_POST['pics_id']);
+                $query->bindValue(':user_id', $_SESSION['id']);
+                $query->execute();
+                array_push($tab, 'true');
+                array_push($tab, 'addedLike');
+                array_push($tab, $_POST['pics_id']);
+            }
+            echo json_encode($lkpost);
+        }
+        catch(Exception $e){
+            $tab = array('false', "Post id = ".$_POST['pics_id'], $e->getMessage());
+            echo json_encode($tab);
         }
     }
 }

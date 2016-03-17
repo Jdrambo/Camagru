@@ -32,14 +32,14 @@ if (isset($_SESSION['id']))
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         
-        $queryy = $db->prepare('SELECT id FROM `tablike` WHERE (`tablike`.`pics_id` = :pics_id && `tablike`.`status` = 1)');
+        $queryy = $db->prepare('SELECT id FROM `tablk` WHERE (`tablk`.`pics_id` = :pics_id)');
         $queryy->bindValue(':pics_id', $datax['picture_id']);
         $queryy->execute();
         $count = $queryy->fetch(PDO::FETCH_ASSOC);
         $likeCount = count($count['id']);
         
         $id_pic = $datax['picture_id'];
-        $q = $db->prepare('SELECT * FROM `tablike` WHERE (`pics_id` = :pics_id && `user_id` = :user_id && `status` = 1)');
+        $q = $db->prepare('SELECT * FROM `tablk` WHERE (`pics_id` = :pics_id && `user_id` = :user_id)');
         $q->bindValue(':pics_id', $datax['picture_id']);
         $q->bindValue(':user_id', $_SESSION['id']);
         $q->execute();
