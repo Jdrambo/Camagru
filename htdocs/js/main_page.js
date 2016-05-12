@@ -1,3 +1,4 @@
+window.onload = function(){
 // On récupère tous les boutons j'aime
 var btnLike = document.getElementsByClassName('like-post');
 // On récupère tous les boutons commenter
@@ -11,10 +12,13 @@ var btnCommentLen = btnComment.length;
 var validComLen = validCom.length;
 var btnDeleteComLen = btnDeleteCom.length;
 var lastEvent;
+var passage = 0;
+
 
 // On ajoute l'evenListner pour le like (j'aime)...
 for (var i = 0; i < btnLikeLen; i++){
-    btnLike[i].addEventListener("click", function(){ likePost(resultLike, this.id)}, false);
+    console.log(btnLike[i]);
+        btnLike[i].addEventListener("click", function(e){ likePost(resultLike, this.id)}, false);
 }
 
 // On ajoute l'eventListener qui détect quand on appuie sur commenter
@@ -43,14 +47,18 @@ for(var i = 0; i < btnDeleteComLen; i++){
 
 // Cette fonction vérifie si un like est présent ou non en bdd, l'ajoute ou le retire selon le cas
     function likePost(callback, elem){
+        console.log(elem);
         var elem_split = elem.split('-');
         var pics_id = encodeURIComponent(elem_split[2]);
-        xhr = new XMLHttpRequest()
+        xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0))
             callback(xhr.responseText);
         };
+        
+        console.log(passage);
+        passage++;
         
         xhr.open("POST", "script/edit_pics.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -61,11 +69,11 @@ for(var i = 0; i < btnDeleteComLen; i++){
     function resultLike(data){
         var result = JSON.parse(data);
         console.log(result);
-        if (result && result[0] === "true"){/*
+        if (result && result[0] === "true"){
             var btnLike = document.getElementById('like-post-'+result[2]);
             var likeCount = document.getElementById('like-count-'+result[2]);
             var count = Number(likeCount.innerHTML);
-            if (result && result[1] === "addLike"){
+            if (result && result[1] === "addedLike"){
                 btnLike.innerHTML = "Je n'aime plus";
                 count++;
             }
@@ -73,7 +81,7 @@ for(var i = 0; i < btnDeleteComLen; i++){
                 btnLike.innerHTML = "J'aime";
                 count--;  
             }
-            likeCount.innerHTML = count;*/
+            likeCount.innerHTML = count;
             console.log("OK")
         }
         else
@@ -191,3 +199,4 @@ for(var i = 0; i < btnDeleteComLen; i++){
         else
             console.log("ERROR");
     }
+}

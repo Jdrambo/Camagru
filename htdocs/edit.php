@@ -11,24 +11,25 @@ spl_autoload_register("loadClass");
 include("head.php");
 ?>
 <body>
-<div class = "container">
-<?php include('header.php');
+<?php 
 if (isset($_SESSION['id']))
 {
 	include("db.php");
+    echo '<div class = "container">';
+    include('header.php');
     echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
 	echo '<p>Edition de photos</p>';
 
 	echo '<video id="video" class = "cam-video"></video>
             <img title = "Prendre une photo" id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png">
-            <canvas id = "canvas" class = "cam-pics"></canvas>
+            <div class = "edit-area"><canvas id = "canvas" class = "cam-pics"></canvas><div class = "filter-area"></div></div>
             <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
             <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">
             <p id = "container-published" class = "container-check"><input class = "form-check" name = "published" id = "pics_published" type = "checkbox"> Publier</p>
             <div id = "edit-menu" class = "edit-menu">
             	<img id = "save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
             	<img id = "edit" title = "Editer la photo" class = "edit-btn" alt = "éditer l\'image" src = "img/edit.png">
-            </div>';
+            </div></div>';
 	?>
 	<script src = "js/edit.js"></script>
 	  <script>
@@ -97,9 +98,10 @@ if (isset($_SESSION['id']))
 }
 else
 {
-	echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p>';
+	echo '<div class = "container">';
+    include('header.php');
+    echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p></div>';
 }
 ?>
-</div>
 </body>
 </html>

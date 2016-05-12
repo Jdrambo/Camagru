@@ -39,7 +39,7 @@ if (isset($_SESSION['id']))
         $likeCount = count($count['id']);
         
         $id_pic = $datax['picture_id'];
-        $q = $db->prepare('SELECT * FROM `tablk` WHERE (`pics_id` = :pics_id && `user_id` = :user_id)');
+        $q = $db->prepare('SELECT id, pics_id, user_id FROM `tablk` WHERE (`pics_id` = :pics_id && `user_id` = :user_id)');
         $q->bindValue(':pics_id', $datax['picture_id']);
         $q->bindValue(':user_id', $_SESSION['id']);
         $q->execute();

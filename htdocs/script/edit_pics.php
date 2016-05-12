@@ -148,7 +148,7 @@ if(isset($_SESSION['id'])){
     //script de j'aime / j'aime pas d'un post
     if (isset($_POST['submit']) && $_POST['submit'] === "lkPost" && isset($_POST['pics_id'])){
         try{
-            $query = $db->prepare('SELECT * FROM tablk WHERE (pics_id = :pics_id && user_id = :user_id) LIMIT 1');
+            $query = $db->prepare('SELECT id FROM tablk WHERE (pics_id = :pics_id && user_id = :user_id) LIMIT 1');
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->execute();
@@ -174,7 +174,7 @@ if(isset($_SESSION['id'])){
                 array_push($tab, 'addedLike');
                 array_push($tab, $_POST['pics_id']);
             }
-            echo json_encode($lkpost);
+            echo json_encode($tab);
         }
         catch(Exception $e){
             $tab = array('false', "Post id = ".$_POST['pics_id'], $e->getMessage());
