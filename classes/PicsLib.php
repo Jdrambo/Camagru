@@ -26,7 +26,7 @@ class PicsLib{
                 $published = "Publique";
                 $url = "img/unlock.png";
             }
-            echo '<div class = "pics-border" id = "border-'.$data['id'].'"><p class = "pics-lib-title">'.$data['title'].'</p><img class = "img-pics-lib" src = "'.$data['url'].'"><p class = "pics-lib-title">'.$data['comment'].'</p><p class = "pics-lib-title">'.$data['day_add'].'/'.$data['month_add'].'/'.$data['year_add'].'<br><span id = "privacy-'.$data['id'].'">'.$published.'</span></p><img id = "delete-'.$data['id'].'" class = "img-delete" src = "img/delete.png" alt = "delete" title = "Supprimer la photo"><img id = "img-privacy-'.$data['id'].'" class = "img-privacy" src = "'.$url.'"></div>';
+            echo '<div class = "pics-border" id = "border-'.$data['id'].'"><p class = "pics-lib-title">'.$data['title'].'</p><a class = "pics-lib-link" href = "'.$data['url'].'" target = "_blank"><img class = "img-pics-lib" src = "'.$data['url'].'"></a><p class = "pics-lib-title">'.$data['comment'].'</p><p class = "pics-lib-title">'.$data['day_add'].'/'.$data['month_add'].'/'.$data['year_add'].'<br><span id = "privacy-'.$data['id'].'">'.$published.'</span></p><img id = "delete-'.$data['id'].'" class = "img-delete" src = "img/delete.png" alt = "delete" title = "Supprimer la photo"><img id = "img-privacy-'.$data['id'].'" class = "img-privacy" src = "'.$url.'"></div>';
         }
         echo '</div>';
     }
