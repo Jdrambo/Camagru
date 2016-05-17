@@ -4,18 +4,14 @@ function loadClass($name){
 	require("classes/".$name.".php");
 }
 spl_autoload_register("loadClass");
-?>
-<!DOCTYPE html>
-<html>
-<?php
-include("head.php");
-?>
-<body>
-<div class = "container">
-<?php include('header.php');
 if (isset($_SESSION['id']))
 {
-	include("db.php");
+    echo '<!DOCTYPE html><html>';
+    include("head.php");
+    echo '<body><div class = "container">';
+    include("db.php");
+    include('header.php');
+	
 	echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p>';
 	
     /*
@@ -80,8 +76,15 @@ if (isset($_SESSION['id']))
     <script src = "js/main_page.js"></script>
 </body>
 </html>
-    <?php
+<?php
 }
-else
-    header('Location: index.php');
+else{
+    echo '<!DOCTYPE html><html>';
+    include("head.php");
+    echo '<body><div class = "container">';
+    include("db.php");
+    include('header.php');
+    echo '</body></html>';
+}
+
 ?>

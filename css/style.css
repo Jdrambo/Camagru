@@ -216,6 +216,7 @@ header a{
     position:relative;
     width:550px;
     margin:12px 32%;
+    z-index:30;
 }
 .cam-pics{
     width: 460px;
@@ -253,8 +254,12 @@ header a{
     height:100px;
     width:100%;
     margin:12px 0;
-    overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+#alpha-value{
+    display:inline-block;
+    width:32px;
 }
 .filter-pics{
     width:128px;
@@ -353,6 +358,7 @@ header a{
     color:#fff;
     text-align:center;
     transition:top 0.5s ease-in, visibility 0.5s ease-in, opacity 0.5s ease-in;
+    z-index:100;
 }
 .login-post{
     color:#fff;

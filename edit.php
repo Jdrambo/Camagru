@@ -43,7 +43,7 @@ if (isset($_SESSION['id']))
         }
     echo '</div>';
     // La zone des filtres
-    echo '<input type = "number" id = "alpha-value" min = "0" max = "1" step = "0.1"><div class = "filters-list">';
+    echo '<input type = "number" id = "alpha-value" value = "0.5" min = "0" max = "1" step = "0.1"><div class = "filters-list">';
     while($filData = $queryFilters->fetch(PDO::FETCH_ASSOC)){
         echo '<img alt = "'.$filData['name'].'" src = "'.$filData['url'].'" title = "'.$filData['name'].'" class = "filter-pics" id = "filter-pics-'.$filData['id'].'">';
     }

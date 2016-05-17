@@ -108,8 +108,6 @@ window.onload = (function(){
         allLayer.push(layerId);
         var addedLayer = new Layer(layerId, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height);
         img.src = addedLayer.src;
-        img.opacity = 0.5;
-        img.style.opacity = 0.5;
         ctx.globalAlpha = alphaValue;
         img.onload = function(){
             ctx.drawImage(img, addedLayer.x, addedLayer.y, addedLayer.w, addedLayer.h);
@@ -122,6 +120,7 @@ window.onload = (function(){
         
         var pos = getMousePos(e);
         var ctx = mainCanvas.getContext("2d");
+        ctx.globalAlpha = 1;
         var img = new Image();
         var emoteWidth = 128;
         var emoteHeight = 128;
