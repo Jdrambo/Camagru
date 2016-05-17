@@ -18,6 +18,10 @@ if (isset($_SESSION['id']))
     $query = $db->prepare('SELECT id, name, url FROM emotes');
     $query->execute();
     
+    //La requete qui recupere les filtres
+    $queryFilters = $db->prepare('SELECT id, name, url FROM filters');
+    $queryFilters->execute();
+    
     //Le message d'information qui est affiché
     echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
 	echo '<p>Edition de photos</p>';
@@ -38,7 +42,12 @@ if (isset($_SESSION['id']))
             echo '<div class = "emote"><img id = "emote-img-'.$data['id'].'" class = "emote-img" title = "'.$data['name'].'" src = "'.$data['url'].'"></div>';
         }
     echo '</div>';
-            
+    // La zone des filtres
+    echo '<input type = "number" id = "alpha-value" min = "0" max = "1" step = "0.1"><div class = "filters-list">';
+    while($filData = $queryFilters->fetch(PDO::FETCH_ASSOC)){
+        echo '<img alt = "'.$filData['name'].'" src = "'.$filData['url'].'" title = "'.$filData['name'].'" class = "filter-pics" id = "filter-pics-'.$filData['id'].'">';
+    }
+    echo '</div>';
     echo '</div>
             <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
             <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">

@@ -3,7 +3,9 @@ window.onload = (function(){
     var allLayer = [];
     var layerId = 1;
     var selectedEmote;
+    var alphaValue = 0.5;
     
+    //Protoype d'un objet Layer qui sert pour les icones et les filtres
     function Layer(id, name, src, x, y, w, h){
         this.id = id;
         this.name = name;
@@ -19,10 +21,16 @@ window.onload = (function(){
     var all_btn_emote_length = all_btn_emote.length;
 
     for (i = 0; i < all_btn_emote_length; i++){
-        //all_btn_emote[i].addEventListener("click", function(){ addEmote(this)}, false);
         all_btn_emote[i].addEventListener("dragstart", function(event){ handleDragStart(event);}, false);
         all_btn_emote[i].addEventListener("drag", function(event){ drag(event);}, false);
         all_btn_emote[i].draggable = "true";
+    }
+    
+    //Chaque filtres
+    var all_btn_filtre = document.getElementsByClassName('filter-pics');
+    var all_btn_filtre_lentght = all_btn_filtre.length;
+    for (i = 0; i < all_btn_filtre_lentght; i++){
+        all_btn_filtre[i].addEventListener("click", function(){ addFilter(this);}, false);
     }
     
     var mainCanvas = document.getElementById('canvas');
@@ -93,28 +101,37 @@ window.onload = (function(){
         e.dataTransfer.dropEffect = "copy";
     }
     
+    function addFilter(obj){
+        var ctx = mainCanvas.getContext("2d");
+        var img = new Image();
+        alphaValue = document.getElementById('alpha-value').value;
+        allLayer.push(layerId);
+        var addedLayer = new Layer(layerId, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height);
+        img.src = addedLayer.src;
+        img.opacity = 0.5;
+        img.style.opacity = 0.5;
+        ctx.globalAlpha = alphaValue;
+        img.onload = function(){
+            ctx.drawImage(img, addedLayer.x, addedLayer.y, addedLayer.w, addedLayer.h);
+        }
+        layerId += 1;
+    }
+    
     function addEmote(e){
         e.preventDefault();
         
         var pos = getMousePos(e);
-        console.log("drop mouseX : " + pos.x + " mouseY : " + pos.y);
-        var ctx = canvas.getContext("2d");
+        var ctx = mainCanvas.getContext("2d");
         var img = new Image();
         var emoteWidth = 128;
         var emoteHeight = 128;
         
         allLayer.push(layerId);
-        var addedLayer = new Layer(layerId, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight)
-        console.log(addedLayer);
-        console.log(allLayer);
+        var addedLayer = new Layer(layerId, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight);
         img.src = addedLayer.src;
-        img.borderColor = "red";
-        img.borderStyle = "solid";
-        img.border = "1px solid red;";
         img.onload = function(){
             ctx.drawImage(img, addedLayer.x, addedLayer.y, addedLayer.w, addedLayer.h);
         }
-        
         layerId += 1;
     }
 
@@ -124,8 +141,6 @@ window.onload = (function(){
             x: (Math.floor(e.clientX - Number(rect.left))),
             y: (Math.floor(e.clientY - Number(rect.top)))
         };
-        console.log("clientX :" + Math.floor(e.clientX) + " clientY : " + Math.floor(e.clientY));
-        console.log("left :" + Math.floor(rect.left) + " top : " + Math.floor(rect.top));
         return (pos);
     }
     

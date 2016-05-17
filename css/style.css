@@ -248,6 +248,21 @@ header a{
     height:120px;
     background-color:#fff;
 }
+.filters-list{
+    display:inline-block;
+    height:100px;
+    width:100%;
+    margin:12px 0;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+.filter-pics{
+    width:128px;
+    height:78px;
+    display:inline-block;
+    margin:4px;
+    cursor:pointer;
+}
 .cam-btn{
     text-align:center;
     vertical-align:middle;
@@ -265,6 +280,7 @@ header a{
     width:40%;
     margin:12px 30%;
     display:inline-block;
+    text-align:center;
 }
 .edit-btn{
     text-align:center;
