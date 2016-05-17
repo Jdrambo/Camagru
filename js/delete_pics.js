@@ -41,6 +41,7 @@ window.onload = function(){
                 parent_pics[i].removeChild(border);
             }
             displayMessage("L'image a bien été supprimée", "#228");
+            console.log(result[3] + " >> " + result[4]);
         }
         else
             displayMessage("Erreur lors de la suppression de l'image", "#822");

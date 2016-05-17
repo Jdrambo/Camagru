@@ -59,26 +59,29 @@ if (isset($_SESSION['id']))
 		echo '<div class = "border_pics"><p><span class = "title_pics">'.$datax['title'].'</span><br>
         <span class = "login-post">'.$datax['login'].'</span><br><span class = "date-post">'.$datax['day_add'].'/'.$datax['month_add'].'/'.$datax['year_add'].', '.$datax['hour_add'].'h'.$datax['min_add'].'</span></p><p class = "comment_pics">'.$datax['comment'].'</p><img class = "main_pics" src = "'.$datax['url'].'"><p class = "command-post"><span class = "like-count" id = "like-count-'.$datax['picture_id'].'">'.$likeCount.'</span><img class = "img-like" src = "img/like2.png"><span class = "like-post" id = "like-post-'.$datax['picture_id'].'">'.$like_status.'</span><span class = "comment-post" id = "comment-post-'.$id_pic.'">Commenter</span></p><div id = "general-input-border-'.$id_pic.'" class = "general-input-border"><div class = "my-comment-img-border"><img class = "my-comment-img" alt = "my_comment_profil_picture" id = "my-comment-img-'.$id_pic.'" src = "'.$_SESSION['url'].'"></div><div class = "comment-input-border"><input id = "comment-input-'.$id_pic.'" class = "comment-input" type = "text" name = "comment-input" placeholder = "Votre commentaire..."></div></div><div class = "comments-block" id = "comments-block-'.$id_pic.'">';
         $i = 0;
+        // Ceci est la boucle qui affiche tous les commentaires
         while ($com = $queryx->fetch(PDO::FETCH_ASSOC)){
             if ($i % 2 > 0)
-                echo '<p class = "line-comment" id = "comment-id-'.$com['comId'].'">';
+                echo '<div class = "line-comment" id = "comment-id-'.$com['comId'].'">';
             else
-                echo '<p class = "line-comment2" id = "comment-id-'.$com['comId'].'">';
-            echo '<img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.$com['comLogin'].'</span><span class = "com-text">'.$com['comContent'].'</span>';
-            if ($com['comUserId'] === $_SESSION['id'])
-                echo '<img id = "delete-com-'.$com['comId'].'" title = "Spprimer le commentaire" alt = "delete comment" class = "delete-com" src = "img/delete_small.png">';
-            echo '</p>';
+                echo '<div class = "line-comment2" id = "comment-id-'.$com['comId'].'">';
+            
+            echo '<div class = "slot-core-comment"><img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.htmlspecialchars($com['comLogin']).'</span><span class = "com-text">'.htmlspecialchars($com['comContent']).'</span></div>';
+            if ($com['comUserId'] === $_SESSION['id']){
+                echo '<div class = "slot-delete-com"><img id = "delete-com-'.$com['comId'].'" title = "Supprimer le commentaire" alt = "delete comment" class = "delete-com" src = "img/delete_small.png"></div>';
+            }
+            echo '</div>';
             $i++;
         }
         echo '</div></div>';
-        echo '<script src = "js/main_page.js"></script>';
 	}
-}
-else
-{
-	echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p>';
-}
-?>
-</div>
+    ?>
+    </div>
+    <script src = "js/main_page.js"></script>
 </body>
 </html>
+    <?php
+}
+else
+    header('Location: index.php');
+?>

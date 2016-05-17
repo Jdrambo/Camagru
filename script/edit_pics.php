@@ -46,34 +46,34 @@ if(isset($_SESSION['id'])){
     // Script de suppression d'une image
     if (isset($_POST['submit']) && isset($_POST['id_pics']) && $_POST['submit'] === "delete_pics"){
         try {
-            $query = $db->prepare('SELECT * FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
+            $query = $db->prepare('SELECT id, url, user_id, title, comment, date_ajout, published FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
             $query->bindValue(":id_pics", $_POST['id_pics']);
             $query->bindValue(":user_id", $_SESSION['id']);
             $query->execute();
             
-            $data = $query->fetch(PDO::FETCH_ASSOC);
-            if (isset($data['id'])){
-                $query = $db->prepare('DELETE FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
+            if ($query->rowCount() > 0){
+                $data = $query->fetch(PDO::FETCH_ASSOC);
+                $query = $db->prepare('DELETE FROM pictures WHERE (id = :id_pics && user_id = :user_id); DELETE FROM comments WHERE pics_id = :id_pics; DELETE FROM tablk WHERE pics_id = :id_pics');
                 $query->bindValue(":id_pics", $data['id']);
                 $query->bindValue(":user_id", $_SESSION['id']);
                 $query->execute();
-                if (is_file($data['url']))
-                    unlink($data['url']);
+                if (is_file("../".$data['url']))
+                    unlink("../".$data['url']);
                 $tab = array('true', 'Image supprimée', $data['id']);
                 echo json_encode($tab);
             }
             else{
-                $tab = array('false', 'Erreur : Vous n\'avez pas le droit de supprimer cette image', '');
+                $tab = array('false', 'Erreur : Vous n\'avez pas le droit de supprimer cette image');
                 echo json_encode($tab);
             }
         }
         catch(Exception $e){
-            $tab = array('false', 'Erreur : '.$e->getMessage());
+            $tab = array('false', 'Erreur : Veuillez contacter l\'administrateur du site');
             echo json_encode($tab);
         }
     }
     
-    // Script de modification du statu publique/privée d'une image
+    // Script de modification du statut publique/privée d'une image
     if (isset($_POST['submit']) && isset($_POST['id_pics']) && $_POST['submit'] === "privacy_pics"){
         $query = $db->prepare('SELECT * FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
         $query->bindValue(":id_pics", $_POST['id_pics']);
@@ -106,12 +106,12 @@ if(isset($_SESSION['id'])){
     
     // Script qui enregistre un commentaire en base de données
     if (isset($_POST['submit']) && isset($_POST['content']) && isset($_POST['pics_id']) && $_POST['submit'] === "comment_post"){
-        $content = trim($_POST['content']);
+        $content = htmlspecialchars(trim($_POST['content']));
         if ($content !== "" && !empty($content)){
             $query = $db->prepare('INSERT INTO comments (pics_id, user_id, content, date_add) VALUES (:pics_id, :user_id, :content, NOW())');
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
-            $query->bindValue(':content', $_POST['content']);
+            $query->bindValue(':content', $content);
             $query->execute();
 
             $query = $db->prepare('SELECT * FROM comments WHERE pics_id = :pics_id && user_id = :user_id ORDER BY date_add DESC LIMIT 1');
