@@ -97,8 +97,10 @@ window.onload = (function(){
     }
     
     function allowDrop(e){
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "copy";
+        if (selectedEmote.className == "emote-img"){
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "copy";
+        }
     }
     
     function addFilter(obj){

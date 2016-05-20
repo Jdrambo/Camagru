@@ -23,8 +23,8 @@ if (!isset($_SESSION['id'])){
 include("head.php");
 ?>
     <body>
+    <?php include('header.php');?>
     <div class = "container">
-        <?php include('header.php');?>
         <form class = "standard-form" action = "connexion.php" method = "post">
             <h2 class = "title-form">Connexion</h2>
             <?php

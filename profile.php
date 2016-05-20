@@ -26,8 +26,9 @@ if (isset($_SESSION['id'])){
 include("head.php");
 ?>
     <body>
+    <?php include('header.php');?>
     <div class = "container">
-        <?php include('header.php');
+        <?php
         //Le message pour les alert
         echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
         //Affichage de la photo de profile et des informations du compte

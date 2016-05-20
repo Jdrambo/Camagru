@@ -3,9 +3,9 @@ body{
 	padding:0;
 	margin:0;
 	color:#fff;
-	font-family:'sans-serif', Arial;
+	font-family: 'Lato', sans-serif;
 	font-weight:100;
-	background-image: url("../img/design3.jpeg");
+	background-image: url("../img/background-photo.jpg");
 	background-size: cover;
 	background-repeat: no-repeat;
 	background-attachment: fixed;
@@ -31,6 +31,9 @@ header{
 	height:60px;
     text-decoration:none;
     color:#fff;
+    background-color: #292422;
+    padding:12px 48px;
+    box-shadow: 4px 4px 4px rgba
 }
 header a{
     text-decoration:none;
@@ -51,7 +54,7 @@ header a{
 	padding:0 12px;
 	color:#fff;
 	text-decoration: none;
-	font-family:'sans-serif', Arial;
+	font-family: 'Lato', sans-serif;
 	font-weight:100;
 	display:inline-block;
 	line-height:48px;
@@ -98,7 +101,9 @@ header a{
     min-width: 320px;
     width:30%;
     margin:12px 35%;
+	font-family: 'Lato', sans-serif;
     font-size:18px;
+    font-weight:100;
     padding:6px;
     border:none;
     border-bottom:1px solid #fff;
@@ -120,6 +125,8 @@ header a{
     border:1px solid #8fc400;
     border-bottom:1px solid #fff;
     background-color:#8fc400;
+    font-family: 'Lato', sans-serif;
+    font-weight:100;
 }
 .btn-form:hover{
     color:#8fc400;
@@ -251,15 +258,21 @@ header a{
 }
 .filters-list{
     display:inline-block;
-    height:100px;
+    height:160px;
     width:100%;
     margin:12px 0;
     overflow-y: auto;
     overflow-x: hidden;
+    text-align: center;
 }
 #alpha-value{
     display:inline-block;
-    width:32px;
+    font-size:20px;
+}
+#line-alpha-value{
+	display:inline-block;
+	text-align:center;
+	width:100%;
 }
 .filter-pics{
     width:128px;

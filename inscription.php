@@ -130,8 +130,9 @@ if (!isset($_SESSION['id']))
 include("head.php");
 ?>
     <body>
+    <?php include('header.php');?>
     <div class = "container">
-        <?php include('header.php');
+        <?php
         // Si la page est chargé suite a un mail de validation on affiche pas le formulaire d'inscription
         if (isset($_GET['submit'])){
             if (isset($message))
