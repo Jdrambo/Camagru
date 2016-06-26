@@ -88,7 +88,5 @@ else{
     include('header.php');
     echo '<div class = "container"></div>';
     echo '<script src = "js/menu.js"></script></body></html>';
->>>>>>> 9cd352a6e37a060f5dd53e8f5e0a518d7fd59bce
 }
-
 ?>
