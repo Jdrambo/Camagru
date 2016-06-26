@@ -30,6 +30,7 @@ header{
 	line-height:60px;
 	height:60px;
     text-decoration:none;
+    text-align:center;
     color:#fff;
 }
 header a{
@@ -482,8 +483,16 @@ header a{
     padding:6px;
     display:inline-block;
 }
+#img-menu{
+    display:none;
+    cursor:pointer;
+}
+#menu-list{
+        display:inline;
+        width:100%;
+    }
 
-@media screen and (min-width: 720px) and (max-width: 1400px){
+@media screen and (min-width: 920px) and (max-width: 1280px){
     .border_pics{
     width:70%;
     margin:12px 15%;
@@ -492,19 +501,54 @@ header a{
     background-color:rgba(0, 0, 0, 0.8);
     }
 }
-@media screen and (max-width: 720px){
+@media screen and (max-width: 920px){
+    body{
+        padding-top:72px;
+    }
+    #img-menu{
+        position:fixed;
+        right:6px;
+        top:6px;
+        display:inline-block;
+    }
+    #menu-list{
+        display:none;
+        width:100%;
+    }
     .container {
         width:90%;
         margin:24px 5%;
     }
-    header {
-        vertical-align: middle;
-        line-height:60px;
-        height:60px;
+    header{
+        width:100%;
+        position:fixed;
+        top:0;
+        left:0;
         text-decoration:none;
-        padding:0 12px;
-        margin:0 0 96px 0;
+        padding:0;
+        margin:0;
         color:#fff;
+    }
+    header .main-title{
+        background-color:#000;
+        text-align:center;
+        height:72px;
+        line-height:72px;
+        vertical-align:middle;
+        width:100%;
+        z-index:1000;
+        display:inline-block;
+    }
+    .btn-menu{
+        background-color:#000;
+        width:100%;
+        z-index:1000;
+        display:inline-block;
+        padding:6px 24px;
+    }
+    .btn-menu:hover{
+        background-color:#fff;
+        color:#000;
     }
     .field {
         width:90%;

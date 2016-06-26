@@ -52,6 +52,7 @@ include("head.php");
     <!-- Script de selection des icones -->
     <script src = "js/select_icon.js"></script>
     <script src = "js/delete_pics.js"></script>
+    <script src = "js/menu.js"></script>
     </body>
     </html>
 <?php

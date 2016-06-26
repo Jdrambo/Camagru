@@ -157,6 +157,7 @@ include("head.php");
         }
         ?>
     </div>
+    <script src = "js/menu.js"></script>
     </body>
     </html>
     <?php

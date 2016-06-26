@@ -56,6 +56,7 @@ if (isset($_SESSION['id']))
             	<img id = "save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
             </div></div>';
 	?>
+    <script src = "js/menu.js"></script>
 	<script src = "js/edit.js"></script>
     </body>
 </html>

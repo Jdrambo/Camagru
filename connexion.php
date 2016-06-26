@@ -38,6 +38,7 @@ include("head.php");
             <button class = "btn-form" name = "submit" value = "connect">Je me connecte</button>
         </form>
     </div>
+    <script src = "js/menu.js"></script>
     </body>
     </html>
 <?php
