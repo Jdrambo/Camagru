@@ -26,7 +26,7 @@ if (isset($_SESSION['id']))
     ORDER BY pictures.date_ajout DESC LIMIT 10');
 	$query->execute();
 	while ($datax = $query->fetch(PDO::FETCH_ASSOC)){
-        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC');
+        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC LIMIT 10');
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         
@@ -76,7 +76,6 @@ if (isset($_SESSION['id']))
     ?>
     </div>
     <script src = "js/main_page.js"></script>
-    <script src = "js/menu.js"></script>
 </body>
 </html>
 <?php
@@ -86,9 +85,8 @@ else{
     include("head.php");
     echo '<body>';
     include('header.php');
-    echo '<div class = "container"></div>';
-    echo '<script src = "js/menu.js"></script></body></html>';
->>>>>>> 9cd352a6e37a060f5dd53e8f5e0a518d7fd59bce
+    echo '<div class = "container">';
+    echo '</body></html>';
 }
 
 ?>

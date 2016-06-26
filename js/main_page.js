@@ -125,12 +125,14 @@ for(var i = 0; i < btnDeleteComLen; i++){
         
         if (result && result[0] === "true"){
             var com_block = document.getElementById("comments-block-" + result[1]);
-            var node = document.createElement("p");
+            var node = document.createElement("div");
             if (com_block.firstChild && com_block.firstChild.className === "line-comment2")
                 node.className = "line-comment";
             else
                 node.className = "line-comment2";
             node.id = "comment-id-"+result[5];
+            var slotCoreComment = document.createElement("div");
+            slotCoreComment.className = "slot-core-comment";
             var image = document.createElement("img");
             image.src = result[3];
             image.className = "icon-comment";
@@ -140,6 +142,8 @@ for(var i = 0; i < btnDeleteComLen; i++){
             var content = document.createElement("span");
             content.className = "com-text";
             content.innerHTML = result[2];
+            var slotDeleteCom = document.createElement("div");
+            slotDeleteCom.className = "slot-delete-com";
             var delete_img = document.createElement("img");
             delete_img.src = "img/delete_small.png";
             delete_img.className = "delete-com";
@@ -148,10 +152,12 @@ for(var i = 0; i < btnDeleteComLen; i++){
             delete_img.alt = "delete comment";
             delete_img.addEventListener("click", function(){ deleteCom(resultDeleteCom, this.id)}, false);
             
-            node.appendChild(image);
-            node.appendChild(login);
-            node.appendChild(content);
-            node.appendChild(delete_img);
+            slotCoreComment.appendChild(image);
+            slotCoreComment.appendChild(login);
+            slotCoreComment.appendChild(content);
+            slotDeleteCom.appendChild(delete_img);
+            node.appendChild(slotCoreComment);
+            node.appendChild(slotDeleteCom);
             var firstNode = com_block.firstChild;
             if (firstNode)
                 com_block.insertBefore(node, firstNode);

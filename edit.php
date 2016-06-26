@@ -11,8 +11,8 @@ if (isset($_SESSION['id']))
     echo '<!DOCTYPE html><html>';
     include("head.php");
     echo '<body>';
-    echo '<div class = "container">';
     include('header.php');
+    echo '<div class = "container">';
     
     //La requete qui recupere les emotes icones
     $query = $db->prepare('SELECT id, name, url FROM emotes');
@@ -43,7 +43,7 @@ if (isset($_SESSION['id']))
         }
     echo '</div>';
     // La zone des filtres
-    echo '<input type = "number" id = "alpha-value" value = "0.5" min = "0" max = "1" step = "0.1"><div class = "filters-list">';
+    echo '<p id = "line-alpha-value">Opacité du filtre <input title = "Opacité du filtre" type = "number" id = "alpha-value" value = "0.5" min = "0" max = "1" step = "0.1"></p><div class = "filters-list">';
     while($filData = $queryFilters->fetch(PDO::FETCH_ASSOC)){
         echo '<img alt = "'.$filData['name'].'" src = "'.$filData['url'].'" title = "'.$filData['name'].'" class = "filter-pics" id = "filter-pics-'.$filData['id'].'">';
     }
