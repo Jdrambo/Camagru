@@ -36,6 +36,7 @@ include("head.php");
             <input class = "field" type = "text" name = "login" placeholder = "Identifiant">
             <input class = "field" type = "password" name = "password" placeholder = "Mot de passe">
             <button class = "btn-form" name = "submit" value = "connect">Je me connecte</button>
+            <a href = "forget_password.php">j'ai oublié mon mot de passe</a>
         </form>
     </div>
     <script src = "js/menu.js"></script>

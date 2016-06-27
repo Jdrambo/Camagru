@@ -16,8 +16,6 @@ class ModifPass{
         $this->setOldPass($oldPass);
         $this->setNewPass($newPass);
         $this->setNewPassVerif($newPassVerif);
-        $this->setPref();
-        $this->setSuff();
         $this->setPassPattern();
         $this->changePass();
     }
@@ -73,22 +71,7 @@ class ModifPass{
         if (isset($value))
             $this->_newPassVerif = $value;
     }
-    
-    public function setPref(){
-        $db = $this->getDb();
-        $query = $db->prepare('SELECT pass_prefixe FROM config');
-        $query->execute();
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        $this->_pref = $data['pass_prefixe'];
-    }
-    
-    public function setSuff(){
-        $db = $this->getDb();
-        $query = $db->prepare('SELECT pass_suffixe FROM config');
-        $query->execute();
-        $data = $query->fetch(PDO::FETCH_ASSOC);
-        $this->_suff = $data['pass_suffixe'];
-    }
+
     
     public function setPassPattern(){
         $db = $this->getDb();
@@ -121,14 +104,6 @@ class ModifPass{
     
     public function getNewPassVerif(){
         return ($this->_newPassVerif);
-    }
-    
-    public function getPref(){
-        return ($this->_pref);
-    }
-    
-    public function getSuff(){
-        return ($this->_suff);
     }
     
     public function getPassPattern(){
