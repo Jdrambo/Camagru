@@ -16,29 +16,35 @@ class DeleteAccount{
 		$query = $db->prepare('SELECT * FROM `account` WHERE `id` = :id');
 		$query->bindValue(':id', $this->getId());
 		$query->execute();
+        
+        if ($query->rowCount() > 0){
 		$data = $query->fetch(PDO::FETCH_ASSOC);
-		if (isset($data['id']) && password_verify($this->getPass(), $data['pass'])){
-            $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
-            $query->bindValue(':id', $this->getId());
-            $query->execute();
-            while($data = $query->fetch(PDO::FETCH_ASSOC)){
-                if (isset($data['pictures_dir']))
-                    $dir = $data['pictures_dir'];
-                if (isset($data['url']) && file_exists($data['url']))
-                    unlink($data['url']);
+            if (isset($data['id']) && password_verify($this->getPass(), $data['pass'])){
+                $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+                $query->bindValue(':id', $this->getId());
+                $query->execute();
+                while($data = $query->fetch(PDO::FETCH_ASSOC)){
+                    if (isset($data['pictures_dir']))
+                        $dir = $data['pictures_dir'];
+                    if (isset($data['url']) && file_exists($data['url']))
+                        unlink($data['url']);
+                }
+                if (isset($dir) && file_exists($dir))
+                    rmdir($dir);
+                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` INNER JOIN `tablk` ON `tablk`.`user_id` = `account`.`id` INNER JOIN `comments` ON `comments`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+                $query->bindValue(':id', $this->getId());
+                $query->execute();
+                /*if (isset($_SESSION)){
+                    foreach ($_SESSION as $key => $value){
+                        unset($_SESSION[$key]);
+                    }
+                }*/
             }
-            if (isset($dir) && file_exists($dir))
-                rmdir($dir);
-			$query = $db->prepare('DELETE `account`, `pictures` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
-			$query->bindValue(':id', $this->getId());
-			$query->execute();
-			if (isset($_SESSION)){
-			    foreach ($_SESSION as $key => $value){
-			        unset($_SESSION[$key]);
-			    }
-			    session_unset($_SESSION);
-			}
-		}
+            else {
+                $message = array("Vous n'avez pas saisi le bon mot de passe", "error");
+                return ($message);
+            }
+        }
 		else {
 			$message = array("Vous n'avez pas saisi le bon mot de passe", "error");
 			return ($message);

@@ -10,8 +10,40 @@ if (isset($_SESSION['id'])){
     $pics = new PicsLib($db);
     //
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_account"){
-        $deleteAc = new DeleteAccount($_SESSION['id'], $_POST['pass'], $db);
-        $message = $deleteAc->eraseAccount();
+        
+        $query = $db->prepare('SELECT * FROM `account` WHERE `id` = :id');
+		$query->bindValue(':id', $_SESSION['id']);
+		$query->execute();
+        
+        if ($query->rowCount() > 0){
+		$data = $query->fetch(PDO::FETCH_ASSOC);
+            if (isset($data['id']) && password_verify($_POST['pass'], $data['pass'])){
+                $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+                $query->bindValue(':id', $_SESSION['id']);
+                $query->execute();
+                while($data = $query->fetch(PDO::FETCH_ASSOC)){
+                    if (isset($data['pictures_dir']))
+                        $dir = $data['pictures_dir'];
+                    if (isset($data['url']) && file_exists($data['url']))
+                        unlink($data['url']);
+                }
+                if (isset($dir) && file_exists($dir))
+                    rmdir($dir);
+                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` INNER JOIN `tablk` ON `tablk`.`user_id` = `account`.`id` INNER JOIN `comments` ON `comments`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+                $query->bindValue(':id', $_SESSION['id']);
+                $query->execute();
+                if (isset($_SESSION)){
+                    foreach ($_SESSION as $key => $value){
+                        unset($_SESSION[$key]);
+                    }
+                    session_unset($_SESSION);
+                }
+            }
+            else
+                $message = array("Vous n'avez pas saisi le bon mot de passe", "error");
+        }
+        else
+            $message = array("Vous n'avez pas saisi le bon mot de passe", "error");
     }
     if (isset($_POST['submit']) && $_POST['submit'] === "modif_pass"){
         $newPass = new ModifPass($db, $_SESSION['id'], $_POST['old_pass'], $_POST['new_pass'], $_POST['new_pass_verif']);

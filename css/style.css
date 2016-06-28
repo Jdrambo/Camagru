@@ -34,7 +34,7 @@ header{
     color:#fff;
     background-color: #292422;
     padding:12px 48px;
-    box-shadow: 4px 4px 4px rgba
+    box-shadow: 2px 2px 2px #000;
 }
 header a{
     text-decoration:none;
@@ -202,12 +202,16 @@ header a{
     display:inline-block;
 }
 .title_pics{
-    color:#1abc9c;
+    color:#fff;
     font-size:32px;
     font-family: 'Nothing You Could Do', cursive;
+    padding:0px 12px;
+    margin:0px;
 }
 .comment_pics{
-    color:#ccc;
+    margin:0px;
+    padding:12px 6px;
+    color:#fff;
 }
 #videoElement {
     width: 460px;
@@ -329,6 +333,7 @@ header a{
 }
 .pics-lib{
     margin: 24px 0;
+    width:100%;
     max-height:600px;
     overflow-y: auto;
     display:inline-block;
@@ -377,7 +382,7 @@ header a{
     z-index:100;
 }
 .login-post{
-    color:#fff;
+    color:#2979FF;
     font-size:20px;
     margin:6px;
 }

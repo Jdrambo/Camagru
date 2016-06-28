@@ -4,13 +4,28 @@ function loadClass($name){
 	require("classes/".$name.".php");
 }
 spl_autoload_register("loadClass");
+
+include("db.php");
+
+if (isset($_GET) && isset($_GET['submit']) && isset($_GET['login']) && isset($_GET['clef']) && $_GET['submit'] === "validation"){
+    $query = $db->prepare('SELECT clef FROM account WHERE clef = :clef && login = :login');
+    $query->bindValue(':clef', $_GET['clef']);
+    $query->bindValue(':login', $_GET['login']);
+    $query->execute();
+    
+    if ($query->rowCount() > 0){
+        $query = $db->prepare('UPDATE account SET actif = 1 WHERE login = :login');
+        $query->bindValue(':login', $_GET['login']);
+        $query->execute();
+        header('Location: connexion.php');
+    }
+}
 /*
 S'il n'existe pas de variable de session id (donc pas d'utilisateur connecté)
 On affiche la page d'inscription. Sinon on renvoie l'utilisateur sur la page d'accueil.
 */
 if (!isset($_SESSION['id']))
 {
-    include("db.php");
     // Si on valide le formulaire
     if (isset($_POST['submit']) && $_POST['submit'] === "inscription")
     {
@@ -58,7 +73,7 @@ if (!isset($_SESSION['id']))
                         $query->bindValue(":dir", $dir);
                         $query->execute();
                         
-                        $link = 'localhost:8080\Camagru\inscription.php?submit=validation&login='.$login.'&clef='.$clef;
+                        $link = 'http://localhost:8080/Camagru/inscription.php?submit=validation&login='.$login.'&clef='.$clef;
 
                         // Ici nous envoyons un e-mail à l'utilisateur afin qu'il puisse valider son compte
                         $content = '<html>
