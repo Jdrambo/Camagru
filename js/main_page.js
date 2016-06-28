@@ -1,4 +1,4 @@
-window.onload = function(){
+window.onload = (function(){
 // On récupère tous les boutons j'aime
 var btnLike = document.getElementsByClassName('like-post');
 // On récupère tous les boutons commenter
@@ -205,4 +205,4 @@ for(var i = 0; i < btnDeleteComLen; i++){
         else
             console.log("ERROR");
     }
-}
+})();

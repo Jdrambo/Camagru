@@ -40,14 +40,14 @@ if (!isset($_SESSION['id'])){
             $content = '<html>
             <head>
             <meta charset = "utf-8">
+            <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet" type="text/css">
             <style>
                 h1{
                     text-align:center;
-                    font-family: "Nothing You Could Do", cursive;
+                    font-family: \'Nothing You Could Do\', cursive;
                     color:#448AFF;
                 }
             </style>
-            <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet" type="text/css">
             </head>
             <body>
             <h1>Réinitialisation du mot de passe de Camagru</h1>

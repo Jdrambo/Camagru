@@ -57,19 +57,40 @@ if (!isset($_SESSION['id']))
                         $query->bindValue(":clef", $clef);
                         $query->bindValue(":dir", $dir);
                         $query->execute();
+                        
+                        $link = 'localhost:8080\Camagru\inscription.php?submit=validation&login='.$login.'&clef='.$clef;
 
                         // Ici nous envoyons un e-mail à l'utilisateur afin qu'il puisse valider son compte
-                        $text = "<html><head><meta charset = \"utf-8\"></head><body><h1>Bonjour et bienvenue sur Camagru</h1>
-                        <p>Vous avez créé un compte avec l'adresse ".$mail." et le login ".$login.".</p>
-                        <p>Pour finaliser votre inscription, cliquez sur le lien ci dessous.</p><p><a href = \"inscription.php?submit=validation&login=".$login."&clef=".$clef."\">Valider l'inscription</a></p>
-                        <p>Ou copiez / collez le dans la barre d'adresse de votre navigateur.</p>
-                        <p>http://www.camagru.fr/inscription.php?submit=validation&login=".$login."&clef=".$clef."</p></body></html>";
+                        $content = '<html>
+                        <head>
+                            <meta charset = \"utf-8\">
+                            <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet" type="text/css">
+                            <style>
+                                h1{
+                                    text-align:center;
+                                    font-family: \'Nothing You Could Do\', cursive;
+                                    color:#448AFF;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <h1>Bonjour et bienvenue sur Camagru</h1>
+                        <p>Vous avez créé un compte avec l\'adresse '.$mail.' et le login '.$login.'.</p>
+                        <p>Pour finaliser votre inscription, cliquez sur le lien ci dessous.</p><p><a href = "'.$link.'">Valider l\'inscription</a></p>
+                        <p>Ou copiez / collez le dans la barre d\'adresse de votre navigateur.</p>
+                        <p>'.$link.'</p>
+                        </body>
+                        </html>';
                         
                         $subject = "Camagru - Inscription";
-                        $headers = "From : register@camagru.fr"."\r\n"."Reply-To: noreply@camagru.fr";
-                        $tab = array("email" => $mail, "message" => $text, "subject" => $subject, "headers" => $headers);
-                        $email = new Email($tab);
-                        $email->sendEmail();
+
+                        $headers = "From: no-reply@camagru.fr\r\n";
+                        $headers .= "Reply-To: no-reply@camagru.fr\r\n";
+                        $headers .= "CC: \r\n";
+                        $headers .= "MIME-Version: 1.0\r\n";
+                        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+                        
+                        mail($mail, $subject, $content, $headers);
 
                         // Le message que l'on affiche pour dire qu'on a envoyé un e-mail à l'utilisateur. (affiché en vert).
                         $message = array("Bienvenue sur Camagru ! Pour valider votre inscription un mail vous a été envoyé a l'adresse suivante : ".$mail."", "ok");

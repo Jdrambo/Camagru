@@ -1,3 +1,5 @@
+window.onload = (function(){
+
 var elems = document.getElementsByClassName("icon-selector");
 var len = elems.length;
 for(var i = 0; i < len; i++){
@@ -34,3 +36,5 @@ function selectIcon(data){
 		document.getElementById('menu-profile-picture').src = result[2];
 	}
 };
+
+})();

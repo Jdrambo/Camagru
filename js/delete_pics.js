@@ -1,4 +1,4 @@
-window.onload = function(){
+window.onload = (function(){
     var elems = document.getElementsByClassName("img-delete");
     var camagruPrivacy = document.getElementsByClassName("img-privacy");
     var len = elems.length;
@@ -91,4 +91,4 @@ window.onload = function(){
             mess.style.visibility = "hidden";
         }),2000);
     }
-}
+})();
