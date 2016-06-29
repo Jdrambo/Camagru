@@ -27,9 +27,19 @@ if(isset($_SESSION['id'])){
 		$pics = str_replace('data:image/png;base64,', '', $pics);
 		$uri = str_replace(' ', '+', $pics);
 		$data = base64_decode($uri);
-		
+
 		$res = file_put_contents($file2, $data);
 		if($res){
+            
+            if (isset($_POST['layers'])){
+            $layers = json_decode($_POST['layers']);
+            if ($layers[0])
+                $src = imagecreatefrompng($layers[0]->src);
+                $dst = imagecreatefrompng($file2);
+            imagecopymerge($dst, $src, $layers[0]->x, $layers[0]->y, 0, 0, $layers[0]->w, $layers[0]->h, 100);
+            }
+            // !!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
 			$query->bindValue(":url", $file);
 			$query->bindValue(":id", $_SESSION['id']);
@@ -37,10 +47,13 @@ if(isset($_SESSION['id'])){
 			$query->bindValue(":comment", $comment);
 			$query->bindValue(":published", $published);
 			$query->execute();
-			echo "true";
+            $tab = array('true', $file, $title);
+			echo json_encode($tab);
 		}
-		else
-			echo "false";
+		else{
+            $tab = array('false');
+			echo json_encode($tab);
+        }
 	}
     
     // Script de suppression d'une image

@@ -4,14 +4,14 @@ function loadClass($name){
 	require("classes/".$name.".php");
 }
 spl_autoload_register("loadClass");
-if (isset($_SESSION['id'])){
     include("db.php");
     $icons = new IconsLib($db);
     $pics = new PicsLib($db);
-    //
+
+    //suppression du compte
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_account"){
         
-        $query = $db->prepare('SELECT * FROM `account` WHERE `id` = :id');
+        $query = $db->prepare('SELECT id, login, mail, pass FROM account WHERE id = :id');
 		$query->bindValue(':id', $_SESSION['id']);
 		$query->execute();
         
@@ -21,6 +21,7 @@ if (isset($_SESSION['id'])){
                 $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
                 $query->bindValue(':id', $_SESSION['id']);
                 $query->execute();
+
                 while($data = $query->fetch(PDO::FETCH_ASSOC)){
                     if (isset($data['pictures_dir']))
                         $dir = $data['pictures_dir'];
@@ -29,9 +30,10 @@ if (isset($_SESSION['id'])){
                 }
                 if (isset($dir) && file_exists($dir))
                     rmdir($dir);
-                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` INNER JOIN `tablk` ON `tablk`.`user_id` = `account`.`id` INNER JOIN `comments` ON `comments`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+
+                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN pictures ON pictures.user_id = account.id LEFT JOIN tablk ON tablk.user_id = account.id LEFT JOIN comments ON comments.user_id = account.id WHERE `account`.`id` = :id');
                 $query->bindValue(':id', $_SESSION['id']);
-                $query->execute();
+                $query->execute();   
                 if (isset($_SESSION)){
                     foreach ($_SESSION as $key => $value){
                         unset($_SESSION[$key]);
@@ -49,7 +51,6 @@ if (isset($_SESSION['id'])){
         $newPass = new ModifPass($db, $_SESSION['id'], $_POST['old_pass'], $_POST['new_pass'], $_POST['new_pass_verif']);
         $message = $newPass->getMessage();
     }
-}
 if (isset($_SESSION['id'])){
     ?>
     <!DOCTYPE html>

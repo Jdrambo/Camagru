@@ -508,9 +508,29 @@ header a{
     cursor:pointer;
 }
 #menu-list{
-        display:inline;
-        width:100%;
-    }
+    display:inline;
+    width:100%;
+}
+.last-pics-list{
+    width:70%;
+    max-height:400px;
+    margin:12px 15% 48px 15%;
+    overflow-y: auto;
+    padding:6px;
+}
+.last-pics{
+    display:inline-block;
+    width:128px;
+    padding:6px;
+}
+.last-pics img{
+    width:128px;
+    max-height:128px;
+    line-height:128px;
+    vertical-align: middle;
+    transition:opacity 2s ease;
+}
+
 
 @media screen and (min-width: 920px) and (max-width: 1280px){
     .border_pics{
@@ -611,8 +631,36 @@ header a{
         background-color:#000;
     }
     .cam-pics{
-        width:100%;
-        margin:12px 0;
+        margin:12px auto;
         display:inline-block;
+    }
+    .edit-area{
+        margin:0;
+        width:100%;
+    }
+    .emotes-area{
+        width:100%;
+        height:76px;
+        margin:0px;
+        overflow-x:auto;
+    }
+    .emote{
+        display:inline-block;
+    }
+    .last-pics-list{
+        overflow-x: hidden;
+        width:100%;
+        height:600px;
+        margin:0;
+    }
+    .last-pics{
+        width:90%;
+        height:auto;
+        margin:6px 5%;
+    }
+    .last-pics img{
+        width:100%;
+        height:auto;
+        max-height:100%;
     }
 }

@@ -55,6 +55,25 @@ if (isset($_SESSION['id']))
             <div id = "edit-menu" class = "edit-menu">
             	<img id = "save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
             </div></div>';
+    
+    
+    //On selectionne toutes les images faites avant
+    $query = $db->prepare('SELECT title, url FROM pictures WHERE user_id = :id ORDER BY date_ajout DESC');
+    $query->bindValue(':id', $_SESSION['id']);
+    $query->execute();
+    
+    echo '<div id = "last-pics-list" class = "last-pics-list">';
+    if($query->rowCount() >0){
+        
+            while($pics = $query->fetch(PDO::FETCH_ASSOC)){
+                echo '<div class = "last-pics">
+                    <a href = "'.$pics['url'].'">
+                    <img src = "'.$pics['url'].'" title = "'.$pics['title'].'" alt = "'.$pics['title'].'">
+                    </a>';
+                echo '</div>';
+            }
+    }
+    echo '</div>';
 	?>
     <script src = "js/menu.js"></script>
 	<script src = "js/edit.js"></script>
