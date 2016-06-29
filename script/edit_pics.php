@@ -27,17 +27,20 @@ if(isset($_SESSION['id'])){
 		$pics = str_replace('data:image/png;base64,', '', $pics);
 		$uri = str_replace(' ', '+', $pics);
 		$data = base64_decode($uri);
+        $temp = "../".$dir."temp.png";
 
-		$res = file_put_contents($file2, $data);
+		$res = file_put_contents($temp, $data);
 		if($res){
             
             if (isset($_POST['layers'])){
             $layers = json_decode($_POST['layers']);
             if ($layers[0])
                 $src = imagecreatefrompng($layers[0]->src);
-                $dst = imagecreatefrompng($file2);
-            imagecopymerge($dst, $src, $layers[0]->x, $layers[0]->y, 0, 0, $layers[0]->w, $layers[0]->h, 100);
+                $dst = imagecreatefrompng($temp);
+            imagecopymerge($dst, $src, $layers[0]->x, $layers[0]->y, 0, 0, $layers[0]->w, $layers[0]->h, ($layers[0]->alpha * 100));
             }
+            
+            imagepng($dst, $file2, 9);
             // !!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
