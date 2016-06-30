@@ -77,6 +77,8 @@ window.onload = (function(){
         if (result[0] == "true"){
             var list = document.getElementById('last-pics-list');
             if (list){
+                var newLink = document.createElement('a');
+                newLink.href = result[1];
                 var newPicsDiv = document.createElement('div');
                 newPicsDiv.className = "last-pics";
                 var newPics = document.createElement('img');
@@ -84,14 +86,13 @@ window.onload = (function(){
                 newPics.alt = result[2];
                 newPics.title = result[2];
                 newPics.style.opacity = 0;
-                newPicsDiv.appendChild(newPics);
+                newLink.appendChild(newPics);
+                newPicsDiv.appendChild(newLink);
                 
-                if (list.firstChild){
+                if (list.firstChild)
                     list.insertBefore(newPicsDiv, list.firstChild);
-                }
-                else {
+                else
                     list.appendChild(newPicsDiv);
-                }
                 setTimeout((function(){
                     newPics.style.opacity = 1;
                 }),10);
@@ -138,6 +139,7 @@ window.onload = (function(){
         alphaValue = document.getElementById('alpha-value').value;
         var addedLayer = new Layer(layerId, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue);
         allLayer.push(addedLayer);
+        console.log(addedLayer);
         img.src = addedLayer.src;
         ctx.globalAlpha = alphaValue;
         img.onload = function(){
@@ -234,6 +236,8 @@ window.onload = (function(){
 		  }, false);
 
 		  function takepicture() {
+            allLayer = [];
+            layerId = 1;
 		    canvas.width = width;
 		    canvas.height = height;
 		    canvas.getContext('2d').drawImage(video, 0, 0, width, height);

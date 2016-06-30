@@ -14,6 +14,7 @@ if(isset($_SESSION['id'])){
 		else
 			$comment = "";
 		$published = $_POST['published'];
+
 		// Ma requete pour recuperer le dossier de l'utilisateur
 		$query = $db->prepare('SELECT pictures_dir FROM account WHERE id = :id');
 		$query->bindValue(":id", $_SESSION['id']);
@@ -33,15 +34,59 @@ if(isset($_SESSION['id'])){
 		if($res){
             
             if (isset($_POST['layers'])){
-            $layers = json_decode($_POST['layers']);
-            if ($layers[0])
-                $src = imagecreatefrompng($layers[0]->src);
-                $dst = imagecreatefrompng($temp);
-            imagecopymerge($dst, $src, $layers[0]->x, $layers[0]->y, 0, 0, $layers[0]->w, $layers[0]->h, ($layers[0]->alpha * 100));
+                $layers = json_decode($_POST['layers']);
+                if ($layers[0] && !empty($layers[0])){
+                    
+                    // Ici c'est la boucle qui va fusionner tous les calque récupéré depuis le tableau d'objet nommé $layers
+                    foreach ($layers as $key => $value){
+                        /*
+                        On créé une resource image à partir du fichier passé en paramètre de imagecreatefrompng
+                        Je récupère sa taille dans un tableau [w, h] au passage
+                        */
+                        $imageBase = imagecreatefrompng($temp);
+                        $baseSize = getimagesize($temp);
+                        
+                        // CONTROLER L EXTENSION DU FILTRE (JPG)...
+                        
+                        $imageEmote = imagecreatefrompng($layers[$key]->src);
+                        $emoteOriginalSize = getimagesize($layers[$key]->src);
+
+                        /*
+                        On créé une image qui sera l'image dans laquelle nous fusioneron notre image de base
+                        puis par dessus le calque choisi.
+                        */
+                        $mergedImage = imagecreatetruecolor($baseSize[0], $baseSize[1]);
+                        $transparentColor = imagecolorallocate($mergedImage, 0, 0, 255);
+                        imagecolortransparent($mergedImage, $transparentColor);
+                        imagefill($mergedImage, 0, 0, $transparentColor);
+                        imagesavealpha($mergedImage, true);
+
+                        imagealphablending($imageBase, false);
+                        imagecopyresampled($mergedImage, $imageBase, 0, 0, 0, 0, $baseSize[0], $baseSize[1], $baseSize[0], $baseSize[1]);
+                        imagealphablending($imageBase, true);
+                        imagedestroy($imageBase);
+
+                        imagealphablending($imageEmote, false);
+                        imagecopyresampled($mergedImage, $imageEmote, $layers[$key]->x, $layers[$key]->y, 0, 0, $layers[$key]->w, $layers[$key]->h, $emoteOriginalSize[0], $emoteOriginalSize[1]);
+                        imagealphablending($imageEmote, true);
+                        imagedestroy($imageEmote);
+
+                        imagealphablending($mergedImage, false);
+                        imagesavealpha($mergedImage, true);
+
+                        imagepng($mergedImage, $temp);
+                    }
+                    //Enfin on merge le résultat 
+                    imagepng($mergedImage, $file2);
+                    imagedestroy($temp);
+                }
+                else
+                    file_put_contents($file2, $data);
             }
+            else
+                file_put_contents($file2, $data);
+
             
-            imagepng($dst, $file2, 9);
-            // !!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
 			$query->bindValue(":url", $file);
