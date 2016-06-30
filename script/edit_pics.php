@@ -23,22 +23,26 @@ if(isset($_SESSION['id'])){
 		$dir = $data['pictures_dir']."/";
 
 		$pics = $_POST['pics'];
+        //On créé un nom de fichier pour l'image avec identifiant unique hashé en md5 et avec l'extension png
 		$file = $dir.hash("md5", uniqid()).".png";
+        //On vérifie si le fichier existe déjà auquel cas on refait un coup de uniqid hashé...
+        while (file_exists($file)){
+            $file = $dir.hash("md5", uniqid()).".png";
+        }
 		$file2 = "../".$file;
 		$pics = str_replace('data:image/png;base64,', '', $pics);
 		$uri = str_replace(' ', '+', $pics);
 		$data = base64_decode($uri);
         $temp = "../".$dir."temp.png";
 
+        //$res est un fichier temporaire que l'on réécri à chaque tour de boucle avec un nouveau calque
 		$res = file_put_contents($temp, $data);
 		if($res){
-            
-            if (isset($_POST['layers'])){
+            if (isset($_POST['layers']) && isset($_POST['layers'][0]) && !empty($_POST['layers'][0])){
                 $layers = json_decode($_POST['layers']);
-                if ($layers[0] && !empty($layers[0])){
-                    
                     // Ici c'est la boucle qui va fusionner tous les calque récupéré depuis le tableau d'objet nommé $layers
                     foreach ($layers as $key => $value){
+                        try{
                         /*
                         On créé une resource image à partir du fichier passé en paramètre de imagecreatefrompng
                         Je récupère sa taille dans un tableau [w, h] au passage
@@ -47,18 +51,24 @@ if(isset($_SESSION['id'])){
                         $baseSize = getimagesize($temp);
                         
                         // CONTROLER L EXTENSION DU FILTRE (JPG)...
-                        
-                        $imageEmote = imagecreatefrompng($layers[$key]->src);
+                        $ext = pathinfo($layers[$key]->src, PATHINFO_EXTENSION);
+                        if ($ext == "png"){
+                            $imageEmote = imagecreatefrompng($layers[$key]->src);
+                        }
+                        if ($ext == "jpg" || $ext == "jpeg"){
+                            $imageEmote = imagecreatefromjpeg($layers[$key]->src);
+                        }
                         $emoteOriginalSize = getimagesize($layers[$key]->src);
 
                         /*
-                        On créé une image qui sera l'image dans laquelle nous fusioneron notre image de base
+                        On créé une image qui sera l'image dans laquelle nous fusionerons notre image de base
                         puis par dessus le calque choisi.
                         */
                         $mergedImage = imagecreatetruecolor($baseSize[0], $baseSize[1]);
                         $transparentColor = imagecolorallocate($mergedImage, 0, 0, 255);
                         imagecolortransparent($mergedImage, $transparentColor);
                         imagefill($mergedImage, 0, 0, $transparentColor);
+
                         imagesavealpha($mergedImage, true);
 
                         imagealphablending($imageBase, false);
@@ -67,7 +77,17 @@ if(isset($_SESSION['id'])){
                         imagedestroy($imageBase);
 
                         imagealphablending($imageEmote, false);
-                        imagecopyresampled($mergedImage, $imageEmote, $layers[$key]->x, $layers[$key]->y, 0, 0, $layers[$key]->w, $layers[$key]->h, $emoteOriginalSize[0], $emoteOriginalSize[1]);
+                        /*
+                        On fusionne les deux images, si c'est un jpg on le fusionne avec la valuer alpha passé en paramètre
+                        Sinon c'est que c'est un png donc un emote on le redimensionne à la taille souhaité et on le place
+                        à l'emplacement voulu
+                        */
+                        if($ext != "png"){
+                            imagecopymerge($mergedImage, $imageEmote, 0, 0, 0, 0, $layers[$key]->w, $layers[$key]->h, ($layers[$key]->alpha * 100));
+                        }
+                        else{
+                            imagecopyresampled($mergedImage, $imageEmote, $layers[$key]->x, $layers[$key]->y, 0, 0, $layers[$key]->w, $layers[$key]->h, $emoteOriginalSize[0], $emoteOriginalSize[1]);
+                        }
                         imagealphablending($imageEmote, true);
                         imagedestroy($imageEmote);
 
@@ -75,18 +95,18 @@ if(isset($_SESSION['id'])){
                         imagesavealpha($mergedImage, true);
 
                         imagepng($mergedImage, $temp);
+                        }
+                        catch(Exception $e){
+                            $message = $e;
+                        }
                     }
-                    //Enfin on merge le résultat 
+                    //Enfin on sauvegarde le résultat 
                     imagepng($mergedImage, $file2);
                     imagedestroy($temp);
                 }
-                else
+                else{
                     file_put_contents($file2, $data);
-            }
-            else
-                file_put_contents($file2, $data);
-
-            
+                }
             
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
 			$query->bindValue(":url", $file);
@@ -95,7 +115,11 @@ if(isset($_SESSION['id'])){
 			$query->bindValue(":comment", $comment);
 			$query->bindValue(":published", $published);
 			$query->execute();
-            $tab = array('true', $file, $title);
+            
+            if (isset($message))
+                $tab = array('error', $message);
+            else
+                $tab = array('true', $file, $title);
 			echo json_encode($tab);
 		}
 		else{
