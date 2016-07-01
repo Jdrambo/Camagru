@@ -29,11 +29,12 @@ window.onload = (function(){
     }
 
     function resultDelete(data){
+        console.log(data);
         var result = JSON.parse(data);
         if (result[0] === "true"){
             var parent_pics = document.getElementsByClassName('pics-lib');
             var border = document.getElementById('border-'+result[2]);
-            while (border.firstChild){
+            while(border.firstChild){
                 border.removeChild(border.firstChild);
             }
             var len = parent_pics.length;
@@ -43,8 +44,9 @@ window.onload = (function(){
             displayMessage("L'image a bien été supprimée", "#228");
             console.log(result[3] + " >> " + result[4]);
         }
-        else
+        else{
             displayMessage("Erreur lors de la suppression de l'image", "#822");
+        }
     }
 
     function changePrivacy(callback, elemId){
@@ -76,8 +78,9 @@ window.onload = (function(){
                 document.getElementById('img-privacy-'+result[2]).src = "img/unlock.png";
             displayMessage(result[1], "#228");
         }
-        else
+        else{
             displayMessage(result[1], "#822");
+        }
     }
 
     function displayMessage(text, color){

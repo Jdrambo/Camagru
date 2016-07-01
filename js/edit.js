@@ -45,7 +45,6 @@ window.onload = (function(){
 
     //La fonction qui appelle en ajax le script qui joindra les filtre et enregistrera la photo
     function savePics(callback){
-        console.log(allLayer);
         var layers = JSON.stringify(allLayer);
         
         var xhr = new XMLHttpRequest();
@@ -72,6 +71,7 @@ window.onload = (function(){
 
     // La fonction de retour du script de sauvegarde de la photo
     function finishSave(data){
+        console.log(data);
         var result = JSON.parse(data);
         var elem = document.getElementById('state_message');
         if (result[0] == "true"){
@@ -105,9 +105,6 @@ window.onload = (function(){
                 elem.style.visibility = "hidden";
             }),2000);
 
-        }
-        else if (result[0] == "error"){
-            console.log(result[1]);
         }
         else {
             elem.innerHTML = "Une erreur est survenue pendant l'enregistrement de l'image";

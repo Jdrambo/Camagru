@@ -5,6 +5,7 @@ if(isset($_SESSION['id'])){
     
     // Script d'enregistrement d'une image
 	if (isset($_POST['submit']) && $_POST['submit'] === "save_pics"){
+        $tab = array('false');
 		if (isset($_POST['title']))
 			$title = trim($_POST['title']);
 		else
@@ -26,7 +27,7 @@ if(isset($_SESSION['id'])){
         //On créé un nom de fichier pour l'image avec identifiant unique hashé en md5 et avec l'extension png
 		$file = $dir.hash("md5", uniqid()).".png";
         //On vérifie si le fichier existe déjà auquel cas on refait un coup de uniqid hashé...
-        while (file_exists($file)){
+        while(file_exists("../".$file)){
             $file = $dir.hash("md5", uniqid()).".png";
         }
 		$file2 = "../".$file;
@@ -35,14 +36,14 @@ if(isset($_SESSION['id'])){
 		$data = base64_decode($uri);
         $temp = "../".$dir."temp.png";
 
-        //$res est un fichier temporaire que l'on réécri à chaque tour de boucle avec un nouveau calque
-		$res = file_put_contents($temp, $data);
-		if($res){
-            if (isset($_POST['layers']) && isset($_POST['layers'][0]) && !empty($_POST['layers'][0])){
+       
+        if ($_POST['layers'] && isset($_POST['layers']) && !empty($_POST['layers'])){
+                 //$temp est un fichier temporaire que l'on réécri à chaque tour de boucle avec un nouveau calque
+                file_put_contents($temp, $data);
                 $layers = json_decode($_POST['layers']);
+                if($layers[0]->src != ""){
                     // Ici c'est la boucle qui va fusionner tous les calque récupéré depuis le tableau d'objet nommé $layers
                     foreach ($layers as $key => $value){
-                        try{
                         /*
                         On créé une resource image à partir du fichier passé en paramètre de imagecreatefrompng
                         Je récupère sa taille dans un tableau [w, h] au passage
@@ -83,6 +84,12 @@ if(isset($_SESSION['id'])){
                         à l'emplacement voulu
                         */
                         if($ext != "png"){
+                            $resizedEmote = imagecreatetruecolor($baseSize[0], $baseSize[1]);
+                            
+                            //On redimensionne le filtre a la taille de notre image de base
+                            imagecopyresized($resizedEmote, $imageEmote, 0, 0, 0, 0, $baseSize[0], $baseSize[1], $emoteOriginalSize[0], $emoteOriginalSize[1]);
+                            imagedestroy($imageEmote);
+                            $imageEmote = $resizedEmote;
                             imagecopymerge($mergedImage, $imageEmote, 0, 0, 0, 0, $layers[$key]->w, $layers[$key]->h, ($layers[$key]->alpha * 100));
                         }
                         else{
@@ -95,17 +102,19 @@ if(isset($_SESSION['id'])){
                         imagesavealpha($mergedImage, true);
 
                         imagepng($mergedImage, $temp);
-                        }
-                        catch(Exception $e){
-                            $message = $e;
-                        }
                     }
-                    //Enfin on sauvegarde le résultat 
+                    //Enfin on sauvegarde le résultat
                     imagepng($mergedImage, $file2);
-                    imagedestroy($temp);
+                    $tab = array('true', $file, $title, $layers);
+                    }
+                    else{
+                        file_put_contents($file2, $data);
+                        $tab = array('true', $file, $title);
+                    }
                 }
                 else{
                     file_put_contents($file2, $data);
+                    $tab = array('true', $file, $title);
                 }
             
 			$query = $db->prepare('INSERT INTO pictures (url, user_id, title, comment, published, date_ajout) VALUES (:url, :id, :title, :comment, :published, NOW())');
@@ -115,18 +124,12 @@ if(isset($_SESSION['id'])){
 			$query->bindValue(":comment", $comment);
 			$query->bindValue(":published", $published);
 			$query->execute();
-            
-            if (isset($message))
-                $tab = array('error', $message);
-            else
-                $tab = array('true', $file, $title);
-			echo json_encode($tab);
-		}
-		else{
-            $tab = array('false');
-			echo json_encode($tab);
-        }
-	}
+		  
+        echo json_encode($tab);
+    
+    }
+    //fin du script d ajout d'une image
+
     
     // Script de suppression d'une image
     if (isset($_POST['submit']) && isset($_POST['id_pics']) && $_POST['submit'] === "delete_pics"){
