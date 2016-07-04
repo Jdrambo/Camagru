@@ -18,15 +18,29 @@ if (isset($_SESSION['id']))
 	
     /*
     Ceci est la requête pour sélectionner les post (images) de tous les utilisateurs, si elles sont publiques
-    J'ai limité à 10 pour afficher les autres post via du ajax (affaire à suivre)
     */
-	$query = $db->prepare('SELECT account.login, pictures.id AS picture_id, pictures.url, pictures.title, pictures.comment, DAY(pictures.date_ajout) AS day_add, MONTH(pictures.date_ajout) AS month_add,
+    $query = $db->prepare('SELECT COUNT(id) AS count_post FROM pictures');
+    $query->execute();
+    if ($query->rowCount() > 0){
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+        $countPost = $data['count_post'];
+    }
+    else
+        $countPost = 0;
+    $limitSize = 10;
+    if (isset($_GET) && isset($_GET['page']))
+        $offset = ($_GET['page'] * $limitSize);
+    else
+        $offset = 0;
+	$query = $db->prepare("SELECT account.login, pictures.id AS picture_id, pictures.url, pictures.title, pictures.comment, DAY(pictures.date_ajout) AS day_add, MONTH(pictures.date_ajout) AS month_add,
 	YEAR(pictures.date_ajout) AS year_add, HOUR(pictures.date_ajout) AS hour_add, MINUTE(pictures.date_ajout) AS min_add
     FROM pictures INNER JOIN account ON account.id = pictures.user_id WHERE pictures.published = 1
-    ORDER BY pictures.date_ajout DESC LIMIT 10');
+    ORDER BY pictures.date_ajout DESC LIMIT :offset, :limitSize");
+    $query->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $query->bindValue(':limitSize', $limitSize, PDO::PARAM_INT);
 	$query->execute();
 	while ($datax = $query->fetch(PDO::FETCH_ASSOC)){
-        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC');
+        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add`');
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         
@@ -73,6 +87,26 @@ if (isset($_SESSION['id']))
         }
         echo '</div></div>';
 	}
+    
+    $nbrPage = $countPost / $limitSize;
+    $i = 0;
+    echo '<div class = "pagination_section">';
+    while ($i < $nbrPage){
+        $linkClass = "pagination_slot";
+        if (isset($_GET) && isset($_GET['page'])){
+            if ($i === (int)$_GET['page']){
+                $linkClass = "pagination_slot pagination_selected";
+            }
+        }
+        else{
+            if ($i == 0){
+                $linkClass = "pagination_slot pagination_selected";
+            }
+        }
+        echo '<a href = "index.php?page='.$i.'" class = "'.$linkClass.'">'.($i + 1).'</a>';
+        $i++;
+    }
+    echo '</div>';
     ?>
     </div>
     <script src = "js/main_page.js"></script>

@@ -196,18 +196,59 @@ if(isset($_SESSION['id'])){
     if (isset($_POST['submit']) && isset($_POST['content']) && isset($_POST['pics_id']) && $_POST['submit'] === "comment_post"){
         $content = htmlspecialchars(trim($_POST['content']));
         if ($content !== "" && !empty($content)){
+            /*
+            La requête qui insert le commentaire en base de donnée
+            */
             $query = $db->prepare('INSERT INTO comments (pics_id, user_id, content, date_add) VALUES (:pics_id, :user_id, :content, NOW())');
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->bindValue(':content', $content);
             $query->execute();
+            
+            $query = $db->prepare('SELECT id, login, mail FROM account INNER JOIN pictures ON pictures.user_id = account.id WHERE pictures.id = :pics_id');
+            $query->bindValue(':pics_id', $_POST['pics_id']);
+            $query->execute();
+            if ($query->rowCount() > 0){
+                $data = $query->fetch(PDO::FETCH_ASSOC);
+                /*
+                Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
+                */
+                $content = '<html>
+                        <head>
+                            <title>Commentaire reçu sur Camagru</title>
+                            <meta charset = \"utf-8\">
+                            <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet" type="text/css">
+                            <style>
+                                h1{
+                                    text-align:center;
+                                    font-family: \'Nothing You Could Do\', cursive;
+                                    color:#448AFF;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <h1>Quelqu\'un a commenté votre photo sur Camagru</h1>
+                        <p>Une de vos photos a été commentée sur Camagru.</p>
+                        </body>
+                        </html>';
+                        
+                        $subject = "Camagru - Commentaire";
 
+                        $headers = "From: no-reply@camagru.fr\r\n";
+                        $headers .= "Reply-To: no-reply@camagru.fr\r\n";
+                        $headers .= "CC: \r\n";
+                        $headers .= "MIME-Version: 1.0\r\n";
+                        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
+                        
+                        mail($mail, $subject, $content, $headers);
+            }
+            
             $query = $db->prepare('SELECT * FROM comments WHERE pics_id = :pics_id && user_id = :user_id ORDER BY date_add DESC LIMIT 1');
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->execute();
             $data = $query->fetch(PDO::FETCH_ASSOC);
-
+            
             $tab = array('true', $_POST['pics_id'], $_POST['content'], $_SESSION['url'], $_SESSION['login'], $data['id']);
             echo json_encode($tab);
         }

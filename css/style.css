@@ -530,7 +530,33 @@ header a{
     vertical-align: middle;
     transition:opacity 2s ease;
 }
-
+/* La section de pagination */
+.pagination_section{
+    padding:24px;
+    text-align:center;
+}
+.pagination_slot{
+    padding:6px;
+    margin:3px;
+    border:1px solid #aaa;
+    border-radius:3px;
+    color:#aaa;
+}
+.pagination_slot:hover{
+    font-weight:bold;
+    background-color:transparent;
+    border-color:#1565C0;
+    color:#1565C0;
+}
+.pagination_selected{
+    background-color:#1565C0;
+    color:#fff;
+    padding:6px 12px;
+    font-weight:bold;
+}
+.pagination_selected:hover{
+    background-color:transparent;
+}
 
 @media screen and (min-width: 920px) and (max-width: 1280px){
     .border_pics{
