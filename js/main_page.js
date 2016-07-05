@@ -12,12 +12,9 @@ var btnCommentLen = btnComment.length;
 var validComLen = validCom.length;
 var btnDeleteComLen = btnDeleteCom.length;
 var lastEvent;
-var passage = 0;
-
 
 // On ajoute l'evenListner pour le like (j'aime)...
 for (var i = 0; i < btnLikeLen; i++){
-    console.log(btnLike[i]);
         btnLike[i].addEventListener("click", function(e){ likePost(resultLike, this.id)}, false);
 }
 
@@ -47,7 +44,6 @@ for(var i = 0; i < btnDeleteComLen; i++){
 
 // Cette fonction vérifie si un like est présent ou non en bdd, l'ajoute ou le retire selon le cas
     function likePost(callback, elem){
-        console.log(elem);
         var elem_split = elem.split('-');
         var pics_id = encodeURIComponent(elem_split[2]);
         xhr = new XMLHttpRequest();
@@ -57,9 +53,6 @@ for(var i = 0; i < btnDeleteComLen; i++){
             callback(xhr.responseText);
         };
         
-        console.log(passage);
-        passage++;
-        
         xhr.open("POST", "script/edit_pics.php", true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.send("submit=lkPost&pics_id="+pics_id);
@@ -67,8 +60,8 @@ for(var i = 0; i < btnDeleteComLen; i++){
 
 // Cette fonction est la fonction callback de likePost, qui incrémente le compteur de like de 1, ou le décrémente
     function resultLike(data){
+        console.log(data);
         var result = JSON.parse(data);
-        console.log(result);
         if (result && result[0] === "true"){
             var btnLike = document.getElementById('like-post-'+result[2]);
             var likeCount = document.getElementById('like-count-'+result[2]);
@@ -82,10 +75,10 @@ for(var i = 0; i < btnDeleteComLen; i++){
                 count--;  
             }
             likeCount.innerHTML = count;
-            console.log("OK")
         }
-        else
+        else {
             console.log("ERROR");
+        }
     }
 
 // Cette fonction a pour but d'afficher la zone de commentaire sous le post sélectionné

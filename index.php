@@ -40,7 +40,7 @@ if (isset($_SESSION['id']))
     $query->bindValue(':limitSize', $limitSize, PDO::PARAM_INT);
 	$query->execute();
 	while ($datax = $query->fetch(PDO::FETCH_ASSOC)){
-        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add`');
+        $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC');
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         

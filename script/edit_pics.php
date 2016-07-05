@@ -205,11 +205,12 @@ if(isset($_SESSION['id'])){
             $query->bindValue(':content', $content);
             $query->execute();
             
-            $query = $db->prepare('SELECT id, login, mail FROM account INNER JOIN pictures ON pictures.user_id = account.id WHERE pictures.id = :pics_id');
+            $query = $db->prepare('SELECT account.login, account.mail FROM account INNER JOIN pictures ON pictures.user_id = account.id WHERE pictures.id = :pics_id');
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->execute();
             if ($query->rowCount() > 0){
                 $data = $query->fetch(PDO::FETCH_ASSOC);
+                $mail = $data['mail'];
                 /*
                 Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
                 */
@@ -227,7 +228,9 @@ if(isset($_SESSION['id'])){
                             </style>
                         </head>
                         <body>
-                        <h1>Quelqu\'un a commenté votre photo sur Camagru</h1>
+                        <h1>Camagru</h1>
+                        <p>Bonjour '.$data['login'].'</p>
+                        <p>'.$_SESSION['login'].' a commenté votre photo sur Camagru</p>
                         <p>Une de vos photos a été commentée sur Camagru.</p>
                         </body>
                         </html>';
