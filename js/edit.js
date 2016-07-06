@@ -5,6 +5,7 @@ window.onload = (function(){
     var layerId = 1;
     var selectedEmote;
     var alphaValue = 0.5;
+    var loadImg = new Image;
 
     //Protoype d'un objet Layer qui sert pour les icones et les filtres
     function Layer(id, name, src, x, y, w, h, alpha){
@@ -51,6 +52,7 @@ window.onload = (function(){
         if(files && files[0]){
         	allLayer = [];
             layerId = 1;
+            loadImg.src = "";
             var formData = new FormData();
             formData.append("sumbit", "upload_file");
             formData.append("file", files[0]);
@@ -75,9 +77,10 @@ window.onload = (function(){
 	        if (result && result[0] === "true"){
 	        	var width = 460;
 	        	var height = 340;
-	        	var img = new Image();
-	        	img.src = result[1];
+	        	loadImg.src = result[1];
 	        	var canvas = document.getElementById("canvas");
+	        	canvas.width = width;
+		    	canvas.height = height;
 	        	
 			    showElement("pics_title", "inline-block");
 			    showElement("pics_comment", "inline-block");
@@ -85,10 +88,9 @@ window.onload = (function(){
 			    showElement("edit-menu", "inline-block");
 			    showElement("edit-area", "inline-block");
 
-		    	img.onload = function(){
-		    		canvas.width = width;
-		    		canvas.height = height;
-			    	canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+		    	loadImg.onload = function(){
+		    		
+			    	canvas.getContext('2d').drawImage(loadImg, 0, 0, width, height);
 	            	firstCanvas = canvas.toDataURL('image/png');
 				}
 	        }
