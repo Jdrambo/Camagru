@@ -107,6 +107,7 @@ if (isset($_SESSION['id']))
         $i++;
     }
     echo '</div>';
+    include('footer.php');
     ?>
     </div>
     <script src = "js/main_page.js"></script>

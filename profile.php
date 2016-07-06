@@ -82,6 +82,7 @@ include("head.php");
         <input class = "field" type = "password" name = "pass" placeholder = "Votre mot de passe...">
         <button class = "btn-form btn-delete" name = "submit" value = "delete_account">Supprimer mon compte</button>
         </form>
+        <?php include('footer.php');?>
     </div>
     <!-- Script de selection des icones -->
     <script src = "js/select_icon.js"></script>

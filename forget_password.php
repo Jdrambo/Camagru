@@ -82,6 +82,7 @@ include("head.php");
             <input class = "field" type = "text" name = "login" placeholder = "Identifiant">
             <button class = "btn-form" name = "submit" value = "retrieve_password">M'envoyer un e-mail de réinitialisation</button>
         </form>
+        <?php include('footer.php');?>
     </div>
     <script src = "js/menu.js"></script>
     </body>

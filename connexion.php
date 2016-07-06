@@ -38,6 +38,7 @@ include("head.php");
             <button class = "btn-form" name = "submit" value = "connect">Je me connecte</button>
             <a href = "forget_password.php">j'ai oublié mon mot de passe</a>
         </form>
+        <?php include('footer.php');?>
     </div>
     <script src = "js/menu.js"></script>
     </body>

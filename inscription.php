@@ -192,6 +192,7 @@ include("head.php");
             </form>
         <?php
         }
+        include('footer.php');
         ?>
     </div>
     <script src = "js/menu.js"></script>

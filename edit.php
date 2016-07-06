@@ -91,6 +91,7 @@ if (isset($_SESSION['id']))
                 echo '</div>';
             }
     }
+    include('footer.php');
     echo '</div>';
 	?>
     <script src = "js/menu.js"></script>

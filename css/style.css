@@ -603,7 +603,11 @@ header a{
 .pagination_selected:hover{
     background-color:transparent;
 }
-
+/* ------- Le Footer ------- */
+footer{
+    padding:36px;
+    text-align:center;
+}
 
 @media screen and (min-width: 920px) and (max-width: 1280px){
     .border_pics{
