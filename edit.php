@@ -28,10 +28,10 @@ if (isset($_SESSION['id']))
 
     echo '<div id = "edit-selection-section" class = "edit-selection-section">
         <div id = "edit-selection-upload" class = "edit-selection-slot">
-            <img id = "edit-selection-upload" src = "img/upload.png">
+            <img src = "img/upload.png">
         </div>
-        <div class = "edit-selection-slot">
-            <img id = "edit-selection-cam" src = "img/cam.png">
+        <div id = "edit-selection-cam" class = "edit-selection-slot">
+            <img src = "img/cam.png">
         </div>
     </div>';
 
