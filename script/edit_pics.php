@@ -160,8 +160,50 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);
         }
     }
-    
-    // Script de modification du statut publique/privée d'une image
+    // Fin - suppression image
+
+
+    // Script d'upload d'un fichier
+    if(!empty($_FILES)){
+
+        $extTab = array("image/jpg", "image/jpeg", "image/png");
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $ext = finfo_file($finfo, $_FILES['file']['tmp_name']);
+        if (array_search($ext, $extTab)){
+            if((int)$_FILES['file']['size'] < 5000000){
+                $tab_exp = explode("/", $ext);
+                $ext = $tab_exp[1];
+
+                $query = $db->prepare('SELECT pictures_dir FROM account WHERE account.id = :user_id');
+                $query->bindValue(':user_id', $_SESSION['id']);
+                $query->execute();
+
+                $data = $query->fetch(PDO::FETCH_ASSOC);
+                $file_path = $data['pictures_dir']."/tempUpload.".$ext;
+
+                //move_uploaded_file($_FILES['file']['tmp_name'], $_FILES['file']['name']);
+                if (move_uploaded_file($_FILES['file']['tmp_name'], "../".$file_path))
+                {
+                    $size = getimagesize("../".$file_path);
+                    $tab = array('true', $file_path, $size);
+                }
+                else{
+                    $tab = array('false', 'Erreur lors du chargement du fichier');
+                }
+            }
+            else{
+                $tab = array('false', 'La taille de votre fichier est supérieure a 5Mo et c\'est trop', $_FILES['file']['size']);
+            }
+        }
+        else{
+            $tab = array('false', 'Erreur lors du chargement du fichier');
+        }
+        echo json_encode($tab);
+    }
+    // Fin - upload fichier
+
+
+    // Script de modification du statut public / privé d'une image
     if (isset($_POST['submit']) && isset($_POST['id_pics']) && $_POST['submit'] === "privacy_pics"){
         $query = $db->prepare('SELECT * FROM pictures WHERE (id = :id_pics && user_id = :user_id)');
         $query->bindValue(":id_pics", $_POST['id_pics']);
@@ -191,6 +233,8 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);
         }
     }
+    //Fin - modification statut public
+
     
     // Script qui enregistre un commentaire en base de données
     if (isset($_POST['submit']) && isset($_POST['content']) && isset($_POST['pics_id']) && $_POST['submit'] === "comment_post"){
@@ -231,7 +275,7 @@ if(isset($_SESSION['id'])){
                         <h1>Camagru</h1>
                         <p>Bonjour '.$data['login'].'</p>
                         <p>'.$_SESSION['login'].' a commenté votre photo sur Camagru</p>
-                        <p>Une de vos photos a été commentée sur Camagru.</p>
+                        <a href = "http://localhost:8080/Camagru/index.php">Camagru</a>
                         </body>
                         </html>';
                         
@@ -260,6 +304,8 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);   
         }
     }
+    //Fin - ajout commentaire
+
     
     // Script de suppression d'un commentaire
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_com" && isset($_POST['com_id'])){
@@ -276,6 +322,8 @@ if(isset($_SESSION['id'])){
             echo json_encode($tab);
         }
     }
+    //Fin - suppression commentaire
+
     
     //script de j'aime / j'aime pas d'un post
     if (isset($_POST['submit']) && $_POST['submit'] === "lkPost" && isset($_POST['pics_id'])){
@@ -284,7 +332,6 @@ if(isset($_SESSION['id'])){
             $query->bindValue(':pics_id', $_POST['pics_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->execute();
-            $tab = array();
             
             if ($query->rowCount() > 0){
                 $lkpost = $query->fetch(PDO::FETCH_ASSOC);
@@ -292,9 +339,7 @@ if(isset($_SESSION['id'])){
                 $query->bindValue(':pics_id', $_POST['pics_id']);
                 $query->bindValue(':user_id', $_SESSION['id']);
                 $query->execute();
-                array_push($tab, 'true');
-                array_push($tab, 'removedLike');
-                array_push($tab, $_POST['pics_id']);
+                $tab = array('true', 'removedLike', $_POST['pics_id']);
             }
             else {
                 $lkpost = $query->fetch(PDO::FETCH_ASSOC);
@@ -302,17 +347,16 @@ if(isset($_SESSION['id'])){
                 $query->bindValue(':pics_id', $_POST['pics_id']);
                 $query->bindValue(':user_id', $_SESSION['id']);
                 $query->execute();
-                array_push($tab, 'true');
-                array_push($tab, 'addedLike');
-                array_push($tab, $_POST['pics_id']);
+                $tab = array('true', 'addedLike', $_POST['pics_id']);
             }
             echo json_encode($tab);
         }
         catch(Exception $e){
-            $tab = array('false', "Post id = ".$_POST['pics_id'], $e->getMessage());
+            $tab = array('false', "Une erreur s'est produite");
             echo json_encode($tab);
         }
     }
+    //Fin - like / unlike
 }
 else
 	header("Location: index.php");

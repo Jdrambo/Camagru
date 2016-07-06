@@ -4,7 +4,6 @@ body{
 	color:#000;
 	font-family: 'Lato', sans-serif;
 	font-weight:100;
-	/*background-image: url("../img/background-photo.jpg");*/
     background-color:#fff;
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -212,6 +211,53 @@ header a{
     margin:0px;
     padding:12px 6px;
     color:#fff;
+}
+
+/* ------- ZONE EDITION CAMERA PHOTO ------- */
+.edit-selection-slot{
+    text-align:center;
+    width:28%;
+    margin:24px 10%;
+    display:inline-block;
+    border:2px solid #29B6F6;
+    border-radius:4px;
+    cursor:pointer;
+}
+.edit-selection-slot:hover{
+    background-color:#5E35B1;
+}
+.edit-selection-slot img{
+    width:50%;
+    margin: 30% 25%;
+}
+.file-upload-section{
+    display:none;
+    text-align:center;
+}
+#cam-section{
+    display:none;
+}
+.upload-icon{
+    width:128px;
+}
+.upload-field{
+    display:inline-block;
+}
+#upload-btn{
+    display:inline-block;
+    border-radius:0;
+    border:1px solid #29B6F6;
+    background-color:#29B6F6;
+    color:#fff;
+    padding:12px 24px;
+    font-size:20px;
+    width:30%;
+    margin: 24px 35%;
+    cursor:pointer;
+}
+#upload-btn:hover{
+    background-color:#fff;
+    color:#29B6F6;
 }
 #videoElement {
     width: 460px;
@@ -557,6 +603,7 @@ header a{
 .pagination_selected:hover{
     background-color:transparent;
 }
+
 
 @media screen and (min-width: 920px) and (max-width: 1280px){
     .border_pics{

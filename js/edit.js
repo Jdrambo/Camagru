@@ -5,7 +5,7 @@ window.onload = (function(){
     var layerId = 1;
     var selectedEmote;
     var alphaValue = 0.5;
-    
+
     //Protoype d'un objet Layer qui sert pour les icones et les filtres
     function Layer(id, name, src, x, y, w, h, alpha){
         this.id = id;
@@ -18,6 +18,89 @@ window.onload = (function(){
         this.alpha = alpha;
     }
     
+    //Bouton pour afficher la section d'upload
+    var upload_section_btn = document.getElementById('edit-selection-upload');
+    if (upload_section_btn){
+        upload_section_btn.addEventListener('click', function(){ 
+            showElement('file-upload-section', 'block');
+            hideElement('edit-selection-section');
+        }, false);
+    }
+
+    //Bouton pour afficher la section camera
+    var cam_section_btn = document.getElementById('edit-selection-cam');
+    if(cam_section_btn){
+        cam_section_btn.addEventListener('click', function(){
+            showElement('cam-section', 'block');
+            hideElement('edit-selection-section');
+        }, false);
+    }
+
+    //Bouton de chargement d'un fichier
+    var form_upload = document.getElementById('upload-form');
+    if (form_upload){
+        form_upload.addEventListener('submit', function(event){
+            event.preventDefault();
+            uploadNewFile(resultUpload);
+        }, false);
+    }
+
+    //Fonction qui charge le fichier temporaire
+    function uploadNewFile(callback){
+        var files = document.getElementById('upload-field').files;
+        if(files && files[0]){
+        	allLayer = [];
+            layerId = 1;
+            var formData = new FormData();
+            formData.append("sumbit", "upload_file");
+            formData.append("file", files[0]);
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 0)) {
+                    callback(xhr.responseText);
+                }
+            };
+
+            xhr.open("POST", "script/edit_pics.php", true);
+            xhr.send(formData);
+        }
+    }
+
+    //Fonction de retour de l'uplod d'un fichier
+    function resultUpload(data){
+    	if (data){
+	        var result = JSON.parse(data);
+	        console.log(result);
+	        if (result && result[0] === "true"){
+	        	var width = 460;
+	        	var height = 340;
+	        	var img = new Image();
+	        	img.src = result[1];
+	        	var canvas = document.getElementById("canvas");
+	        	
+			    showElement("pics_title", "inline-block");
+			    showElement("pics_comment", "inline-block");
+			    showElement("container-published", "block");
+			    showElement("edit-menu", "inline-block");
+			    showElement("edit-area", "inline-block");
+
+		    	img.onload = function(){
+		    		canvas.width = width;
+		    		canvas.height = height;
+			    	canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+	            	firstCanvas = canvas.toDataURL('image/png');
+				}
+	        }
+	        else {
+	        	showMessage("Une erreur c'est produite au chargement du fichier", "#822");
+	        }
+	    }
+	    else{
+	    	showMessage("Une erreur c'est produite au chargement du fichier", "#822");
+	    }
+    }
+
     //Chaque emote icone
     var all_btn_emote = document.getElementsByClassName('emote-img');
     var all_btn_emote_length = all_btn_emote.length;
@@ -34,7 +117,7 @@ window.onload = (function(){
     for (i = 0; i < all_btn_filtre_lentght; i++){
         all_btn_filtre[i].addEventListener("click", function(){ addFilter(this);}, false);
     }
-    
+
     var mainCanvas = document.getElementById('canvas');
     mainCanvas.addEventListener("dragover", function(e){ allowDrop(e)}, false);
     mainCanvas.addEventListener("drop", function(event){ addEmote(event);}, false);
@@ -46,10 +129,7 @@ window.onload = (function(){
     //La fonction qui appelle en ajax le script qui joindra les filtre et enregistrera la photo
     function savePics(callback){
         var layers = JSON.stringify(allLayer);
-        
         var xhr = new XMLHttpRequest();
-
-        var canvas = document.getElementById('canvas').toDataURL('image/png');
         var title = document.getElementById('pics_title').value;
         var comment = document.getElementById('pics_comment').value;
         var published = document.getElementById('pics_published');
@@ -71,7 +151,6 @@ window.onload = (function(){
 
     // La fonction de retour du script de sauvegarde de la photo
     function finishSave(data){
-        console.log(data);
         var result = JSON.parse(data);
         var elem = document.getElementById('state_message');
         if (result[0] == "true"){
@@ -118,6 +197,18 @@ window.onload = (function(){
         }
     }
     
+    function showMessage(text, color){
+    	var elem = document.getElementById('state_message');
+    	elem.innerHTML = text;
+        elem.style.backgroundColor = color;
+        elem.style.visibility = "visible";
+        elem.style.opacity = "1";
+        setTimeout((function(){
+            elem.style.opacity = "0";
+            elem.style.visibility = "hidden";
+        }),2000);
+    }
+
     function handleDragStart(e){
         selectedEmote = e.target;
     }
@@ -196,6 +287,7 @@ window.onload = (function(){
         hideElement("container-published");
         hideElement("edit-area");
         hideElement("edit-menu");
+
        (function() {
 		  var streaming = false,
 		      video        = document.querySelector('#video'),

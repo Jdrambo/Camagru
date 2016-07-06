@@ -12,7 +12,7 @@ if (isset($_SESSION['id']))
     include('header.php');
     echo '<div class = "container">';
     include("db.php");
-    
+
 	
 	echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p>';
 	

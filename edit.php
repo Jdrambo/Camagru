@@ -26,11 +26,29 @@ if (isset($_SESSION['id']))
     echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
 	echo '<p>Edition de photos</p>';
 
+    echo '<div id = "edit-selection-section" class = "edit-selection-section">
+        <div id = "edit-selection-upload" class = "edit-selection-slot">
+            <img id = "edit-selection-upload" src = "img/upload.png">
+        </div>
+        <div class = "edit-selection-slot">
+            <img id = "edit-selection-cam" src = "img/cam.png">
+        </div>
+    </div>';
+
+    echo '<div id = "file-upload-section" class = "file-upload-section">
+        <img class = "upload-icon" src = "img/upload.png">
+        <p>Sélectionnez une image a charger</p>
+        <form id = "upload-form" action = "edit.php" method = "post" enctype="multipart/form-data">
+        <input id = "upload-field" class = "upload-field" type = "file" name = "upload_file">
+        <button id = "upload-btn">Charger un fichier</button>
+        </form>
+    </div>';
+
     //L'element video qui recoit le flux de la web cam
-	echo '<video id="video" class = "cam-video"></video>';
+	echo '<div id = "cam-section"><video id="video" class = "cam-video"></video>';
     
     //Le bouton aui prend la photo
-    echo '<img title = "Prendre une photo" id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png">';
+    echo '<img title = "Prendre une photo" id="startbutton" class = "cam-btn" alt = "prendre une photo" src = "img/cam.png"></div>';
     
     //La zone d'edition de l'image
     echo '<div id = "edit-area" class = "edit-area">
