@@ -258,6 +258,7 @@ if(isset($_SESSION['id'])){
                 /*
                 Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
                 */
+                /*
                 $content = '<html>
                         <head>
                             <title>Commentaire reçu sur Camagru</title>
@@ -279,15 +280,14 @@ if(isset($_SESSION['id'])){
                         </body>
                         </html>';
                         
-                        $subject = "Camagru - Commentaire";
-
-                        $headers = "From: no-reply@camagru.fr\r\n";
-                        $headers .= "Reply-To: no-reply@camagru.fr\r\n";
-                        $headers .= "CC: \r\n";
-                        $headers .= "MIME-Version: 1.0\r\n";
-                        $headers .= "Content-Type: text/html; charset=utf-8\r\n";
-                        
-                        mail($mail, $subject, $content, $headers);
+                    $subject = "Camagru - Commentaire";
+                    $headers = "From: no-reply@camagru.fr\r\n";
+                    $headers .= "Reply-To: no-reply@camagru.fr\r\n";
+                    $headers .= "CC: \r\n";
+                    $headers .= "MIME-Version: 1.0\r\n";
+                    $headers .= "Content-Type: text/html; charset=utf-8\r\n";     
+                    mail($mail, $subject, $content, $headers);
+                    */
             }
             
             $query = $db->prepare('SELECT * FROM comments WHERE pics_id = :pics_id && user_id = :user_id ORDER BY date_add DESC LIMIT 1');
@@ -310,7 +310,7 @@ if(isset($_SESSION['id'])){
     // Script de suppression d'un commentaire
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_com" && isset($_POST['com_id'])){
         try{
-            $query = $db->prepare('DELETE FROM comments WHERE id = :id && user_id = :user_id');
+            $query = $db->prepare('DELETE comments FROM comments INNER JOIN pictures ON pictures.id = comments.pics_id WHERE comments.id = :id && (comments.user_id = :user_id || pictures.user_id = :user_id)');
             $query->bindValue(':id', $_POST['com_id']);
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->execute();
@@ -333,6 +333,7 @@ if(isset($_SESSION['id'])){
             $query->bindValue(':user_id', $_SESSION['id']);
             $query->execute();
             
+            //Si on a déjà mis un j'aime
             if ($query->rowCount() > 0){
                 $lkpost = $query->fetch(PDO::FETCH_ASSOC);
                 $query = $db->prepare('DELETE FROM tablk WHERE (pics_id = :pics_id && user_id = :user_id)');
@@ -342,11 +343,52 @@ if(isset($_SESSION['id'])){
                 $tab = array('true', 'removedLike', $_POST['pics_id']);
             }
             else {
+                //Si on a pas déjà mis un j'aime
                 $lkpost = $query->fetch(PDO::FETCH_ASSOC);
                 $query = $db->prepare('INSERT INTO tablk (pics_id, user_id) VALUES (:pics_id, :user_id)');
                 $query->bindValue(':pics_id', $_POST['pics_id']);
                 $query->bindValue(':user_id', $_SESSION['id']);
                 $query->execute();
+                
+            //Et on envoie un mail pour dire qu'on a mis un j'aime
+            $query = $db->prepare('SELECT account.login, account.mail FROM account INNER JOIN pictures ON pictures.user_id = account.id WHERE pictures.id = :pics_id');
+            $query->bindValue(':pics_id', $_POST['pics_id']);
+            $query->execute();
+            if ($query->rowCount() > 0){
+                $data = $query->fetch(PDO::FETCH_ASSOC);
+                $mail = $data['mail'];
+                /*
+                Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
+                */
+                /*$content = '<html>
+                        <head>
+                            <title>Commentaire reçu sur Camagru</title>
+                            <meta charset = \"utf-8\">
+                            <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet" type="text/css">
+                            <style>
+                                h1{
+                                    text-align:center;
+                                    font-family: \'Nothing You Could Do\', cursive;
+                                    color:#448AFF;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                        <h1>Camagru</h1>
+                        <p>Bonjour '.$data['login'].'</p>
+                        <p>'.$_SESSION['login'].' a aimé votre photo sur Camagru</p>
+                        <a href = "http://localhost:8080/Camagru/index.php">Camagru</a>
+                        </body>
+                        </html>';
+                        
+                $subject = "Camagru - Commentaire";
+                $headers = "From: no-reply@camagru.fr\r\n";
+                $headers .= "Reply-To: no-reply@camagru.fr\r\n";
+                $headers .= "CC: \r\n";
+                $headers .= "MIME-Version: 1.0\r\n";
+                $headers .= "Content-Type: text/html; charset=utf-8\r\n";     
+                mail($mail, $subject, $content, $headers);*/
+                }
                 $tab = array('true', 'addedLike', $_POST['pics_id']);
             }
             echo json_encode($tab);

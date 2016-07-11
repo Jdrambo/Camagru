@@ -60,7 +60,6 @@ for(var i = 0; i < btnDeleteComLen; i++){
 
 // Cette fonction est la fonction callback de likePost, qui incrémente le compteur de like de 1, ou le décrémente
     function resultLike(data){
-        console.log(data);
         var result = JSON.parse(data);
         if (result && result[0] === "true"){
             var btnLike = document.getElementById('like-post-'+result[2]);

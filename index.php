@@ -32,7 +32,11 @@ if (isset($_SESSION['id']))
         $offset = ($_GET['page'] * $limitSize);
     else
         $offset = 0;
-	$query = $db->prepare("SELECT account.login, pictures.id AS picture_id, pictures.url, pictures.title, pictures.comment, DAY(pictures.date_ajout) AS day_add, MONTH(pictures.date_ajout) AS month_add,
+    /*
+    La requête qui sélectionne tous les poste défini comme public
+    Dans les limite de limitSize à partir de offset
+    */
+	$query = $db->prepare("SELECT account.id AS account_id, account.login, pictures.id AS picture_id, pictures.url, pictures.title, pictures.comment, DAY(pictures.date_ajout) AS day_add, MONTH(pictures.date_ajout) AS month_add,
 	YEAR(pictures.date_ajout) AS year_add, HOUR(pictures.date_ajout) AS hour_add, MINUTE(pictures.date_ajout) AS min_add
     FROM pictures INNER JOIN account ON account.id = pictures.user_id WHERE pictures.published = 1
     ORDER BY pictures.date_ajout DESC LIMIT :offset, :limitSize");
@@ -40,10 +44,17 @@ if (isset($_SESSION['id']))
     $query->bindValue(':limitSize', $limitSize, PDO::PARAM_INT);
 	$query->execute();
 	while ($datax = $query->fetch(PDO::FETCH_ASSOC)){
+        
+        /*
+        La requête qui sélectionne les commentaire du post actuel
+        */
         $queryx = $db->prepare('SELECT `comments`.`id` AS comId, `comments`.`user_id` AS comUserId, `comments`.`content` AS comContent, DAY(comments.date_add) AS comDay, MONTH(comments.date_add) AS comMonth, YEAR(comments.date_add) AS comYear, HOUR(comments.date_add) AS comHour, MINUTE(comments.date_add) AS comMin, `account`.`login` AS comLogin, `icons`.`url` AS urlIcon FROM `comments` INNER JOIN `account` ON `account`.`id` = `comments`.`user_id` INNER JOIN `icons` ON `account`.`id_icon` = `icons`.`id` WHERE `comments`.`pics_id` = :pics_id ORDER BY `comments`.`date_add` DESC');
         $queryx->bindValue(':pics_id', $datax['picture_id']);
         $queryx->execute();
         
+        /*
+        Le code qui nous permettra de compte le nombre de like du post
+        */
         $queryy = $db->prepare('SELECT id FROM `tablk` WHERE (`tablk`.`pics_id` = :pics_id)');
         $queryy->bindValue(':pics_id', $datax['picture_id']);
         $queryy->execute();
@@ -79,7 +90,13 @@ if (isset($_SESSION['id']))
                 echo '<div class = "line-comment2" id = "comment-id-'.$com['comId'].'">';
             
             echo '<div class = "slot-core-comment"><img class = "icon-comment" src = "'.$com['urlIcon'].'"><span class = "com-login">'.htmlspecialchars($com['comLogin']).'</span><span class = "com-text">'.htmlspecialchars($com['comContent']).'</span></div>';
-            if ($com['comUserId'] === $_SESSION['id']){
+            
+            /*
+            La condition qui définie si on affiche ou non la croix de suppression d'un commentaire
+            Si le commentaire nous appartient
+            Ou si on est propriétaire du post
+            */
+            if ($com['comUserId'] === $_SESSION['id'] || $datax['account_id'] === $_SESSION['id']){
                 echo '<div class = "slot-delete-com"><img id = "delete-com-'.$com['comId'].'" title = "Supprimer le commentaire" alt = "delete comment" class = "delete-com" src = "img/delete_small.png"></div>';
             }
             echo '</div>';
