@@ -258,7 +258,7 @@ if(isset($_SESSION['id'])){
                 /*
                 Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
                 */
-                /*
+                
                 $content = '<html>
                         <head>
                             <title>Commentaire reçu sur Camagru</title>
@@ -287,7 +287,7 @@ if(isset($_SESSION['id'])){
                     $headers .= "MIME-Version: 1.0\r\n";
                     $headers .= "Content-Type: text/html; charset=utf-8\r\n";     
                     mail($mail, $subject, $content, $headers);
-                    */
+                    
             }
             
             $query = $db->prepare('SELECT * FROM comments WHERE pics_id = :pics_id && user_id = :user_id ORDER BY date_add DESC LIMIT 1');
@@ -360,7 +360,7 @@ if(isset($_SESSION['id'])){
                 /*
                 Ici on envoie un mail pour avertir le propriétaire de la photo qu'il a reçu un commentaire
                 */
-                /*$content = '<html>
+                $content = '<html>
                         <head>
                             <title>Commentaire reçu sur Camagru</title>
                             <meta charset = \"utf-8\">
@@ -387,7 +387,7 @@ if(isset($_SESSION['id'])){
                 $headers .= "CC: \r\n";
                 $headers .= "MIME-Version: 1.0\r\n";
                 $headers .= "Content-Type: text/html; charset=utf-8\r\n";     
-                mail($mail, $subject, $content, $headers);*/
+                mail($mail, $subject, $content, $headers);
                 }
                 $tab = array('true', 'addedLike', $_POST['pics_id']);
             }
