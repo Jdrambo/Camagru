@@ -3,6 +3,24 @@ session_start();
 function loadClass($name){
 	require("classes/".$name.".php");
 }
+
+//La fonction qui permet d'effacer un fichier
+function remove_dir($dir){
+    if (isset($dir)){
+        $objects = scandir($dir);
+        foreach ($objects as $obj){
+            if ($obj != "." && $obj != ".."){
+                if(filetype($dir."/".$obj) === "dir")
+                    rmdir($dir."/".$obj);
+                else
+                    unlink($dir."/".$obj);
+            }
+        }
+        reset($objects);
+        rmdir($dir);
+    }
+}
+
 spl_autoload_register("loadClass");
     include("db.php");
     $icons = new IconsLib($db);
@@ -28,8 +46,9 @@ spl_autoload_register("loadClass");
                     if (isset($data['url']) && file_exists($data['url']))
                         unlink($data['url']);
                 }
+                
                 if (isset($dir) && file_exists($dir))
-                    rmdir($dir);
+                    remove_dir($dir);
 
                 $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN pictures ON pictures.user_id = account.id LEFT JOIN tablk ON tablk.user_id = account.id LEFT JOIN comments ON comments.user_id = account.id WHERE `account`.`id` = :id');
                 $query->bindValue(':id', $_SESSION['id']);

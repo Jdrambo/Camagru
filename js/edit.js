@@ -30,7 +30,7 @@ window.onload = (function(){
 
     //Bouton pour afficher la section camera
     var cam_section_btn = document.getElementById('edit-selection-cam');
-    if(cam_section_btn){
+    if (cam_section_btn){
         cam_section_btn.addEventListener('click', function(){
             showElement('cam-section', 'block');
             hideElement('edit-selection-section');
@@ -63,7 +63,6 @@ window.onload = (function(){
                     callback(xhr.responseText);
                 }
             };
-
             xhr.open("POST", "script/edit_pics.php", true);
             xhr.send(formData);
         }
@@ -73,7 +72,6 @@ window.onload = (function(){
     function resultUpload(data){
     	if (data){
 	        var result = JSON.parse(data);
-	        console.log(result);
 	        if (result && result[0] === "true"){
 	        	var width = 460;
 	        	var height = 340;
@@ -89,7 +87,6 @@ window.onload = (function(){
 			    showElement("edit-area", "inline-block");
 
 		    	loadImg.onload = function(){
-		    		
 			    	canvas.getContext('2d').drawImage(loadImg, 0, 0, width, height);
 	            	firstCanvas = canvas.toDataURL('image/png');
 				}
@@ -121,7 +118,7 @@ window.onload = (function(){
     }
 
     var mainCanvas = document.getElementById('canvas');
-    mainCanvas.addEventListener("dragover", function(e){ allowDrop(e)}, false);
+    mainCanvas.addEventListener("dragover", function(event){ allowDrop(event)}, false);
     mainCanvas.addEventListener("drop", function(event){ addEmote(event);}, false);
 
     //Le bouton de sauvegarde de la photo
@@ -212,11 +209,13 @@ window.onload = (function(){
     }
 
     function handleDragStart(e){
-        selectedEmote = e.target;
+        if (e.target.className === "emote-img")
+            selectedEmote = e.target;
     }
     
     function drag(e){
-        e.dataTransfer.setData("text", e.target.id);
+        if (e.target.className = "emote-img")
+            e.dataTransfer.setData("text", e.target.id);
     }
     
     function allowDrop(e){
@@ -232,7 +231,6 @@ window.onload = (function(){
         alphaValue = document.getElementById('alpha-value').value;
         var addedLayer = new Layer(layerId, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue);
         allLayer.push(addedLayer);
-        console.log(addedLayer);
         img.src = addedLayer.src;
         ctx.globalAlpha = alphaValue;
         img.onload = function(){
@@ -242,8 +240,6 @@ window.onload = (function(){
     }
     
     function addEmote(e){
-        e.preventDefault();
-        
         var pos = getMousePos(e);
         var ctx = mainCanvas.getContext("2d");
         ctx.globalAlpha = 1;
@@ -258,6 +254,7 @@ window.onload = (function(){
             ctx.drawImage(img, addedLayer.x, addedLayer.y, addedLayer.w, addedLayer.h);
         }
         layerId += 1;
+        selectedEmote = "";
     }
 
     function getMousePos(e){
@@ -298,10 +295,7 @@ window.onload = (function(){
 		      width = 460,
 		      height = 340;
 
-		  navigator.getMedia = ( navigator.getUserMedia ||
-		                         navigator.webkitGetUserMedia ||
-		                         navigator.mozGetUserMedia ||
-		                         navigator.msGetUserMedia);
+		  navigator.getMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
 
 		  navigator.getMedia(
 		    {
@@ -318,7 +312,7 @@ window.onload = (function(){
 		      video.play();
 		    },
 		    function(err) {
-		      console.log("An error occured! " + err);
+		      console.log("Il y a eu une erreur ! " + err);
 		    }
 		  );
 
