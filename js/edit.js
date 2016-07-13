@@ -8,7 +8,7 @@ window.onload = (function(){
     var loadImg = new Image;
 
     //Protoype d'un objet Layer qui sert pour les icones et les filtres
-    function Layer(id, pics_id_name, name, src, x, y, w, h, alpha){
+    function Layer(id, pics_id_name, name, src, x, y, w, h, alpha, type){
         var pics_id = pics_id_name.split("-");
         this.id = id;
         this.pics_id = pics_id[2];
@@ -19,6 +19,7 @@ window.onload = (function(){
         this.w = w;
         this.h = h;
         this.alpha = alpha;
+        this.type = type;
     }
     
     //Bouton pour afficher la section d'upload
@@ -82,11 +83,8 @@ window.onload = (function(){
 	        	canvas.width = width;
 		    	canvas.height = height;
 	        	
-			    showElement("pics_title", "inline-block");
-			    showElement("pics_comment", "inline-block");
-			    showElement("container-published", "block");
-			    showElement("edit-menu", "inline-block");
-			    showElement("edit-area", "inline-block");
+			    showElement("info-section", "inline-block");
+                showElement("edit-area", "inline-block");
 
 		    	loadImg.onload = function(){
 			    	canvas.getContext('2d').drawImage(loadImg, 0, 0, width, height);
@@ -183,7 +181,8 @@ window.onload = (function(){
             showMessage("Une erreur est survenue pendant l'enregistrement de l'image", "#822");
         }
     }
-    
+
+//Une fonction bien sympathique qui nous affichera un message durant 2 seconde
     function showMessage(text, color){
     	var elem = document.getElementById('state_message');
     	elem.innerHTML = text;
@@ -213,11 +212,12 @@ window.onload = (function(){
         }
     }
     
+//La fonction qui ajoute un filtre sur l'image
     function addFilter(obj){
         var ctx = mainCanvas.getContext("2d");
         var img = new Image();
         alphaValue = document.getElementById('alpha-value').value;
-        var addedLayer = new Layer(layerId, obj.id, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue);
+        var addedLayer = new Layer(layerId, obj.id, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue, "filter");
         allLayer.push(addedLayer);
         img.src = addedLayer.src;
         ctx.globalAlpha = alphaValue;
@@ -227,6 +227,7 @@ window.onload = (function(){
         layerId += 1;
     }
     
+//La fonction qui ajoute un emote icone (tu sais les smiley et tout)
     function addEmote(e){
         var pos = getMousePos(e);
         var ctx = mainCanvas.getContext("2d");
@@ -235,7 +236,7 @@ window.onload = (function(){
         var emoteWidth = 128;
         var emoteHeight = 128;
 
-        var addedLayer = new Layer(layerId, selectedEmote.id, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight, 1);
+        var addedLayer = new Layer(layerId, selectedEmote.id, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight, 1, "emote");
         allLayer.push(addedLayer);
         img.src = addedLayer.src;
         img.onload = function(){
@@ -245,6 +246,7 @@ window.onload = (function(){
         selectedEmote = "";
     }
 
+//La fonction qui determine la position de la souris
     function getMousePos(e){
         var rect = mainCanvas.getBoundingClientRect();
         var pos = {
@@ -269,11 +271,8 @@ window.onload = (function(){
         document.getElementById(id).style.display = "none";
     }
     
-        hideElement("pics_title");
-        hideElement("pics_comment");
-        hideElement("container-published");
-        hideElement("edit-area");
-        hideElement("edit-menu");
+    hideElement("edit-area");
+    hideElement("info-section");
 
        (function() {
 		  var streaming = false,
@@ -319,10 +318,7 @@ window.onload = (function(){
 		    canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 		    var dataURL = canvas.toDataURL('image/png');
             firstCanvas = canvas.toDataURL('image/png');
-		    showElement("pics_title", "inline-block");
-		    showElement("pics_comment", "inline-block");
-		    showElement("container-published", "block");
-		    showElement("edit-menu", "inline-block");
+		    showElement("info-section", "inline-block");
 		    showElement("edit-area", "inline-block");
 		  }
 

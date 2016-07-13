@@ -346,6 +346,9 @@ header a{
 .cam-btn:hover{
     opacity:0.8;
 }
+#info-section{
+    width:100%;
+}
 .edit-menu{
     width:40%;
     margin:12px 30%;

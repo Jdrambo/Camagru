@@ -66,13 +66,13 @@ if (isset($_SESSION['id']))
         echo '<img alt = "'.$filData['name'].'" src = "'.$filData['url'].'" title = "'.$filData['name'].'" class = "filter-pics" id = "filter-pics-'.$filData['id'].'">';
     }
     echo '</div>';
-    echo '</div>
+    echo '</div><div id = "info-section">
             <input id = "pics_title" type = "text" name = "title" class = "field" placeholder = "Titre de la photo...">
             <input id = "pics_comment" type = "text" name = "comment" class = "field" placeholder = "Description...">
             <p id = "container-published" class = "container-check"><input class = "form-check" name = "published" id = "pics_published" type = "checkbox">Publier</p>
             <div id = "edit-menu" class = "edit-menu">
             	<img id = "save" title = "Enregistrer la photo" class = "edit-btn" alt = "enregistrer l\'image" src = "img/save.png">
-            </div></div>';
+            </div></div></div>';
     
     
     //On selectionne toutes les images faites avant
