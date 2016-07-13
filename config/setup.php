@@ -1,7 +1,22 @@
 <?php
+session_start();
 header('Location: ../index.php');
 include("database.php");
 $db = new PDO("mysql:host=".$DB_HOST, $DB_USER, $DB_PASSWORD, array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
+
+//Suppression des variables de session
+if (isset($_SESSION)){
+	foreach ($_SESSION AS $key => $value){
+		unset($_SESSION[$key]);
+	}
+	session_unset($_SESSION);
+}
+
+//Suppression de la BDD si elle existe
+$db->query("DROP DATABASE IF EXISTS ".$DB_NAME);
+
+
+
 $db->query("CREATE DATABASE ".$DB_NAME);
 $db->query("USE ".$DB_NAME);
 

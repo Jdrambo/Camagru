@@ -13,7 +13,7 @@ if (isset($_SESSION['id']))
     echo '<div class = "container">';
     include("db.php");
 
-	
+	echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
 	echo '<p>Bienvenue sur Camagru le site de retouche photo ultime</p>';
 	
     /*

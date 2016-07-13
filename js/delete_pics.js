@@ -29,7 +29,6 @@ window.onload = (function(){
     }
 
     function resultDelete(data){
-        console.log(data);
         var result = JSON.parse(data);
         if (result[0] === "true"){
             var parent_pics = document.getElementsByClassName('pics-lib');
@@ -42,7 +41,6 @@ window.onload = (function(){
                 parent_pics[i].removeChild(border);
             }
             displayMessage("L'image a bien été supprimée", "#228");
-            console.log(result[3] + " >> " + result[4]);
         }
         else{
             displayMessage("Erreur lors de la suppression de l'image", "#822");
@@ -66,7 +64,6 @@ window.onload = (function(){
     }
 
     function resultPrivacy(data){
-        console.log(data);
         var result = JSON.parse(data);
 
         if (result[0] === "true"){

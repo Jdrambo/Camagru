@@ -299,7 +299,7 @@ window.onload = (function(){
 		      video.play();
 		    },
 		    function(err) {
-		      console.log("Il y a eu une erreur ! " + err);
+		      showMessage("Il y a eu une erreur", "#822");
 		    }
 		  );
 

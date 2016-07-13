@@ -23,7 +23,7 @@ if (isset($_SESSION['id']))
     $queryFilters->execute();
     
     //Le message d'information qui est affiché
-    echo '<div id = "state_message" class = "state_message">UN MESSAGE</div>';
+    echo '<div id = "state_message" class = "state_message"></div>';
 	echo '<p>Edition de photos</p>';
 
     echo '<div id = "edit-selection-section" class = "edit-selection-section">

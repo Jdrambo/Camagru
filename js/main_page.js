@@ -76,7 +76,7 @@ for(var i = 0; i < btnDeleteComLen; i++){
             likeCount.innerHTML = count;
         }
         else {
-            console.log("ERROR");
+            showMessage("Une erreur s'est produite", "#822");
         }
     }
 
@@ -157,7 +157,7 @@ for(var i = 0; i < btnDeleteComLen; i++){
                 com_block.appendChild(node);
         }
         else
-            console.log("ERROR");
+            showMessage("Une erreur s'est produite", "#822");
     }
 
 // Cette fonction demandera une suppression du commentaire voulu en BDD
@@ -192,9 +192,22 @@ for(var i = 0; i < btnDeleteComLen; i++){
             
         }
         else if (result && result[0] === "false"){
-            console.log(result);
+            showMessage("Une erreur s'est produite", "#822");
         }
         else
-            console.log("ERROR");
+            showMessage("Une erreur s'est produite", "#822");
+    }
+
+    //Une fonction bien sympathique qui nous affichera un message durant 2 seconde
+    function showMessage(text, color){
+        var elem = document.getElementById('state_message');
+        elem.innerHTML = text;
+        elem.style.backgroundColor = color;
+        elem.style.visibility = "visible";
+        elem.style.opacity = "1";
+        setTimeout((function(){
+            elem.style.opacity = "0";
+            elem.style.visibility = "hidden";
+        }),2000);
     }
 })();
