@@ -36,7 +36,7 @@ function remove_dir($dir){
         if ($query->rowCount() > 0){
 		$data = $query->fetch(PDO::FETCH_ASSOC);
             if (isset($data['id']) && password_verify($_POST['pass'], $data['pass'])){
-                $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` INNER JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
+                $query = $db->prepare('SELECT `pictures`.`url`, `account`.`pictures_dir` FROM `account` LEFT JOIN `pictures` ON `pictures`.`user_id` = `account`.`id` WHERE `account`.`id` = :id');
                 $query->bindValue(':id', $_SESSION['id']);
                 $query->execute();
 
@@ -47,7 +47,7 @@ function remove_dir($dir){
                         unlink($data['url']);
                 }
                 
-                if (isset($dir) && file_exists($dir))
+                if (isset($dir))
                     remove_dir($dir);
 
                 $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` LEFT JOIN pictures ON pictures.user_id = account.id LEFT JOIN tablk ON tablk.user_id = account.id LEFT JOIN comments ON comments.user_id = account.id WHERE `account`.`id` = :id');
