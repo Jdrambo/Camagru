@@ -48,10 +48,11 @@ if(isset($_SESSION['id'])){
                         On créé une resource image à partir du fichier passé en paramètre de imagecreatefrompng
                         Je récupère sa taille dans un tableau [w, h] au passage
                         */
+                        //$imageBase = imagecreatefrompng($temp);
                         $imageBase = imagecreatefrompng($temp);
                         $baseSize = getimagesize($temp);
                         
-                        // CONTROLER L EXTENSION DU FILTRE (JPG)...
+                        // CONTROLER L EXTENSION DU calque (JPG)...
                         $ext = pathinfo($layers[$key]->src, PATHINFO_EXTENSION);
                         if ($ext == "png"){
                             $imageEmote = imagecreatefrompng($layers[$key]->src);
@@ -60,24 +61,14 @@ if(isset($_SESSION['id'])){
                             $imageEmote = imagecreatefromjpeg($layers[$key]->src);
                         }
                         $emoteOriginalSize = getimagesize($layers[$key]->src);
-
-                        /*
-                        On créé une image qui sera l'image dans laquelle nous fusionerons notre image de base
-                        puis par dessus le calque choisi.
-                        */
+                        
                         $mergedImage = imagecreatetruecolor($baseSize[0], $baseSize[1]);
-                        $transparentColor = imagecolorallocate($mergedImage, 0, 0, 255);
-                        imagecolortransparent($mergedImage, $transparentColor);
-                        imagefill($mergedImage, 0, 0, $transparentColor);
+                        $trans_color = imagecolorallocatealpha($mergedImage, 0, 0, 0, 127);
+                        imagefill($mergedImage, 0, 0, $trans_color);
 
-                        imagesavealpha($mergedImage, true);
+                        imagecopy($mergedImage, $imageBase, 0, 0, 0, 0, $baseSize[0], $baseSize[1]);
 
-                        imagealphablending($imageBase, false);
-                        imagecopyresampled($mergedImage, $imageBase, 0, 0, 0, 0, $baseSize[0], $baseSize[1], $baseSize[0], $baseSize[1]);
-                        imagealphablending($imageBase, true);
-                        imagedestroy($imageBase);
-
-                        imagealphablending($imageEmote, false);
+                        
                         /*
                         On fusionne les deux images, si c'est un jpg on le fusionne avec la valuer alpha passé en paramètre
                         Sinon c'est que c'est un png donc un emote on le redimensionne à la taille souhaité et on le place
@@ -95,12 +86,9 @@ if(isset($_SESSION['id'])){
                         else{
                             imagecopyresampled($mergedImage, $imageEmote, $layers[$key]->x, $layers[$key]->y, 0, 0, $layers[$key]->w, $layers[$key]->h, $emoteOriginalSize[0], $emoteOriginalSize[1]);
                         }
-                        imagealphablending($imageEmote, true);
                         imagedestroy($imageEmote);
-
                         imagealphablending($mergedImage, false);
                         imagesavealpha($mergedImage, true);
-
                         imagepng($mergedImage, $temp);
                     }
                     //Enfin on sauvegarde le résultat
@@ -165,37 +153,44 @@ if(isset($_SESSION['id'])){
 
     // Script d'upload d'un fichier
     if(!empty($_FILES)){
+        try {
+            $extTab = array("image/jpg", "image/jpeg", "image/png");
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            if (file_exists($_FILES['file']['tmp_name'])){
+                $ext = finfo_file($finfo, $_FILES['file']['tmp_name']);
 
-        $extTab = array("image/jpg", "image/jpeg", "image/png");
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $ext = finfo_file($finfo, $_FILES['file']['tmp_name']);
-        if (array_search($ext, $extTab)){
-            if((int)$_FILES['file']['size'] < 5000000){
-                $tab_exp = explode("/", $ext);
-                $ext = $tab_exp[1];
+                $tab = array('false', 'Erreur lors du chargement du fichier');
+                if (array_search($ext, $extTab)){
+                    if((int)$_FILES['file']['size'] < 5000000){
+                        $tab_exp = explode("/", $ext);
+                        $ext = $tab_exp[1];
 
-                $query = $db->prepare('SELECT pictures_dir FROM account WHERE account.id = :user_id');
-                $query->bindValue(':user_id', $_SESSION['id']);
-                $query->execute();
+                        $query = $db->prepare('SELECT pictures_dir FROM account WHERE account.id = :user_id');
+                        $query->bindValue(':user_id', $_SESSION['id']);
+                        $query->execute();
 
-                $data = $query->fetch(PDO::FETCH_ASSOC);
-                $file_path = $data['pictures_dir']."/tempUpload.".$ext;
+                        $data = $query->fetch(PDO::FETCH_ASSOC);
+                        $file_path = $data['pictures_dir']."/tempUpload.".$ext;
 
-                //move_uploaded_file($_FILES['file']['tmp_name'], $_FILES['file']['name']);
-                if (move_uploaded_file($_FILES['file']['tmp_name'], "../".$file_path))
-                {
-                    $size = getimagesize("../".$file_path);
-                    $tab = array('true', $file_path, $size);
-                }
-                else{
-                    $tab = array('false', 'Erreur lors du chargement du fichier');
+                        if (move_uploaded_file($_FILES['file']['tmp_name'], "../".$file_path))
+                        {
+                            $size = getimagesize("../".$file_path);
+                            $tab = array('true', $file_path, $size);
+                        }
+                        else {
+                            $tab = array('false', 'Erreur lors du chargement du fichier');
+                        }
+                    }
+                    else {
+                        $tab = array('false', 'La taille de votre fichier est supérieure a 5Mo et c\'est trop');
+                    }
                 }
             }
             else{
-                $tab = array('false', 'La taille de votre fichier est supérieure a 5Mo et c\'est trop', $_FILES['file']['size']);
+                $tab = array('false', 'Erreur lors du chargement du fichier');
             }
         }
-        else{
+        catch(Exception $e){
             $tab = array('false', 'Erreur lors du chargement du fichier');
         }
         echo json_encode($tab);

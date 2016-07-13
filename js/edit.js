@@ -8,8 +8,10 @@ window.onload = (function(){
     var loadImg = new Image;
 
     //Protoype d'un objet Layer qui sert pour les icones et les filtres
-    function Layer(id, name, src, x, y, w, h, alpha){
+    function Layer(id, pics_id_name, name, src, x, y, w, h, alpha){
+        var pics_id = pics_id_name.split("-");
         this.id = id;
+        this.pics_id = pics_id[2];
         this.name = name;
         this.src = src;
         this.x = x;
@@ -92,11 +94,11 @@ window.onload = (function(){
 				}
 	        }
 	        else {
-	        	showMessage("Une erreur c'est produite au chargement du fichier", "#822");
+	        	showMessage("Une erreur s'est produite au chargement du fichier", "#822");
 	        }
 	    }
 	    else{
-	    	showMessage("Une erreur c'est produite au chargement du fichier", "#822");
+	    	showMessage("Une erreur s'est produite au chargement du fichier", "#822");
 	    }
     }
 
@@ -175,24 +177,10 @@ window.onload = (function(){
                     newPics.style.opacity = 1;
                 }),10);
             }
-            elem.innerHTML = "La photo a bien été enregistrée";
-            elem.style.visibility = "visible";
-            elem.style.opacity = "1";
-            setTimeout((function(){
-                elem.style.opacity = "0";
-                elem.style.visibility = "hidden";
-            }),2000);
-
+            showMessage("La photo a bien été enregistrée", "#282");
         }
         else {
-            elem.innerHTML = "Une erreur est survenue pendant l'enregistrement de l'image";
-            elem.style.backgroundColor = "#822";
-            elem.style.visibility = "visible";
-            elem.style.opacity = "1";
-            setTimeout((function(){
-                elem.style.opacity = "0";
-                elem.style.visibility = "hidden";
-            }),2000);
+            showMessage("Une erreur est survenue pendant l'enregistrement de l'image", "#822");
         }
     }
     
@@ -229,7 +217,7 @@ window.onload = (function(){
         var ctx = mainCanvas.getContext("2d");
         var img = new Image();
         alphaValue = document.getElementById('alpha-value').value;
-        var addedLayer = new Layer(layerId, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue);
+        var addedLayer = new Layer(layerId, obj.id, obj.title, obj.src, 0, 0, mainCanvas.width, mainCanvas.height, alphaValue);
         allLayer.push(addedLayer);
         img.src = addedLayer.src;
         ctx.globalAlpha = alphaValue;
@@ -247,7 +235,7 @@ window.onload = (function(){
         var emoteWidth = 128;
         var emoteHeight = 128;
 
-        var addedLayer = new Layer(layerId, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight, 1);
+        var addedLayer = new Layer(layerId, selectedEmote.id, selectedEmote.title, selectedEmote.src, pos.x - (emoteWidth / 2), pos.y - (emoteHeight / 2), emoteWidth, emoteHeight, 1);
         allLayer.push(addedLayer);
         img.src = addedLayer.src;
         img.onload = function(){

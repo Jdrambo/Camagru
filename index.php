@@ -19,7 +19,7 @@ if (isset($_SESSION['id']))
     /*
     Ceci est la requête pour sélectionner les post (images) de tous les utilisateurs, si elles sont publiques
     */
-    $query = $db->prepare('SELECT COUNT(id) AS count_post FROM pictures');
+    $query = $db->prepare('SELECT COUNT(id) AS count_post FROM pictures WHERE published = 1');
     $query->execute();
     if ($query->rowCount() > 0){
         $data = $query->fetch(PDO::FETCH_ASSOC);
