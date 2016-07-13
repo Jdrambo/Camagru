@@ -4,7 +4,12 @@ function loadClass($name){
 	require("classes/".$name.".php");
 }
 
-//La fonction qui permet d'effacer un fichier
+spl_autoload_register("loadClass");
+    include("db.php");
+    $icons = new IconsLib($db);
+    $pics = new PicsLib($db);
+
+    //La fonction qui permet d'effacer un fichier
 function remove_dir($dir){
     if (isset($dir)){
         $objects = scandir($dir);
@@ -20,11 +25,6 @@ function remove_dir($dir){
         rmdir($dir);
     }
 }
-
-spl_autoload_register("loadClass");
-    include("db.php");
-    $icons = new IconsLib($db);
-    $pics = new PicsLib($db);
 
     //suppression du compte
     if (isset($_POST['submit']) && $_POST['submit'] === "delete_account"){
@@ -50,7 +50,7 @@ spl_autoload_register("loadClass");
                 if (isset($dir) && file_exists($dir))
                     remove_dir($dir);
 
-                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` INNER JOIN pictures ON pictures.user_id = account.id LEFT JOIN tablk ON tablk.user_id = account.id LEFT JOIN comments ON comments.user_id = account.id WHERE `account`.`id` = :id');
+                $query = $db->prepare('DELETE `account`, `pictures`, `tablk`, `comments` FROM `account` LEFT JOIN pictures ON pictures.user_id = account.id LEFT JOIN tablk ON tablk.user_id = account.id LEFT JOIN comments ON comments.user_id = account.id WHERE `account`.`id` = :id');
                 $query->bindValue(':id', $_SESSION['id']);
                 $query->execute();   
                 if (isset($_SESSION)){
