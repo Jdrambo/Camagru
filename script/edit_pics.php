@@ -52,15 +52,37 @@ if(isset($_SESSION['id'])){
                         $imageBase = imagecreatefrompng($temp);
                         $baseSize = getimagesize($temp);
                         
+                        if ($layers[$key]->type === "filter"){
+                            $query = $db->prepare('SELECT url FROM filters WHERE id = :id');
+                            $query->bindValue(":id", $layers[$key]->pics_id);
+                            $query->execute();
+                            if($query->rowCount() > 0){
+                                $data = $query->fetch(PDO::FETCH_ASSOC);
+                                $filter = '../'.$data['url'];
+                            }
+                            else
+                                $filter = '../img/filter/aquarel.jpg';
+                        }
+                        else{
+                            $query = $db->prepare('SELECT url FROM emotes WHERE id = :id');
+                            $query->bindValue(":id", $layers[$key]->pics_id);
+                            $query->execute();
+                            if($query->rowCount() > 0){
+                                $data = $query->fetch(PDO::FETCH_ASSOC);
+                                $filter = '../'.$data['url'];
+                            }
+                            else
+                                $filter = '../img/emote/angel.png';
+                        }
                         // CONTROLER L EXTENSION DU calque (JPG)...
                         $ext = pathinfo($layers[$key]->src, PATHINFO_EXTENSION);
                         if ($ext == "png"){
-                            $imageEmote = imagecreatefrompng($layers[$key]->src);
+                            $imageEmote = imagecreatefrompng($filter);
                         }
                         if ($ext == "jpg" || $ext == "jpeg"){
-                            $imageEmote = imagecreatefromjpeg($layers[$key]->src);
+                            $imageEmote = imagecreatefromjpeg($filter);
                         }
-                        $emoteOriginalSize = getimagesize($layers[$key]->src);
+                        $emoteOriginalSize = getimagesize($filter);
                         
                         $mergedImage = imagecreatetruecolor($baseSize[0], $baseSize[1]);
                         $trans_color = imagecolorallocatealpha($mergedImage, 0, 0, 0, 127);
